@@ -1,0 +1,988 @@
+[
+  {
+    "id": "schema.public",
+    "label": "Create schema \"public\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres"
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "Create schema \"public\"",
+        "sql": "CREATE SCHEMA IF NOT EXISTS \"public\"",
+        "params": []
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "table.Collaborator",
+    "label": "Create table \"Collaborator\"",
+    "summary": "Creates table \"Collaborator\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "Collaborator"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"Collaborator\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Collaborator\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"Collaborator\"",
+        "sql": "CREATE TABLE \"public\".\"Collaborator\" (\n  \"id\" uuid NOT NULL,\n  \"name\" text NOT NULL,\n  \"profileUrl\" text,\n  PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"Collaborator\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Collaborator\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.Project",
+    "label": "Create table \"Project\"",
+    "summary": "Creates table \"Project\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "Project"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"Project\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Project\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"Project\"",
+        "sql": "CREATE TABLE \"public\".\"Project\" (\n  \"coverImageKey\" text,\n  \"createdAt\" timestamptz DEFAULT (now()) NOT NULL,\n  \"description\" text NOT NULL,\n  \"endedAt\" date,\n  \"featuredRank\" int4,\n  \"githubUrl\" text,\n  \"id\" uuid NOT NULL,\n  \"liveUrl\" text,\n  \"metadata\" jsonb DEFAULT '{}'::jsonb NOT NULL,\n  \"published\" bool DEFAULT false NOT NULL,\n  \"slug\" text NOT NULL,\n  \"startedAt\" date,\n  \"status\" text DEFAULT 'ONGOING' NOT NULL,\n  \"teamName\" text,\n  \"title\" text NOT NULL,\n  \"updatedAt\" timestamptz NOT NULL,\n  PRIMARY KEY (\"id\"),\n  CONSTRAINT \"Project_status_check_5a6c300b\" CHECK (\"status\" IN ('ONGOING', 'COMPLETED'))\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"Project\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Project\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.ProjectCollaborator",
+    "label": "Create table \"ProjectCollaborator\"",
+    "summary": "Creates table \"ProjectCollaborator\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "ProjectCollaborator"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"ProjectCollaborator\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"ProjectCollaborator\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"ProjectCollaborator\"",
+        "sql": "CREATE TABLE \"public\".\"ProjectCollaborator\" (\n  \"collaboratorId\" uuid NOT NULL,\n  \"projectId\" uuid NOT NULL,\n  \"role\" text,\n  PRIMARY KEY (\"projectId\", \"collaboratorId\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"ProjectCollaborator\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"ProjectCollaborator\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.ProjectImage",
+    "label": "Create table \"ProjectImage\"",
+    "summary": "Creates table \"ProjectImage\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "ProjectImage"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"ProjectImage\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"ProjectImage\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"ProjectImage\"",
+        "sql": "CREATE TABLE \"public\".\"ProjectImage\" (\n  \"alt\" text NOT NULL,\n  \"id\" uuid NOT NULL,\n  \"key\" text NOT NULL,\n  \"order\" int4 DEFAULT 0 NOT NULL,\n  \"projectId\" uuid NOT NULL,\n  PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"ProjectImage\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"ProjectImage\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.ProjectSkill",
+    "label": "Create table \"ProjectSkill\"",
+    "summary": "Creates table \"ProjectSkill\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "ProjectSkill"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"ProjectSkill\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"ProjectSkill\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"ProjectSkill\"",
+        "sql": "CREATE TABLE \"public\".\"ProjectSkill\" (\n  \"projectId\" uuid NOT NULL,\n  \"skillId\" uuid NOT NULL,\n  PRIMARY KEY (\"projectId\", \"skillId\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"ProjectSkill\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"ProjectSkill\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.Skill",
+    "label": "Create table \"Skill\"",
+    "summary": "Creates table \"Skill\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "Skill"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"Skill\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Skill\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"Skill\"",
+        "sql": "CREATE TABLE \"public\".\"Skill\" (\n  \"categoryId\" uuid NOT NULL,\n  \"createdAt\" timestamptz DEFAULT (now()) NOT NULL,\n  \"id\" uuid NOT NULL,\n  \"name\" text NOT NULL,\n  \"slug\" text NOT NULL,\n  PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"Skill\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Skill\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.SkillCategory",
+    "label": "Create table \"SkillCategory\"",
+    "summary": "Creates table \"SkillCategory\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "SkillCategory"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"SkillCategory\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"SkillCategory\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"SkillCategory\"",
+        "sql": "CREATE TABLE \"public\".\"SkillCategory\" (\n  \"confidence\" int4,\n  \"createdAt\" timestamptz DEFAULT (now()) NOT NULL,\n  \"id\" uuid NOT NULL,\n  \"name\" text NOT NULL,\n  \"overview\" text NOT NULL,\n  \"slug\" text NOT NULL,\n  \"topRank\" int4,\n  \"updatedAt\" timestamptz NOT NULL,\n  PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"SkillCategory\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"SkillCategory\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unique.Project.Project_slug_key",
+    "label": "Add unique constraint on \"Project\" (slug)",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "unique",
+        "name": "Project_slug_key",
+        "table": "Project"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"Project_slug_key\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "Project_slug_key",
+          "public",
+          "\"public\".\"Project\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add unique constraint \"Project_slug_key\"",
+        "sql": "ALTER TABLE \"public\".\"Project\" ADD CONSTRAINT \"Project_slug_key\" UNIQUE (\"slug\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"Project_slug_key\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "Project_slug_key",
+          "public",
+          "\"public\".\"Project\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unique.Project.Project_featuredRank_key",
+    "label": "Add unique constraint on \"Project\" (featuredRank)",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "unique",
+        "name": "Project_featuredRank_key",
+        "table": "Project"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"Project_featuredRank_key\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "Project_featuredRank_key",
+          "public",
+          "\"public\".\"Project\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add unique constraint \"Project_featuredRank_key\"",
+        "sql": "ALTER TABLE \"public\".\"Project\" ADD CONSTRAINT \"Project_featuredRank_key\" UNIQUE (\"featuredRank\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"Project_featuredRank_key\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "Project_featuredRank_key",
+          "public",
+          "\"public\".\"Project\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unique.Skill.Skill_slug_key",
+    "label": "Add unique constraint on \"Skill\" (slug)",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "unique",
+        "name": "Skill_slug_key",
+        "table": "Skill"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"Skill_slug_key\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "Skill_slug_key",
+          "public",
+          "\"public\".\"Skill\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add unique constraint \"Skill_slug_key\"",
+        "sql": "ALTER TABLE \"public\".\"Skill\" ADD CONSTRAINT \"Skill_slug_key\" UNIQUE (\"slug\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"Skill_slug_key\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "Skill_slug_key",
+          "public",
+          "\"public\".\"Skill\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unique.SkillCategory.SkillCategory_slug_key",
+    "label": "Add unique constraint on \"SkillCategory\" (slug)",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "unique",
+        "name": "SkillCategory_slug_key",
+        "table": "SkillCategory"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"SkillCategory_slug_key\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "SkillCategory_slug_key",
+          "public",
+          "\"public\".\"SkillCategory\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add unique constraint \"SkillCategory_slug_key\"",
+        "sql": "ALTER TABLE \"public\".\"SkillCategory\" ADD CONSTRAINT \"SkillCategory_slug_key\" UNIQUE (\"slug\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"SkillCategory_slug_key\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "SkillCategory_slug_key",
+          "public",
+          "\"public\".\"SkillCategory\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unique.SkillCategory.SkillCategory_topRank_key",
+    "label": "Add unique constraint on \"SkillCategory\" (topRank)",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "unique",
+        "name": "SkillCategory_topRank_key",
+        "table": "SkillCategory"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"SkillCategory_topRank_key\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "SkillCategory_topRank_key",
+          "public",
+          "\"public\".\"SkillCategory\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add unique constraint \"SkillCategory_topRank_key\"",
+        "sql": "ALTER TABLE \"public\".\"SkillCategory\" ADD CONSTRAINT \"SkillCategory_topRank_key\" UNIQUE (\"topRank\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"SkillCategory_topRank_key\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "SkillCategory_topRank_key",
+          "public",
+          "\"public\".\"SkillCategory\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.ProjectCollaborator.ProjectCollaborator_collaboratorId_idx_bf803da6",
+    "label": "Create index \"ProjectCollaborator_collaboratorId_idx_bf803da6\" on \"ProjectCollaborator\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "ProjectCollaborator_collaboratorId_idx_bf803da6",
+        "table": "ProjectCollaborator"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"ProjectCollaborator_collaboratorId_idx_bf803da6\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"ProjectCollaborator_collaboratorId_idx_bf803da6\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"ProjectCollaborator_collaboratorId_idx_bf803da6\"",
+        "sql": "CREATE INDEX \"ProjectCollaborator_collaboratorId_idx_bf803da6\" ON \"public\".\"ProjectCollaborator\" (\"collaboratorId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"ProjectCollaborator_collaboratorId_idx_bf803da6\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"ProjectCollaborator_collaboratorId_idx_bf803da6\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.ProjectCollaborator.ProjectCollaborator_projectId_idx_a96e4d92",
+    "label": "Create index \"ProjectCollaborator_projectId_idx_a96e4d92\" on \"ProjectCollaborator\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "ProjectCollaborator_projectId_idx_a96e4d92",
+        "table": "ProjectCollaborator"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"ProjectCollaborator_projectId_idx_a96e4d92\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"ProjectCollaborator_projectId_idx_a96e4d92\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"ProjectCollaborator_projectId_idx_a96e4d92\"",
+        "sql": "CREATE INDEX \"ProjectCollaborator_projectId_idx_a96e4d92\" ON \"public\".\"ProjectCollaborator\" (\"projectId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"ProjectCollaborator_projectId_idx_a96e4d92\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"ProjectCollaborator_projectId_idx_a96e4d92\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.ProjectImage.ProjectImage_projectId_idx_a96e4d92",
+    "label": "Create index \"ProjectImage_projectId_idx_a96e4d92\" on \"ProjectImage\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "ProjectImage_projectId_idx_a96e4d92",
+        "table": "ProjectImage"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"ProjectImage_projectId_idx_a96e4d92\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"ProjectImage_projectId_idx_a96e4d92\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"ProjectImage_projectId_idx_a96e4d92\"",
+        "sql": "CREATE INDEX \"ProjectImage_projectId_idx_a96e4d92\" ON \"public\".\"ProjectImage\" (\"projectId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"ProjectImage_projectId_idx_a96e4d92\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"ProjectImage_projectId_idx_a96e4d92\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.ProjectSkill.ProjectSkill_projectId_idx_a96e4d92",
+    "label": "Create index \"ProjectSkill_projectId_idx_a96e4d92\" on \"ProjectSkill\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "ProjectSkill_projectId_idx_a96e4d92",
+        "table": "ProjectSkill"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"ProjectSkill_projectId_idx_a96e4d92\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"ProjectSkill_projectId_idx_a96e4d92\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"ProjectSkill_projectId_idx_a96e4d92\"",
+        "sql": "CREATE INDEX \"ProjectSkill_projectId_idx_a96e4d92\" ON \"public\".\"ProjectSkill\" (\"projectId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"ProjectSkill_projectId_idx_a96e4d92\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"ProjectSkill_projectId_idx_a96e4d92\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.ProjectSkill.ProjectSkill_skillId_idx_6e19993d",
+    "label": "Create index \"ProjectSkill_skillId_idx_6e19993d\" on \"ProjectSkill\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "ProjectSkill_skillId_idx_6e19993d",
+        "table": "ProjectSkill"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"ProjectSkill_skillId_idx_6e19993d\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"ProjectSkill_skillId_idx_6e19993d\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"ProjectSkill_skillId_idx_6e19993d\"",
+        "sql": "CREATE INDEX \"ProjectSkill_skillId_idx_6e19993d\" ON \"public\".\"ProjectSkill\" (\"skillId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"ProjectSkill_skillId_idx_6e19993d\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"ProjectSkill_skillId_idx_6e19993d\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.Skill.Skill_categoryId_idx_15c304f2",
+    "label": "Create index \"Skill_categoryId_idx_15c304f2\" on \"Skill\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "Skill_categoryId_idx_15c304f2",
+        "table": "Skill"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"Skill_categoryId_idx_15c304f2\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Skill_categoryId_idx_15c304f2\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"Skill_categoryId_idx_15c304f2\"",
+        "sql": "CREATE INDEX \"Skill_categoryId_idx_15c304f2\" ON \"public\".\"Skill\" (\"categoryId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"Skill_categoryId_idx_15c304f2\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Skill_categoryId_idx_15c304f2\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.ProjectCollaborator.ProjectCollaborator_projectId_fkey",
+    "label": "Add foreign key \"ProjectCollaborator_projectId_fkey\" on \"ProjectCollaborator\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "ProjectCollaborator_projectId_fkey",
+        "table": "ProjectCollaborator"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"ProjectCollaborator_projectId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "ProjectCollaborator_projectId_fkey",
+          "public",
+          "\"public\".\"ProjectCollaborator\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"ProjectCollaborator_projectId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"ProjectCollaborator\"\nADD CONSTRAINT \"ProjectCollaborator_projectId_fkey\"\nFOREIGN KEY (\"projectId\")\nREFERENCES \"public\".\"Project\" (\"id\")\nON DELETE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"ProjectCollaborator_projectId_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "ProjectCollaborator_projectId_fkey",
+          "public",
+          "\"public\".\"ProjectCollaborator\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.ProjectCollaborator.ProjectCollaborator_collaboratorId_fkey",
+    "label": "Add foreign key \"ProjectCollaborator_collaboratorId_fkey\" on \"ProjectCollaborator\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "ProjectCollaborator_collaboratorId_fkey",
+        "table": "ProjectCollaborator"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"ProjectCollaborator_collaboratorId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "ProjectCollaborator_collaboratorId_fkey",
+          "public",
+          "\"public\".\"ProjectCollaborator\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"ProjectCollaborator_collaboratorId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"ProjectCollaborator\"\nADD CONSTRAINT \"ProjectCollaborator_collaboratorId_fkey\"\nFOREIGN KEY (\"collaboratorId\")\nREFERENCES \"public\".\"Collaborator\" (\"id\")\nON DELETE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"ProjectCollaborator_collaboratorId_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "ProjectCollaborator_collaboratorId_fkey",
+          "public",
+          "\"public\".\"ProjectCollaborator\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.ProjectImage.ProjectImage_projectId_fkey",
+    "label": "Add foreign key \"ProjectImage_projectId_fkey\" on \"ProjectImage\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "ProjectImage_projectId_fkey",
+        "table": "ProjectImage"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"ProjectImage_projectId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "ProjectImage_projectId_fkey",
+          "public",
+          "\"public\".\"ProjectImage\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"ProjectImage_projectId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"ProjectImage\"\nADD CONSTRAINT \"ProjectImage_projectId_fkey\"\nFOREIGN KEY (\"projectId\")\nREFERENCES \"public\".\"Project\" (\"id\")\nON DELETE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"ProjectImage_projectId_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "ProjectImage_projectId_fkey",
+          "public",
+          "\"public\".\"ProjectImage\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.ProjectSkill.ProjectSkill_projectId_fkey",
+    "label": "Add foreign key \"ProjectSkill_projectId_fkey\" on \"ProjectSkill\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "ProjectSkill_projectId_fkey",
+        "table": "ProjectSkill"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"ProjectSkill_projectId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "ProjectSkill_projectId_fkey",
+          "public",
+          "\"public\".\"ProjectSkill\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"ProjectSkill_projectId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"ProjectSkill\"\nADD CONSTRAINT \"ProjectSkill_projectId_fkey\"\nFOREIGN KEY (\"projectId\")\nREFERENCES \"public\".\"Project\" (\"id\")\nON DELETE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"ProjectSkill_projectId_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "ProjectSkill_projectId_fkey",
+          "public",
+          "\"public\".\"ProjectSkill\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.ProjectSkill.ProjectSkill_skillId_fkey",
+    "label": "Add foreign key \"ProjectSkill_skillId_fkey\" on \"ProjectSkill\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "ProjectSkill_skillId_fkey",
+        "table": "ProjectSkill"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"ProjectSkill_skillId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "ProjectSkill_skillId_fkey",
+          "public",
+          "\"public\".\"ProjectSkill\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"ProjectSkill_skillId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"ProjectSkill\"\nADD CONSTRAINT \"ProjectSkill_skillId_fkey\"\nFOREIGN KEY (\"skillId\")\nREFERENCES \"public\".\"Skill\" (\"id\")\nON DELETE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"ProjectSkill_skillId_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "ProjectSkill_skillId_fkey",
+          "public",
+          "\"public\".\"ProjectSkill\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.Skill.Skill_categoryId_fkey",
+    "label": "Add foreign key \"Skill_categoryId_fkey\" on \"Skill\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "Skill_categoryId_fkey",
+        "table": "Skill"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"Skill_categoryId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "Skill_categoryId_fkey",
+          "public",
+          "\"public\".\"Skill\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"Skill_categoryId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"Skill\"\nADD CONSTRAINT \"Skill_categoryId_fkey\"\nFOREIGN KEY (\"categoryId\")\nREFERENCES \"public\".\"SkillCategory\" (\"id\")\nON DELETE RESTRICT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"Skill_categoryId_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "Skill_categoryId_fkey",
+          "public",
+          "\"public\".\"Skill\""
+        ]
+      }
+    ]
+  }
+]
