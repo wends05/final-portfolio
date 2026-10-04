@@ -1,5 +1,7 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
-import ComingSoonPage from "#/features/public/components/ComingSoonPage";
+import { useState } from "react";
+import ComingSoonComponent from "#/features/public/components/ComingSoonComponent";
+import IntroCurtain from "#/features/public/components/intro/IntroCurtain";
 import { getSiteGate } from "#/features/site/site.functions";
 
 export const Route = createFileRoute("/coming-soon")({
@@ -18,3 +20,16 @@ export const Route = createFileRoute("/coming-soon")({
 	}),
 	component: ComingSoonPage,
 });
+
+function ComingSoonPage() {
+	const [introActive, setIntroActive] = useState(false);
+
+	return (
+		<>
+			<IntroCurtain onActiveChange={setIntroActive} />
+			<div inert={introActive} className="contents">
+				<ComingSoonComponent />
+			</div>
+		</>
+	);
+}

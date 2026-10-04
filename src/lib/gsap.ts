@@ -8,4 +8,6 @@ gsap.registerPlugin(useGSAP, CustomEase);
 // include all of the needed plugins in here.
 CustomEase.create("swiss", "0.2,0,0,1");
 
+CustomEase.create("curtain", "0.76,0,0.24,1");
+
 export { gsap, useGSAP };

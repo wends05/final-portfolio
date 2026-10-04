@@ -4,6 +4,7 @@
 @import "@fontsource-variable/outfit";
 @import "@fontsource-variable/geist-mono";
 @import "./styles/portfolio.css";
+@import "./styles/intro.css";
 
 @custom-variant dark (&:is(.dark *));
 

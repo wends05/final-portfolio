@@ -1,0 +1,53 @@
+/* No data-intro (JS off): no curtain, hero in its final state. */
+.intro-curtain {
+  display: none;
+  background: color-mix(in srgb, var(--paper), var(--ink-black) 10%);
+}
+.intro-mark {
+  color: var(--on-accent);
+}
+
+:root[data-intro="play"] {
+  overflow: hidden;
+} /* scroll lock: no scrolling, no scrollbar */
+
+html {
+  scrollbar-gutter: stable;
+} /* no layout jump when a classic scrollbar returns */
+
+:root[data-intro="play"] .intro-curtain {
+  display: flex;
+}
+
+:root[data-intro] .intro-hero [data-reveal] {
+  visibility: hidden;
+}
+
+:root[data-intro] .intro-mark {
+  color: var(--text);
+}
+
+:root[data-intro] .intro-mark-ink {
+  transform: scaleX(0);
+}
+
+/* Fail-safe if the app bundle never runs; GSAP sets animation: none on start. */
+@keyframes intro-failsafe-hide {
+  to {
+    visibility: hidden;
+  }
+}
+
+@keyframes intro-failsafe-show {
+  to {
+    visibility: visible;
+  }
+}
+
+:root[data-intro="play"] .intro-curtain {
+  animation: intro-failsafe-hide 0s 10s forwards;
+}
+
+:root[data-intro] .intro-hero [data-reveal] {
+  animation: intro-failsafe-show 0s 10s forwards;
+}
