@@ -1,18 +1,15 @@
 {
-  "include": ["**/*.ts", "**/*.tsx"],
+  "include": ["**/*.ts", "**/*.tsx", "src/integrations/prisma/contract.ts"],
+  "exclude": ["./src/integrations/prisma/**", "migrations/**"],
   "compilerOptions": {
     "target": "ES2022",
     "jsx": "react-jsx",
     "module": "preserve",
     "paths": {
       "#/*": ["./src/*"],
-      "@/*": ["./src/*"]
     },
     "lib": ["ES2022", "DOM", "DOM.Iterable"],
-    "types": [
-      "vite/client",
-      "node"
-    ],
+    "types": ["vite/client", "node"],
 
     /* Bundler mode */
     "moduleResolution": "bundler",
@@ -27,6 +24,6 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
-    "resolveJsonModule": true
-  }
+    "resolveJsonModule": true,
+  },
 }

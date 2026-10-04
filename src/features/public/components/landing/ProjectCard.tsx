@@ -1,9 +1,5 @@
-import type { LandingProjectCard } from "../../public.types";
 
-export default function ProjectCard({
-	title,
-	description,
-	imageUrl,
-}: LandingProjectCard) {
+
+export default function ProjectCard() {
 	return <div>ProjectCard</div>;
 }

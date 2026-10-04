@@ -31,7 +31,7 @@
     "@phosphor-icons/react": "^2.1.10",
     "@prisma/adapter-pg": "^7.10.0",
     "@prisma/client": "^7.10.0",
-    "@prisma/orm-postgres": "^8.0.0-rc.9-dev.13",
+    "@prisma/orm-postgres": "8.0.0-rc.13",
     "@tailwindcss/vite": "^4.3.3",
     "@tanstack/react-devtools": "latest",
     "@tanstack/react-query": "latest",
@@ -42,13 +42,12 @@
     "@tanstack/react-start": "latest",
     "@tanstack/react-store": "latest",
     "@tanstack/store": "latest",
-    "biome": "^0.3.3",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "dotenv": "^17.4.2",
     "gsap": "^3.15.0",
     "nitro": "3.0.260610-beta",
-    "prisma": "^8.0.0-rc.9-dev.79",
+    "prisma": "8.0.0-rc.19",
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
     "shadcn": "^4.21.1",
@@ -58,8 +57,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^2.5.15",
-    "@prisma/cli": "^8.0.0-rc.19",
-    "@prisma/cli-engine": "0.2.3",
+    "@prisma/cli-engine": "0.6.1",
     "@rolldown/plugin-babel": "^0.2.4",
     "@shadcn/lint": "^0.2.0",
     "@tanstack/devtools-event-client": "latest",
@@ -77,6 +75,13 @@
     "tsx": "^4.23.15",
     "typescript": "^6.0.3",
     "vite": "^8.3.2"
+  },
+  "overrides": {
+    "@hono/node-server": "1.19.17",
+    "hono": "4.13.13",
+    "lodash": "4.18.1",
+    "valibot": "1.5.0",
+    "arktype": "2.2.7"
   },
   "pnpm": {
     "onlyBuiltDependencies": [

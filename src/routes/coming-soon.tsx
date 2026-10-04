@@ -4,9 +4,9 @@ import { getSiteGate } from "#/features/site/site.functions";
 
 export const Route = createFileRoute("/coming-soon")({
 	beforeLoad: async () => {
-		// 		const { gated } = await getSiteGate();
-		//
-		// 		if (!gated) throw redirect({ to: "/" });
+		const { gated } = await getSiteGate();
+
+		if (!gated) throw redirect({ to: "/" });
 	},
 	head: () => ({
 		meta: [
