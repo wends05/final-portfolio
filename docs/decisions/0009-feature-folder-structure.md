@@ -59,11 +59,9 @@ None were recorded.
 
 - TanStack Start's import protection blocks `*.server.*` files from the client bundle by default, so the suffix also enforces the server boundary in `AGENTS.md`.
 - Routes stay thin: they compose feature components and call `*.functions.ts`.
-- One feature may call another feature's `.server.ts` from its own server code; `public.functions.tsx` does this for projects and skills.
+- One feature may call another feature's `.server.ts` from its own server code; `public.server.ts` does this for projects and skills.
 - The existing source does not fully follow this yet:
   - `src/features/public/lib/intro.ts` holds feature helpers in `lib/` instead of `utils/` or `public.utils.ts`.
-  - `src/features/public/public.functions.tsx` imports `../projects/projects.server` with relative paths instead of `#/`.
-  - `public.functions.tsx` returns `createCompositeComponent` sources (JSX) instead of plain data; removed with RSC ([0011](0011-no-react-server-components.md)).
   - `src/features/projects/projects.functions.ts` is empty, and `skills` has no `.functions.ts`.
 
   Align these when the files are next changed; they do not block other work.
