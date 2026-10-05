@@ -45,11 +45,13 @@ Do not use the `db:*` scripts in `package.json`; they are traditional Prisma com
 
 ## Validation
 
-There is no test suite yet. Pick checks that fit the change:
+Pick checks that fit the change:
 
 ```bash
-bun --bun run verify   # Biome check, lint:ds, typecheck, build
+bun --bun run verify   # Biome check, lint:ds, typecheck, build (and tests, once added)
 ```
+
+Tests use Vitest, and every pull request that changes behavior includes tests ([decision 0010](decisions/0010-vitest-tests-in-every-pr.md)). The test setup is not added yet.
 
 [../scripts/verify.mjs](../scripts/verify.mjs) runs all four from the repository root, keeps going after a failure, and exits 1 if any check fails. It never touches the database.
 
@@ -90,11 +92,10 @@ flowchart LR
     Branch -->|other| Preview["Preview URL, behind Vercel login"]
 ```
 
-[../vercel.json](../vercel.json) sets the install and build commands and `bunVersion`. Nitro reads `bunVersion` and sets the function runtime to Bun (`bun1.x`) instead of Node.js:
+[../vercel.json](../vercel.json) sets the install and build commands. Production runs on Vercel's Node.js runtime ([decision 0005](decisions/0005-vercel-deployment.md)), pinned with `vercel.functions.runtime: "nodejs24.x"` in the Nitro config because the build runs under Bun. Application code must not use Bun-only APIs such as `Bun.s3`:
 
 ```json
 {
-  "bunVersion": "1.x",
   "installCommand": "bun install --frozen-lockfile",
   "buildCommand": "bun --bun run build"
 }
@@ -107,12 +108,12 @@ Set these environment variables in the Vercel project for each environment that 
 | `DATABASE_URL` | Every page that reads the database. Preview deployments without it fail with a database error while reading the contract marker. |
 | `COMING_SOON`, `PREVIEW_TOKEN` | The [coming-soon gate](architecture.md#coming-soon-gate) |
 
-To reproduce the Vercel build locally, which writes the ignored `.vercel/output/`:
+To reproduce the Vercel build locally, which writes the ignored `.vercel/output/` (check `functions/__server.func/.vc-config.json` shows a `nodejs` runtime):
 
 ```bash
 NITRO_PRESET=vercel bun --bun run build
 ```
 
-After a deploy, confirm the production deployment succeeded and `/` (or `/coming-soon` when gated) responds. If the Bun runtime causes problems, remove `bunVersion` to fall back to Node.js.
+After a deploy, confirm the production deployment succeeded and `/` (or `/coming-soon` when gated) responds.
 
 Pushing to `main` deploys to production. Push to `main` only when the owner asks.

@@ -11,7 +11,11 @@ const config = defineConfig({
 	resolve: { tsconfigPaths: true },
 	plugins: [
 		devtools(),
-		nitro({ rollupConfig: { external: [/^@sentry\//] } }),
+		nitro({
+			rollupConfig: { external: [/^@sentry\//] },
+			// The build runs under Bun, which would otherwise select Vercel's Bun runtime (ADR 0005).
+			vercel: { functions: { runtime: "nodejs24.x" } },
+		}),
 		tailwindcss(),
 		tanstackStart({
 			rsc: {
