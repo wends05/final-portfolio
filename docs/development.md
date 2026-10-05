@@ -60,7 +60,7 @@ Tests use Vitest ([decision 0010](decisions/0010-vitest-tests-in-every-pr.md)) a
 
 ### CI
 
-[../.github/workflows/ci.yml](../.github/workflows/ci.yml) runs `verify` on every pull request and every push to `main`. It installs the Bun version pinned in `package.json` (`packageManager`) and Node.js 24 for the tests.
+[../.github/workflows/ci.yml](../.github/workflows/ci.yml) runs `verify` on every pull request and every push to `main`. It installs the Bun version pinned in `package.json` (`packageManager`) and Node.js 24 for the tests. It also runs `bun audit` before `verify` as a non-blocking step: advisories show in the log but don't fail the job, because `braces` has no fix yet.
 
 `verify` must pass before a change is done. Report results in chat or the PR, not in these docs. For UI work, also check affected pages on small screens and with the keyboard. See [sdlc.md](sdlc.md#verification-by-change-type).
 
@@ -79,6 +79,19 @@ Tests use Vitest ([decision 0010](decisions/0010-vitest-tests-in-every-pr.md)) a
 ```bash
 bun audit
 ```
+
+CI runs `bun audit` on every pull request without failing the job ([CI](#ci)).
+
+### Dependabot
+
+[../.github/dependabot.yml](../.github/dependabot.yml) configures two update streams:
+
+| Ecosystem | Schedule | Pull requests |
+| --- | --- | --- |
+| `bun` (package.json + bun.lock) | Monthly | `open-pull-requests-limit: 0`, so Dependabot opens no version-update PRs for npm packages. Minor and patch updates would be grouped into one `chore:` PR if the limit is raised. |
+| `github-actions` | Weekly | One grouped `ci:` PR for all action updates |
+
+To start receiving npm update PRs, raise `open-pull-requests-limit`. CI runs on Dependabot PRs like any other. Workflows triggered by Dependabot can't read repository secrets, so any workflow that needs one must skip Dependabot PRs.
 
 ## Build output and deployment
 
