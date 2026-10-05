@@ -14,7 +14,7 @@ Use Biome 2.5.15 for formatting, import sorting, and general linting, configured
 - Formatter: tabs, double quotes.
 - Linter: `recommended` preset, with `style/noNonNullAssertion` off.
 - Assist: `organizeImports` on.
-- Scope: `src/**`, `scripts/**/*.mjs`, `vite.config.ts`, and `.vscode/**`. Excludes the generated route tree, `src/styles.css`, `src/styles/*`, `src/integrations/prisma/contract.ts`, and `.delta/`.
+- Scope: `src/**`, root `scripts/**/*.mjs`, `vite.config.ts`, and `.vscode/**`. Excludes generated files (`src/routeTree.gen.ts`, `src/integrations/prisma/contract.json`, `contract.d.ts`), `src/styles.css`, `src/styles/*`, and `.delta/`. Agent skill folders (`.agents/`, `.claude/`, `.cursor/`, `.devin/`) are out of scope.
 
 ```bash
 bun --bun run check    # format + lint + imports, read-only
@@ -32,9 +32,9 @@ None were recorded. [0001](0001-oxlint-for-design-system-lint.md) rejected repla
 
 - One fast tool covers formatting and general linting; there is no ESLint or Prettier config to maintain.
 - Stylesheets are excluded because Biome's CSS parser does not have Tailwind directives enabled.
-- Generated Prisma JSON and types under `src/integrations/prisma/` are still in scope, so they can produce findings.
+- Generated files are excluded, so `contract emit` output never fails the check. The hand-written `contract.ts` is checked.
 - The scripts are read-only. Pass `--write` explicitly only when changes are intended.
 
 ## Validation
 
-On 2026-10-05, `bun --bun run check` exited 1 with existing findings; see [../development.md](../development.md#validation). The configuration loads with the installed CLI.
+On 2026-10-05, after narrowing the scope and formatting nine files, `bun --bun run check` exited 0.

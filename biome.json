@@ -8,7 +8,7 @@
 	"files": {
 		"ignoreUnknown": false,
 		"includes": [
-			"**/scripts/**/*.mjs",
+			"scripts/**/*.mjs",
 			"**/src/**/*",
 			"**/.vscode/**/*",
 			"**/index.html",
@@ -17,8 +17,8 @@
 			"!**/src/styles.css",
 			"!**/src/styles/*",
 			"!!**/.delta",
-			"**/src/integrations/prisma/",
-			"!**/src/integrations/prisma/contract.ts"
+			"!**/src/integrations/prisma/contract.json",
+			"!**/src/integrations/prisma/contract.d.ts"
 		]
 	},
 	"formatter": {
