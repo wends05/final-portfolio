@@ -14,19 +14,20 @@ TanStack marks server components as experimental ("will remain so into early v1"
 Do not use React Server Components for now. Load data with server functions that return plain, serializable data, and render it with ordinary SSR React components.
 
 ```ts
-// projects.functions.ts
-export const getFeaturedProjectsFn = createServerFn().handler(() =>
-  getFeaturedProjects({ limit: 3 }),
-);
-
-// routes/_public/index.tsx
-loader: async () => {
+// public.server.ts
+export async function getHomepageData() {
   const [projects, skills] = await Promise.all([
-    getFeaturedProjectsFn(),
-    getTopSkillsFn(),
+    getFeaturedProjects({ limit: 3 }),
+    getTopSkills({ limit: 3 }),
   ]);
   return { projects, skills };
-},
+}
+
+// public.functions.ts
+export const getHomepage = createServerFn().handler(() => getHomepageData());
+
+// routes/_public/index.tsx
+loader: () => getHomepage(),
 ```
 
 ```mermaid
@@ -53,4 +54,4 @@ Removing RSC from the code is tracked in Linear: replace `createCompositeCompone
 
 ## Validation
 
-Decision only. On 2026-10-05, TanStack's [server components guide](https://tanstack.com/start/latest/docs/framework/react/guide/server-components) and [RSC blog post](https://tanstack.com/blog/react-server-components) were reviewed. The code still uses RSC until the removal task is done.
+Decision only. On 2026-10-05, TanStack's [server components guide](https://tanstack.com/start/latest/docs/framework/react/guide/server-components) and [RSC blog post](https://tanstack.com/blog/react-server-components) were reviewed. Implemented the same day (Linear WD-49): the homepage loads `getHomepage()` (plain data), `@vitejs/plugin-rsc` and the `rsc` option are removed, and `components.json` has `"rsc": false`. `verify` passed with tests for `getHomepageData`; the dev server rendered both sections during SSR and hydrated without warnings.
