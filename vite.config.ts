@@ -34,6 +34,18 @@ const config = defineConfig({
 					warn(warning);
 				},
 			},
+			hooks: {
+				// Nitro names its node_modules chunk group with a function, so Rolldown asks
+				// for a `debugName` label. Nitro's group wins over user config, so set it here.
+				"rollup:before"(_nitro, config) {
+					const output = config.output as {
+						codeSplitting?: { groups?: { debugName?: string }[] };
+					};
+					for (const group of output?.codeSplitting?.groups ?? []) {
+						group.debugName ??= "node_modules";
+					}
+				},
+			},
 			// The build runs under Bun, which would otherwise select Vercel's Bun runtime (ADR 0005).
 			vercel: { functions: { runtime: "nodejs24.x" } },
 		}),
