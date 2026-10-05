@@ -34,12 +34,34 @@ flowchart TD
 | Skills | Reusable skills, each linked to the projects that used it |
 | Contact | Links only (email, GitHub, LinkedIn, or similar). No form and no contact backend |
 | Resume | A downloadable PDF |
-| Content editing | A protected admin page for creating and editing projects and skills |
+| Content editing | A protected admin dashboard with full create, edit, and delete for all content; see [Admin dashboard](#admin-dashboard) |
 
 ## Content rules
 
 - **Featured order is manual.** The three featured projects and three top skills are chosen and ordered explicitly through an order field, not by date or computed ranking.
 - **Projects and skills are many-to-many.** A project lists the skills it used; a skill shows the projects that used it.
+
+## Admin dashboard
+
+Direction from the owner on 2026-10-05: a standard dashboard layout where the owner picks a content type, then adds, edits, or deletes entries. Full CRUD for everything, with edge cases handled.
+
+| Content type | Operations |
+| --- | --- |
+| Projects | Create, edit, delete, publish/unpublish, set featured rank, attach skills, collaborators, and images |
+| Skill categories | Create, edit, delete, set top rank and confidence |
+| Skills | Create, edit, delete, move between categories |
+| Collaborators | Create, edit, delete, link to projects with a role |
+| Project images | Upload, reorder, edit alt text, delete |
+
+Edge cases the dashboard must handle include:
+
+- Duplicate slugs and duplicate ranks (both unique): show a clear error, or offer to swap ranks.
+- Deleting a skill category that still has skills: blocked by the database; explain why and offer to move or delete the skills first.
+- Deleting a project: confirm, and remove its images from storage as well as its rows.
+- Unpublished projects: never shown publicly, even if ranked.
+- Confidence outside 0–100, missing required fields (such as image `alt`), invalid URLs and dates (`endedAt` before `startedAt`).
+- Concurrent edits and failed saves: no silent data loss.
+- Only the owner (`neon_auth.user.role = 'admin'`) can reach the dashboard or call its server functions.
 
 ## Non-goals
 

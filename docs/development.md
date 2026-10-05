@@ -53,7 +53,7 @@ bun --bun run verify   # Biome check, lint:ds, typecheck, build
 
 [../scripts/verify.mjs](../scripts/verify.mjs) runs all four from the repository root, keeps going after a failure, and exits 1 if any check fails. It never touches the database.
 
-Run `verify` before and after a change so you can tell existing failures from new ones. Report results in chat or the PR, not in these docs. For UI work, also check affected pages on small screens and with the keyboard. See [sdlc.md](sdlc.md#verification-by-change-type).
+`verify` must pass before a change is done. Report results in chat or the PR, not in these docs. For UI work, also check affected pages on small screens and with the keyboard. See [sdlc.md](sdlc.md#verification-by-change-type).
 
 ## Generated files
 

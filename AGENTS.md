@@ -22,7 +22,7 @@ bun --bun run build      # production build into .output/
 bun --bun run verify     # all four checks; nonzero if any fail
 ```
 
-Not every check passes yet. Run `verify` before and after a change, and report which failures existed before your change and which are new.
+`verify` passes on `main`. Keep it passing: a change is not done while `verify` fails.
 
 ## Rules
 
