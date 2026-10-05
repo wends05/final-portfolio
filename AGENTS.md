@@ -30,6 +30,7 @@ The baseline does not pass every check yet; see [docs/development.md](docs/devel
 - Keep database access in `*.server.ts` modules and server functions; UI receives data through loaders or composite components.
 - Ask before running anything that changes a database (`db:push`, `db:migrate`, `db:seed`, migration apply). Never print or commit `DATABASE_URL` or the contents of `.env`.
 - `.delta/` holds tool-managed clones and worktrees. Do not edit, lint, or commit it.
+- Pushing `main` deploys to production on Vercel ([docs/development.md](docs/development.md#vercel)). Push only when the owner asks.
 
 ## Skills
 
@@ -38,7 +39,7 @@ The baseline does not pass every check yet; see [docs/development.md](docs/devel
 
 ## Development workflow
 
-- Read [docs/sdlc.md](docs/sdlc.md) before planning substantial work. Use `docs/templates/` for change artifacts in `docs/changes/NNN-short-topic/`.
+- Read [docs/sdlc.md](docs/sdlc.md) before planning substantial work. Plan tasks in chat and record significant architectural decisions in `docs/decisions/`; separate per-change documents are not required.
 - Record actual owner acceptance and implementation authorization; never infer acceptance from an agent-written status. Once authorized, continue routine work within scope without repeatedly asking permission.
 - Define observable acceptance criteria, inspect relevant source, and update the plan and affected docs when the approach changes.
 - Choose verification appropriate to the change. Record actual results, existing failures, regressions, and checks not run before reporting completion. A failing `verify` command remains a failure even when the cause predates the change.
