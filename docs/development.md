@@ -54,7 +54,7 @@ bun --bun run verify   # Biome check, lint:ds, typecheck, Vitest, build
 bun run test           # tests only
 ```
 
-Tests use Vitest ([decision 0010](decisions/0010-vitest-tests-in-every-pr.md)) and live next to the code as `*.test.ts`. Every pull request that changes behavior includes tests. [../vitest.config.ts](../vitest.config.ts) is separate from `vite.config.ts`, so tests don't load the Nitro or TanStack Start plugins. Tests run on Node.js, like production: `verify` starts the test step without Bun's `node` shim.
+Tests use Vitest ([decision 0010](decisions/0010-vitest-tests-in-every-pr.md)) and live next to the code as `*.test.ts`. Every pull request that changes behavior includes tests. For now the suite is unit tests only; components, database queries, and browser flows are not tested. [../vitest.config.ts](../vitest.config.ts) is separate from `vite.config.ts`, so tests don't load the Nitro or TanStack Start plugins. Tests run on Node.js, like production: `verify` starts the test step without Bun's `node` shim.
 
 [../scripts/verify.mjs](../scripts/verify.mjs) runs every check from the repository root, keeps going after a failure, and exits 1 if any check fails. It never touches the database.
 
