@@ -4,7 +4,7 @@ Source snapshot: **2026-10-04**. The UI is still mostly scaffolding; these notes
 
 ## Styling and components
 
-Styles come in two layers, recorded in [decision 0002](decisions/0002-portfolio-design-tokens.md):
+shadcn is the component and token base ([decision 0007](decisions/0007-shadcn-component-and-token-base.md)). Styles come in two layers, recorded in [decision 0002](decisions/0002-portfolio-design-tokens.md):
 
 1. [../src/styles/portfolio.css](../src/styles/portfolio.css) holds the Rence Portfolio design system: palette (`--ink-black`, `--paper`, `--steel-grey`, `--dim-grey`), semantic roles (`--surface`, `--text`, `--text-muted`, `--text-subtle`, `--surface-inverse`, `--rule`, `--rule-soft`, `--focus`…), the type scale, fonts and layout utilities.
 2. [../src/styles.css](../src/styles.css) is the shadcn entry named in `components.json`. It imports Tailwind, animation utilities, shadcn styles, Outfit Variable, Geist Mono Variable and `portfolio.css`. Its light shadcn variables point at the portfolio roles (`--background: var(--surface)`, `--primary: var(--surface-accent)`, `--border: var(--rule-soft)`, `--ring: var(--focus)`). `--secondary`, `--muted`, `--accent`, `--destructive`, `--chart-*`, `--radius` and the whole `.dark` block keep their shadcn defaults.

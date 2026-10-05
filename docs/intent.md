@@ -58,7 +58,7 @@ Each item below is a known difference. Changing the data model or adding auth is
 | Case-study page per project | `/projects/$` is a placeholder splat route. `getProjectBySlug` exists, but no route calls it. |
 | Case study covers problem, approach, and result | The schema has only `description`. Separate fields were deferred ([decision 0003](decisions/0003-neon-database-and-portfolio-schema.md)). |
 | Contact links and resume download | `ContactSection` is a placeholder and is not mounted; no `public/resume.pdf` exists |
-| Admin page | No admin route. Neon Auth is provisioned, but the app does not use it yet. |
+| Admin page | Only placeholder `/home` and `/auth` routes under `_dashboard`. Neon Auth is provisioned, but the app does not use it yet. |
 | Clean, minimal visual design | Landing components render placeholder text |
 
 The data model now covers manual featured order (`featuredRank`, `topRank`) and the many-to-many link between projects and skills (`ProjectSkill`). See [data](data.md#models).

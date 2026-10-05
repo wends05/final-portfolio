@@ -26,6 +26,8 @@ These are source observations, not confirmation that all pieces work together at
 | Contact | Placeholder component is not mounted | There is no implemented contact flow |
 | Navigation | Icons are rendered without links | Configured paths do not provide clickable navigation |
 | Skills and projects pages | Placeholder route components | Listings and project detail loading are unfinished |
+| Dashboard routes | `_dashboard/home.tsx` and `_dashboard/auth/index.tsx` render generated placeholder text | No admin UI or authentication yet |
+| Folder layout | A few files predate [decision 0009](decisions/0009-feature-folder-structure.md), such as `public/lib/intro.ts` | Align them when those files next change |
 | Project server functions | `projects.functions.ts` is empty | No project-specific server-function API exists there |
 | Skill component injection | SkillsSection declares a SkillCard prop but renders an imported SkillCard | Supplied card customization is not used |
 | Simulated delay | `Promise.resolve(() => setTimeout(...))` resolves a function without invoking it | It does not implement the apparent five-second delay |

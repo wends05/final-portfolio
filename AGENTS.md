@@ -28,6 +28,7 @@ The baseline does not pass every check yet; see [docs/development.md](docs/devel
 
 - Do not edit generated files by hand: `src/routeTree.gen.ts` (route generator) and `src/integrations/prisma/contract.json` / `contract.d.ts` (`contract:emit`). See [docs/development.md](docs/development.md#generated-files) and [docs/data.md](docs/data.md).
 - Keep database access in `*.server.ts` modules and server functions; UI receives data through loaders or composite components.
+- Follow the feature folder layout in [docs/decisions/0009-feature-folder-structure.md](docs/decisions/0009-feature-folder-structure.md): `<feature>.server.ts`, `<feature>.functions.ts`, `utils`, `types`, and `components/` per feature; shared code in `#/components` and `#/lib`.
 - Ask before running anything that changes a database (`db:push`, `db:migrate`, `db:seed`, migration apply). Never print or commit `DATABASE_URL` or the contents of `.env`.
 - `.delta/` holds tool-managed clones and worktrees. Do not edit, lint, or commit it.
 - Pushing `main` deploys to production on Vercel ([docs/development.md](docs/development.md#vercel)). Push only when the owner asks.

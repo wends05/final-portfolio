@@ -32,7 +32,7 @@ The dev script requests port **3000**. `DATABASE_URL` must point at the Neon dat
 
 Biome 2.5.15 (CLI and `biome.json` schema) scopes its checks through [../biome.json](../biome.json); it includes `scripts/**/*.mjs` and excludes the generated route tree, the stylesheets, and `.delta/` (tool-managed clones whose nested `biome.json` otherwise stops Biome with a "nested root configuration" error). Generated Prisma JSON and types are still included, so generated-file findings remain possible. The scripts do not pass `--write`. Use an explicit write option only when formatting changes are intended.
 
-Two linters run side by side and do not overlap:
+Two linters run side by side and do not overlap ([decision 0008](decisions/0008-biome-linter-and-formatter.md), [decision 0001](decisions/0001-oxlint-for-design-system-lint.md)):
 
 | Tool | Config | Owns |
 | --- | --- | --- |

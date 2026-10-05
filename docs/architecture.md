@@ -4,7 +4,7 @@ Source snapshot: **2026-10-05**. See [current status](status.md) for implementat
 
 ## Stack and entry points
 
-This is a TypeScript React portfolio. The root document title is `wends.dev`. TanStack Start provides the application framework and server functions; TanStack Router provides file-based routing. Vite enables React Server Components (RSC), the React compiler, Tailwind CSS, and the Nitro server adapter in [../vite.config.ts](../vite.config.ts).
+This is a TypeScript React portfolio. The root document title is `wends.dev`. The stack is recorded in [decision 0006](decisions/0006-tanstack-start-application-stack.md). TanStack Start provides the application framework and server functions; TanStack Router provides file-based routing. Vite enables React Server Components (RSC), the React compiler, Tailwind CSS, and the Nitro server adapter in [../vite.config.ts](../vite.config.ts).
 
 [../src/router.tsx](../src/router.tsx) exports `getRouter()`, which creates a router and a fresh QueryClient context, then connects Router and Query for SSR. The homepage currently fetches through route loaders and server functions; it does not use a `useQuery` hook.
 
@@ -19,6 +19,7 @@ This is a TypeScript React portfolio. The root document title is `wends.dev`. Ta
 | `/projects` | `_public/projects/route.tsx` and `index.tsx` | Nested outlet and placeholder listing |
 | `/projects/*` | `_public/projects/$.tsx` | Placeholder splat route |
 | `/coming-soon` | `coming-soon.tsx` | Placeholder coming-soon page with a server-function gate and `noindex` metadata |
+| `/home`, `/auth` | `_dashboard/home.tsx`, `_dashboard/auth/index.tsx` | Generated placeholders ("Hello …"); no layout, auth, or gate yet |
 
 `_public` does not appear in browser URLs. The `$` file is a catch-all route, not an implemented project lookup by slug. [../src/routeTree.gen.ts](../src/routeTree.gen.ts) is generated from the route files.
 
@@ -58,6 +59,8 @@ flowchart TD
 The loader awaits both sections before returning. The skills section has a Suspense wrapper, but the source does not establish that its fallback appears during the initial loader fetch.
 
 ## File ownership
+
+The layout follows [decision 0009](decisions/0009-feature-folder-structure.md): `<feature>.server.ts` for server-only code, `<feature>.functions.ts` for server functions, plus `utils`, `types`, and `components/` per feature, with shared code in `#/components` and `#/lib`.
 
 | Location | Responsibility |
 | --- | --- |
