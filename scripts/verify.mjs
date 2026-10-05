@@ -1,19 +1,41 @@
 import { spawnSync } from "node:child_process";
+import { delimiter } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const cwd = fileURLToPath(new URL("../", import.meta.url));
-const checks = ["check", "lint:ds", "typecheck", "build"];
+// `onNode` checks run on Node.js, matching production (ADR 0005, ADR 0010).
+const checks = [
+	{ name: "check" },
+	{ name: "lint:ds" },
+	{ name: "typecheck" },
+	{ name: "test", onNode: true },
+	{ name: "build" },
+];
 const results = [];
 
-for (const check of checks) {
-	console.log(`\nRunning ${check}`);
-	const result = spawnSync("bun", ["--bun", "run", check], {
-		cwd,
-		stdio: "inherit",
-	});
+// `bun --bun` puts a `node` shim on PATH; drop it so `node` means Node.js.
+const nodeEnv = {
+	...process.env,
+	PATH: (process.env.PATH ?? "")
+		.split(delimiter)
+		.filter((dir) => !dir.includes("bun-node"))
+		.join(delimiter),
+};
+
+for (const { name, onNode } of checks) {
+	console.log(`\nRunning ${name}`);
+	const result = spawnSync(
+		"bun",
+		onNode ? ["run", name] : ["--bun", "run", name],
+		{
+			cwd,
+			stdio: "inherit",
+			env: onNode ? nodeEnv : process.env,
+		},
+	);
 	if (result.error) console.error(result.error.message);
 	results.push({
-		check,
+		check: name,
 		passed: !result.error && result.status === 0,
 		detail: result.error
 			? "could not start"

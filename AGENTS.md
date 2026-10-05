@@ -19,7 +19,8 @@ bun --bun run check      # Biome: format, lint, import order
 bun --bun run lint:ds    # Oxlint + @shadcn/lint (design-system rules)
 bun --bun run typecheck  # TypeScript
 bun --bun run build      # production build into .output/
-bun --bun run verify     # all four checks; nonzero if any fail
+bun run test             # Vitest (Node.js)
+bun --bun run verify     # check, lint:ds, typecheck, test, build; nonzero if any fail
 ```
 
 `verify` passes on `main`. Keep it passing: a change is not done while `verify` fails. Every pull request that changes behavior includes Vitest tests ([docs/decisions/0010-vitest-tests-in-every-pr.md](docs/decisions/0010-vitest-tests-in-every-pr.md)).
@@ -31,7 +32,8 @@ bun --bun run verify     # all four checks; nonzero if any fail
 - Follow the feature folder layout in [docs/decisions/0009-feature-folder-structure.md](docs/decisions/0009-feature-folder-structure.md): `<feature>.server.ts`, `<feature>.functions.ts`, `utils`, `types`, and `components/` per feature; shared code in `#/components` and `#/lib`.
 - Ask before running anything that changes a database (`db:push`, `db:migrate`, `db:seed`, migration apply). Never print or commit `DATABASE_URL` or the contents of `.env`.
 - `.delta/` holds tool-managed clones and worktrees. Do not edit, lint, or commit it.
-- Pushing `main` deploys to production on Vercel ([docs/development.md](docs/development.md#vercel)). Push only when the owner asks.
+- Pushing `main` deploys to production on Vercel ([docs/development.md](docs/development.md#vercel)). Don't push to `main`; all changes go through pull requests.
+- Branches are `<type>/<short-name>` (`feat/navbar-links`), PR titles are conventional commits, and Linear issues go in the PR description (`Closes WD-21`, `Part of WD-13`). See [docs/sdlc.md](docs/sdlc.md#git-workflow) and [ADR 0012](docs/decisions/0012-trunk-based-pr-workflow.md). Never rename a branch with an open PR.
 
 ## Skills
 

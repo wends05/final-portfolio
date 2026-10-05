@@ -27,7 +27,9 @@ The dev server runs on port **3000**. `DATABASE_URL` must point at the Neon data
 | `bun --bun run check` | Biome check |
 | `bun --bun run lint:ds` | Oxlint with the configured shadcn plugin |
 | `bun --bun run typecheck` | TypeScript check without emitting files |
-| `bun --bun run verify` | Sequential check, lint:ds, typecheck, and build; nonzero if any fail |
+| `bun --bun run test` | Vitest, once (runs on Node.js) |
+| `bun --bun run test:watch` | Vitest in watch mode |
+| `bun --bun run verify` | Sequential check, lint:ds, typecheck, test, and build; nonzero if any fail |
 | `bun --bun run contract:emit` | Prisma contract emission |
 
 Biome 2.5.15 (CLI and `biome.json` schema) scopes its checks through [../biome.json](../biome.json); it includes `scripts/**/*.mjs` and excludes the generated route tree, the stylesheets, and `.delta/` (tool-managed clones whose nested `biome.json` otherwise stops Biome with a "nested root configuration" error). The scripts do not pass `--write`; add it only when you intend to change files.
@@ -48,12 +50,17 @@ Do not use the `db:*` scripts in `package.json`; they are traditional Prisma com
 Pick checks that fit the change:
 
 ```bash
-bun --bun run verify   # Biome check, lint:ds, typecheck, build (and tests, once added)
+bun --bun run verify   # Biome check, lint:ds, typecheck, Vitest, build
+bun run test           # tests only
 ```
 
-Tests use Vitest, and every pull request that changes behavior includes tests ([decision 0010](decisions/0010-vitest-tests-in-every-pr.md)). The test setup is not added yet.
+Tests use Vitest ([decision 0010](decisions/0010-vitest-tests-in-every-pr.md)) and live next to the code as `*.test.ts`. Every pull request that changes behavior includes tests. [../vitest.config.ts](../vitest.config.ts) is separate from `vite.config.ts`, so tests don't load the Nitro or TanStack Start plugins. Tests run on Node.js, like production: `verify` starts the test step without Bun's `node` shim.
 
-[../scripts/verify.mjs](../scripts/verify.mjs) runs all four from the repository root, keeps going after a failure, and exits 1 if any check fails. It never touches the database.
+[../scripts/verify.mjs](../scripts/verify.mjs) runs every check from the repository root, keeps going after a failure, and exits 1 if any check fails. It never touches the database.
+
+### CI
+
+[../.github/workflows/ci.yml](../.github/workflows/ci.yml) runs `verify` on every pull request and every push to `main`. It installs the Bun version pinned in `package.json` (`packageManager`) and Node.js 24 for the tests.
 
 `verify` must pass before a change is done. Report results in chat or the PR, not in these docs. For UI work, also check affected pages on small screens and with the keyboard. See [sdlc.md](sdlc.md#verification-by-change-type).
 
