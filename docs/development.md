@@ -64,6 +64,14 @@ Tests use Vitest ([decision 0010](decisions/0010-vitest-tests-in-every-pr.md)) a
 
 `verify` must pass before a change is done. Report results in chat or the PR, not in these docs. For UI work, also check affected pages on small screens and with the keyboard. See [sdlc.md](sdlc.md#verification-by-change-type).
 
+### Claude review
+
+[../.github/workflows/claude-review.yml](../.github/workflows/claude-review.yml) has Claude (`claude-sonnet-5-5`, through `anthropics/claude-code-action@v1`) review every pull request that is not a draft or opened by Dependabot. It posts inline comments for real problems and one summary comment. The review is advisory: do not add it to branch protection as a required check.
+
+The review prompt is [../.github/claude/review.md](../.github/claude/review.md). The workflow reads that file at run time and puts the repository and PR number above it, so change the review by editing the prompt, not the workflow. A new push cancels the review still running for the same PR.
+
+The workflow needs the `CLAUDE_CODE_OAUTH_TOKEN` repository secret, created with `claude setup-token` and billed to the owner's Claude plan, and the Claude GitHub App installed on the repository. Never commit or print the token.
+
 ## Generated files
 
 - Edit route files, then use route generation; do not manually patch `src/routeTree.gen.ts`.
