@@ -54,7 +54,7 @@ bun --bun run verify   # Biome check, lint:ds, typecheck, Vitest, build
 bun run test           # tests only
 ```
 
-Tests use Vitest ([decision 0010](decisions/0010-vitest-tests-in-every-pr.md)) and live next to the code as `*.test.ts`. Every pull request that changes behavior includes tests. [../vitest.config.ts](../vitest.config.ts) is separate from `vite.config.ts`, so tests don't load the Nitro or TanStack Start plugins. Tests run on Node.js, like production: `verify` starts the test step without Bun's `node` shim.
+Tests use Vitest ([decision 0010](decisions/0010-vitest-tests-in-every-pr.md)) and live next to the code as `*.test.ts`. Every pull request that changes behavior includes tests. For now the suite is unit tests only; components, database queries, and browser flows are not tested. [../vitest.config.ts](../vitest.config.ts) is separate from `vite.config.ts`, so tests don't load the Nitro or TanStack Start plugins. Tests run on Node.js, like production: `verify` starts the test step without Bun's `node` shim.
 
 [../scripts/verify.mjs](../scripts/verify.mjs) runs every check from the repository root, keeps going after a failure, and exits 1 if any check fails. It never touches the database.
 
@@ -63,6 +63,14 @@ Tests use Vitest ([decision 0010](decisions/0010-vitest-tests-in-every-pr.md)) a
 [../.github/workflows/ci.yml](../.github/workflows/ci.yml) runs `verify` on every pull request and every push to `main`. It installs the Bun version pinned in `package.json` (`packageManager`) and Node.js 24 for the tests.
 
 `verify` must pass before a change is done. Report results in chat or the PR, not in these docs. For UI work, also check affected pages on small screens and with the keyboard. See [sdlc.md](sdlc.md#verification-by-change-type).
+
+### Claude review
+
+[../.github/workflows/claude-review.yml](../.github/workflows/claude-review.yml) has Claude (`claude-sonnet-5-5`, through `anthropics/claude-code-action@v1`) review every pull request that is not a draft or opened by Dependabot. It posts inline comments for real problems and one summary comment. The review is advisory: do not add it to branch protection as a required check.
+
+The review prompt is [../.github/claude/review.md](../.github/claude/review.md). The workflow reads that file at run time and puts the repository and PR number above it, so change the review by editing the prompt, not the workflow. A new push cancels the review still running for the same PR.
+
+The workflow needs the `CLAUDE_CODE_OAUTH_TOKEN` repository secret, created with `claude setup-token` and billed to the owner's Claude plan, and the Claude GitHub App installed on the repository. Never commit or print the token.
 
 ## Generated files
 

@@ -43,7 +43,7 @@ Trunk-based, through pull requests ([decision 0012](decisions/0012-trunk-based-p
 ```mermaid
 flowchart LR
     Branch["feat/short-name"] --> PR["Pull request<br/>CI + Vercel preview"]
-    PR -->|squash merge| Main["main"] --> Prod["production"]
+    PR -->|merge commit| Main["main"] --> Prod["production"]
 ```
 
 1. **Branch** from `main` as `<type>/<short-name>`: `feat/navbar-links`, `fix/gate-cookie`, `docs/git-workflow`. Don't use Linear's generated branch names.
@@ -58,7 +58,7 @@ flowchart LR
 
    `Closes`/`Fixes`/`Resolves` move the issue to Done on merge; `Part of`/`Refs` only link it.
 4. **CI** runs `verify` and must pass. The Vercel preview shows the change.
-5. **The owner squash-merges.** The PR title becomes the commit on `main`, which deploys production.
+5. **The owner merges with a merge commit.** The branch's commits and a merge commit land on `main`, which deploys production.
 
 Never rename a branch that has an open PR; GitHub closes the PR. For a change that depends on an open PR, base the new branch on that PR's branch, then rebase onto `main` after it merges.
 
@@ -68,7 +68,7 @@ Owner authorization comes from an actual instruction; an agent-written status ca
 
 Report a task complete only when its own requirements have evidence. Failed required checks remain failed even if the cause predates the task. Distinguish scoped completion from a clean application baseline, and local verification from deployment. In the completion report include what changed, checks and results, existing failures versus new findings, and anything not checked.
 
-These documents guide behavior; they do not enforce tool permissions. CI runs `verify` on every pull request ([.github/workflows/ci.yml](../.github/workflows/ci.yml)); hooks and automatic stage triggers are not configured.
+These documents guide behavior; they do not enforce tool permissions. CI runs `verify` on every pull request ([.github/workflows/ci.yml](../.github/workflows/ci.yml)), and Claude adds an advisory review that is never a required check ([development.md](development.md#claude-review)); hooks and automatic stage triggers are not configured.
 
 ## Verification by change type
 
