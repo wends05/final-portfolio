@@ -1,6 +1,6 @@
 # Product intent
 
-Agreed with the owner: **2026-10-04**. This document states what the portfolio should become. It is a target, not a description of current behavior; see [current status](status.md) for what exists. When intent and code disagree, the code is the current behavior and this document is the direction.
+Agreed with the owner: **2026-10-04**. This document states what the portfolio should become. When the code differs, this document is the direction.
 
 ## Purpose
 
@@ -49,19 +49,7 @@ flowchart TD
 
 Authentication is not a non-goal: the admin page needs it, for the owner only. Visitor accounts are out of scope.
 
-## Gaps between intent and current code
-
-Each item below is a known difference. Changing the data model or adding auth is significant; record the chosen approach in [decisions](decisions/README.md).
-
-| Intent | Current state |
-| --- | --- |
-| Case-study page per project | `/projects/$` is a placeholder splat route. `getProjectBySlug` exists, but no route calls it. |
-| Case study covers problem, approach, and result | The schema has only `description`. Separate fields were deferred ([decision 0003](decisions/0003-neon-database-and-portfolio-schema.md)). |
-| Contact links and resume download | `ContactSection` is a placeholder and is not mounted; no `public/resume.pdf` exists |
-| Admin page | Only placeholder `/home` and `/auth` routes under `_dashboard`. Neon Auth is provisioned, but the app does not use it yet. |
-| Clean, minimal visual design | Landing components render placeholder text |
-
-The data model now covers manual featured order (`featuredRank`, `topRank`) and the many-to-many link between projects and skills (`ProjectSkill`). See [data](data.md#models).
+Changing the data model or adding auth is significant; record the chosen approach in [decisions](decisions/README.md).
 
 ## Answered questions
 

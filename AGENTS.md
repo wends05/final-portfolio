@@ -4,9 +4,9 @@ When writing a plan, include code blocks to explain the implementation. Include 
 
 ## Read the portfolio lore first
 
-Start with [docs/README.md](docs/README.md), then read the documents relevant to the task before editing. The index covers product intent, architecture, development, data, UI, current status, and decision records. Check [docs/intent.md](docs/intent.md) before choosing what to build or how it should behave.
+Start with [docs/README.md](docs/README.md), then read the documents relevant to the task before editing. The index covers product intent, architecture, development, data, UI, and decision records. Check [docs/intent.md](docs/intent.md) before choosing what to build or how it should behave.
 
-Treat documentation as a source snapshot. Verify the relevant code and configuration before relying on it, and update affected docs when behavior changes. Distinguish implemented behavior, placeholders, proposals, and checks actually run.
+The docs describe direction, conventions, and decisions, not what is implemented today. Read the code for current behavior. Update the docs when a convention, plan, or decision changes; do not add implementation status or check results to them.
 
 ## Commands
 
@@ -22,7 +22,7 @@ bun --bun run build      # production build into .output/
 bun --bun run verify     # all four checks; nonzero if any fail
 ```
 
-The baseline does not pass every check yet; see [docs/development.md](docs/development.md#validation). Report which failures existed before your change and which are new.
+Not every check passes yet. Run `verify` before and after a change, and report which failures existed before your change and which are new.
 
 ## Rules
 

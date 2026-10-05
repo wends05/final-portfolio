@@ -10,9 +10,11 @@ The owner requested an adaptation of Anthropic's AI-native SDLC and shared `AGEN
 
 ## Decision
 
-Use [../sdlc.md](../sdlc.md) as the workflow guide and `AGENTS.md` as the shared entry point. Plan individual tasks in chat, define observable acceptance criteria, implement within authorization, verify, and report actual results. Keep significant architectural rationale in this ADR directory and current behavior in topic docs. When an issue or PR is used, record useful task scope and evidence there.
+Use [../sdlc.md](../sdlc.md) as the workflow guide and `AGENTS.md` as the shared entry point. Plan individual tasks in chat, define observable acceptance criteria, implement within authorization, verify, and report actual results. Keep significant architectural rationale in this ADR directory and direction and conventions in topic docs. When an issue or PR is used, record useful task scope and evidence there.
 
-Retain the `typecheck` and aggregate `verify` commands. Per-task folders and four-document templates are no longer required and have been removed. Important historical verification is consolidated in [../development.md](../development.md); source-matched intro notes and the remaining hero proposal are in [../ui.md](../ui.md#intro-and-motion).
+Retain the `typecheck` and aggregate `verify` commands. Per-task folders and four-document templates are no longer required and have been removed.
+
+Also on 2026-10-05, the owner chose to keep the docs forward-looking: they describe direction, conventions, and decisions, not implementation status. `status.md` and the current-state sections of other docs were removed. Check results are reported in chat or the PR; the code is the record of what exists.
 
 This is a lighter adaptation: the full playbook's versioned intent/spec/plan chain is not implemented for every task. Local verification remains the starting point; CI, hooks, and deployment automation are separate future work.
 
@@ -25,7 +27,7 @@ This is a lighter adaptation: the full playbook's versioned intent/spec/plan cha
 
 ## Consequences
 
-The workflow stays small while preserving planning, verification, and architectural reasoning. Chat plans have weaker long-term discoverability than committed plans; important decisions and outcomes must reach topic docs, ADRs, or an issue/PR. Documents guide behavior rather than enforce tool permissions. Required failures must remain visible.
+The workflow stays small while preserving planning, verification, and architectural reasoning. Without a status document, finding unfinished work means reading the code or asking an agent to survey it. Chat plans have weaker long-term discoverability than committed plans; important decisions and outcomes must reach topic docs, ADRs, or an issue/PR. Documents guide behavior rather than enforce tool permissions. Required failures must remain visible.
 
 ## Validation
 

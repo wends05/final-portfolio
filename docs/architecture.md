@@ -1,80 +1,87 @@
 # Architecture
 
-Source snapshot: **2026-10-05**. See [current status](status.md) for implementation gaps.
+How the application is structured and how new code should fit in. The stack is recorded in [decision 0006](decisions/0006-tanstack-start-application-stack.md) and the folder layout in [decision 0009](decisions/0009-feature-folder-structure.md).
 
 ## Stack and entry points
 
-This is a TypeScript React portfolio. The root document title is `wends.dev`. The stack is recorded in [decision 0006](decisions/0006-tanstack-start-application-stack.md). TanStack Start provides the application framework and server functions; TanStack Router provides file-based routing. Vite enables React Server Components (RSC), the React compiler, Tailwind CSS, and the Nitro server adapter in [../vite.config.ts](../vite.config.ts).
+A TypeScript React app on TanStack Start: TanStack Router for file-based routes, TanStack Query for client data, React Server Components, the React compiler, Tailwind CSS, and Nitro for server output. All of it is configured in [../vite.config.ts](../vite.config.ts).
 
-[../src/router.tsx](../src/router.tsx) exports `getRouter()`, which creates a router and a fresh QueryClient context, then connects Router and Query for SSR. The homepage currently fetches through route loaders and server functions; it does not use a `useQuery` hook.
+| File | Owns |
+| --- | --- |
+| [../src/router.tsx](../src/router.tsx) | `getRouter()`: router plus a fresh QueryClient per request, wired for SSR |
+| [../src/routes/__root.tsx](../src/routes/__root.tsx) | HTML document, metadata, stylesheets, scripts, devtools |
+| `src/routes/_public/route.tsx` | Public layout: navbar, page outlet, footer, intro curtain, coming-soon redirect |
+| `src/routes/_dashboard/` | Admin layout and pages |
+| [../src/routeTree.gen.ts](../src/routeTree.gen.ts) | Generated from the route files; never edit by hand |
 
-[../src/routes/__root.tsx](../src/routes/__root.tsx) owns the HTML document, metadata, stylesheet link, scripts, and devtools. The pathless `_public` layout renders `Navbar`, the nested route outlet, and `Footer` through [RootLayout](../src/features/public/components/RootLayout.tsx).
+## Planned routes
 
-## Routes
+Route groups that start with `_` (`_public`, `_dashboard`) are pathless layouts and do not appear in URLs.
 
-| URL | Source under `src/routes/` | Current responsibility |
+| URL | Route file | Purpose |
 | --- | --- | --- |
-| `/` | `_public/index.tsx` | Loads project and skill sections and renders the landing page |
-| `/skills` | `_public/skills.tsx` | Placeholder page |
-| `/projects` | `_public/projects/route.tsx` and `index.tsx` | Nested outlet and placeholder listing |
-| `/projects/*` | `_public/projects/$.tsx` | Placeholder splat route |
-| `/coming-soon` | `coming-soon.tsx` | Placeholder coming-soon page with a server-function gate and `noindex` metadata |
-| `/home`, `/auth` | `_dashboard/home.tsx`, `_dashboard/auth/index.tsx` | Generated placeholders ("Hello …"); no layout, auth, or gate yet |
-
-`_public` does not appear in browser URLs. The `$` file is a catch-all route, not an implemented project lookup by slug. [../src/routeTree.gen.ts](../src/routeTree.gen.ts) is generated from the route files.
-
-[../src/features/site/site.functions.ts](../src/features/site/site.functions.ts) computes the gate:
-
-```ts
-const comingSoon = process.env.COMING_SOON === "true";
-const token = process.env.PREVIEW_TOKEN;
-const hasPreview = !token && getCookie("preview") === token;
-return { gated: comingSoon && hasPreview };
-```
-
-As written, the site is gated only when `COMING_SOON` is `"true"`, `PREVIEW_TOKEN` is unset, and the request has no `preview` cookie. Setting `PREVIEW_TOKEN` turns the gate off for everyone, and a matching cookie does not bypass it. This looks inverted from the apparent intent (a matching cookie bypasses the gate), which would be `hasPreview = !!token && cookie === token` and `gated: comingSoon && !hasPreview`; see [status](status.md#unfinished-or-needs-verification).
-
-The public layout redirects to `/coming-soon` when gated; `/coming-soon` redirects to `/` when not gated. This is not admin authentication.
-
-## Homepage data flow
+| `/` | `_public/index.tsx` | Hero, description, 3 featured projects, 3 top skill categories, contact links, resume download |
+| `/projects` | `_public/projects/index.tsx` | All published projects |
+| `/projects/<slug>` | `_public/projects/$slug.tsx` | Case study for one project |
+| `/skills` | `_public/skills.tsx` | Skill categories and skills, each linked to the projects that use them |
+| `/coming-soon` | `coming-soon.tsx` | Holding page while the site is gated; `noindex` |
+| Admin URLs | `_dashboard/…` | Sign-in and create/edit screens for projects and skills, owner only. Exact URLs to be decided with the admin work. |
 
 ```mermaid
 flowchart TD
-    Request["Visit /"] --> Loader["Homepage loader: Promise.all"]
-    Loader --> ProjectsFn["getProjectsSection"]
-    Loader --> SkillsFn["getSkillsSection"]
-    ProjectsFn --> ProjectsQuery["getFeaturedProjects: published=true, ranked ascending, limit=3"]
-    SkillsFn --> SkillsQuery["getTopSkills: ranked SkillCategory, limit=3"]
-    ProjectsQuery --> DB["Prisma Next runtime / PostgreSQL"]
-    SkillsQuery --> DB
-    ProjectsFn --> ProjectSource["createCompositeComponent: ProjectsSection"]
-    SkillsFn --> SkillSource["createCompositeComponent: SkillsSection"]
-    ProjectSource --> Home["Home: CompositeComponent"]
-    SkillSource --> Home
-    Home --> Cards["Section and card rendering"]
+    Home["/"] --> Projects["/projects"] --> Detail["/projects/&lt;slug&gt;"]
+    Home --> Skills["/skills"] --> Detail
+    Admin["_dashboard (owner only)"]
 ```
 
-[../src/features/public/public.functions.tsx](../src/features/public/public.functions.tsx) defines the server functions. They query server-side modules and return `{ src }` from `createCompositeComponent`. `Home` passes card components into `CompositeComponent`; `ProjectsSection` uses the supplied component, while `SkillsSection` currently uses its own imported `SkillCard`.
+## Coming-soon gate
 
-The loader awaits both sections before returning. The skills section has a Suspense wrapper, but the source does not establish that its fallback appears during the initial loader fetch.
+While the site is not ready, public pages redirect to `/coming-soon`. The owner can bypass the gate with a preview cookie:
 
-## File ownership
+| `COMING_SOON` | `preview` cookie matches `PREVIEW_TOKEN` | Result |
+| --- | --- | --- |
+| not `"true"` | any | Site is public; `/coming-soon` redirects to `/` |
+| `"true"` | yes | Site is visible to that browser |
+| `"true"` | no | Public pages redirect to `/coming-soon` |
 
-The layout follows [decision 0009](decisions/0009-feature-folder-structure.md): `<feature>.server.ts` for server-only code, `<feature>.functions.ts` for server functions, plus `utils`, `types`, and `components/` per feature, with shared code in `#/components` and `#/lib`.
+```ts
+// src/features/site/site.functions.ts (intended logic)
+const comingSoon = process.env.COMING_SOON === "true";
+const token = process.env.PREVIEW_TOKEN;
+const hasPreview = !!token && getCookie("preview") === token;
+return { gated: comingSoon && !hasPreview };
+```
+
+The gate is not authentication. Admin pages use Neon Auth ([intent](intent.md#answered-questions)).
+
+## Data flow
+
+Pages load data through route loaders that call server functions. Server functions call server-only modules, which own all database access.
+
+```mermaid
+flowchart LR
+    Loader["Route loader"] --> Fn["feature.functions.ts<br/>createServerFn"]
+    Fn --> Server["feature.server.ts"]
+    Server --> DB["Prisma Next / Neon"]
+    Fn -->|"data, or createCompositeComponent source"| Loader
+    Loader --> Page["Route component"]
+```
+
+- A server function returns plain data, or `{ src }` from `createCompositeComponent` when a section renders on the server. The route renders that source with `CompositeComponent` and can pass client components into it.
+- Load independent sections in parallel (`Promise.all` in the loader).
+- UI never imports `*.server.ts` directly; TanStack Start blocks it from the client bundle.
+
+## Folder ownership
 
 | Location | Responsibility |
 | --- | --- |
-| `src/routes/` | URL definitions, loaders, and route composition |
-| `src/features/public/` | Landing-page server functions, card prop types, and sections |
-| `src/features/projects/` | Project database queries; `projects.functions.ts` is currently empty |
-| `src/features/skills/` | Skill database queries |
-| `src/features/site/` | Coming-soon gate server function |
-| `src/components/` | Shared navigation and footer |
-| `src/components/ui/` | Reusable UI primitives |
-| `src/integrations/tanstack-query/` | QueryClient context and query devtools |
-| `src/integrations/prisma/` | Data contract, generated contract artifacts, and database runtime |
-| `src/styles.css` | Global styles, fonts, and theme tokens |
-| `migrations/` | Migration packages, contract snapshots, and the `db` ref |
-| `vercel.json` | Vercel install, build, and Bun runtime settings ([decision 0005](decisions/0005-vercel-deployment.md)) |
+| `src/routes/` | URLs, loaders, page composition |
+| `src/features/<feature>/` | Feature code: `.server.ts`, `.functions.ts`, `utils`, `types`, `components/` ([0009](decisions/0009-feature-folder-structure.md)) |
+| `src/components/`, `src/components/ui/` | Shared components and shadcn primitives |
+| `src/lib/` | Shared utilities |
+| `src/integrations/` | Prisma runtime and contract, TanStack Query wiring |
+| `src/styles.css`, `src/styles/` | Global styles and tokens ([ui](ui.md)) |
+| `migrations/` | Prisma Next migrations ([data](data.md)) |
+| `vercel.json` | Vercel settings ([0005](decisions/0005-vercel-deployment.md)) |
 
-Keep database access on the server. Route components and UI should receive data or rendered composite sources through the framework boundary. See [data](data.md) for query details and [development](development.md) for commands.
+Expected features: `public` (landing page), `projects`, `skills`, `site` (gate), and an admin feature for the dashboard.
