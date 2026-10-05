@@ -13,7 +13,7 @@ Use TanStack Start as the application framework because it is the owner's prefer
 
 | Piece | Role here |
 | --- | --- |
-| TanStack Start | SSR, server functions (`createServerFn`), React Server Components (`createCompositeComponent`) |
+| TanStack Start | SSR and server functions (`createServerFn`). Its experimental React Server Components are not used ([0011](0011-no-react-server-components.md)). |
 | TanStack Router | File-based routes in `src/routes/`, generated `src/routeTree.gen.ts` |
 | TanStack Query | QueryClient per request, wired to the router for SSR in `src/router.tsx` |
 | Nitro | Server output: `bun` preset locally, `vercel` on Vercel ([0005](0005-vercel-deployment.md)) |
@@ -23,10 +23,10 @@ flowchart LR
     Route["src/routes/*.tsx<br/>loader"] --> Fn["feature.functions.ts<br/>createServerFn"]
     Fn --> Server["feature.server.ts<br/>database access"]
     Server --> DB["Prisma Next / Neon"]
-    Fn -->|"data or RSC source"| Route
+    Fn -->|"plain data"| Route
 ```
 
-Configuration lives in [../../vite.config.ts](../../vite.config.ts) (`tanstackStart({ rsc: { enabled: true } })`, `nitro()`, React compiler) and [../../src/router.tsx](../../src/router.tsx).
+Configuration lives in [../../vite.config.ts](../../vite.config.ts) (`tanstackStart()`, `nitro()`, React compiler) and [../../src/router.tsx](../../src/router.tsx).
 
 ## Alternatives
 
@@ -36,7 +36,7 @@ None were recorded; the choice predates these records and rests on the owner's p
 
 - Routes, loaders, and server functions follow TanStack conventions; the folder layout builds on them ([0009](0009-feature-folder-structure.md)).
 - Server-only code relies on TanStack Start's import protection, which by default denies `**/*.server.*` files in the client bundle.
-- Most `@tanstack/*` dependencies are pinned to `latest`, and RSC support and Nitro 3 are recent. Upgrades can change behavior; check installed versions before applying version-specific advice.
+- Most `@tanstack/*` dependencies are pinned to `latest`, and Nitro 3 is recent. Upgrades can change behavior; check installed versions before applying version-specific advice.
 
 ## Validation
 

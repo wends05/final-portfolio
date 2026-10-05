@@ -8,11 +8,13 @@ Use this folder for implementation choices whose rationale should survive future
 | [0002: Portfolio design tokens under the shadcn variables](0002-portfolio-design-tokens.md) | Accepted |
 | [0003: Neon as the database host and the portfolio schema](0003-neon-database-and-portfolio-schema.md) | Accepted |
 | [0004: Repository-based development workflow](0004-repository-based-sdlc.md) | Accepted |
-| [0005: Vercel deployment with the Bun runtime](0005-vercel-deployment.md) | Accepted |
+| [0005: Vercel deployment on the Node.js runtime](0005-vercel-deployment.md) | Accepted |
 | [0006: TanStack Start as the application stack](0006-tanstack-start-application-stack.md) | Accepted |
 | [0007: shadcn/ui as the component and token base](0007-shadcn-component-and-token-base.md) | Accepted |
 | [0008: Biome as the linter and formatter](0008-biome-linter-and-formatter.md) | Accepted |
 | [0009: Feature-based folder structure](0009-feature-folder-structure.md) | Accepted |
+| [0010: Vitest, with tests in every pull request](0010-vitest-tests-in-every-pr.md) | Accepted |
+| [0011: No React Server Components for now](0011-no-react-server-components.md) | Accepted |
 
 Some choices made before these records began were recorded on 2026-10-05 (0006–0009) with the owner's stated reasons. Do not invent reasons for other earlier choices; existing architecture is documented in [../architecture.md](../architecture.md). Add each new record to the table above.
 

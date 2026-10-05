@@ -22,12 +22,12 @@ bun --bun run build      # production build into .output/
 bun --bun run verify     # all four checks; nonzero if any fail
 ```
 
-`verify` passes on `main`. Keep it passing: a change is not done while `verify` fails.
+`verify` passes on `main`. Keep it passing: a change is not done while `verify` fails. Every pull request that changes behavior includes Vitest tests ([docs/decisions/0010-vitest-tests-in-every-pr.md](docs/decisions/0010-vitest-tests-in-every-pr.md)).
 
 ## Rules
 
 - Do not edit generated files by hand: `src/routeTree.gen.ts` (route generator) and `src/integrations/prisma/contract.json` / `contract.d.ts` (`contract:emit`). See [docs/development.md](docs/development.md#generated-files) and [docs/data.md](docs/data.md).
-- Keep database access in `*.server.ts` modules and server functions; UI receives data through loaders or composite components.
+- Keep database access in `*.server.ts` modules and server functions; UI receives plain data through route loaders and server functions. Do not use React Server Components or Bun-only runtime APIs ([docs/decisions/0011-no-react-server-components.md](docs/decisions/0011-no-react-server-components.md), [docs/decisions/0005-vercel-deployment.md](docs/decisions/0005-vercel-deployment.md)).
 - Follow the feature folder layout in [docs/decisions/0009-feature-folder-structure.md](docs/decisions/0009-feature-folder-structure.md): `<feature>.server.ts`, `<feature>.functions.ts`, `utils`, `types`, and `components/` per feature; shared code in `#/components` and `#/lib`.
 - Ask before running anything that changes a database (`db:push`, `db:migrate`, `db:seed`, migration apply). Never print or commit `DATABASE_URL` or the contents of `.env`.
 - `.delta/` holds tool-managed clones and worktrees. Do not edit, lint, or commit it.

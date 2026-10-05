@@ -4,7 +4,7 @@ How the application is structured and how new code should fit in. The stack is r
 
 ## Stack and entry points
 
-A TypeScript React app on TanStack Start: TanStack Router for file-based routes, TanStack Query for client data, React Server Components, the React compiler, Tailwind CSS, and Nitro for server output. All of it is configured in [../vite.config.ts](../vite.config.ts).
+A TypeScript React app on TanStack Start, running on Node.js in production ([decision 0005](decisions/0005-vercel-deployment.md)): TanStack Router for file-based routes, TanStack Query for client data, the React compiler, Tailwind CSS, and Nitro for server output. All of it is configured in [../vite.config.ts](../vite.config.ts).
 
 | File | Owns |
 | --- | --- |
@@ -63,11 +63,11 @@ flowchart LR
     Loader["Route loader"] --> Fn["feature.functions.ts<br/>createServerFn"]
     Fn --> Server["feature.server.ts"]
     Server --> DB["Prisma Next / Neon"]
-    Fn -->|"data, or createCompositeComponent source"| Loader
+    Fn -->|"plain data"| Loader
     Loader --> Page["Route component"]
 ```
 
-- A server function returns plain data, or `{ src }` from `createCompositeComponent` when a section renders on the server. The route renders that source with `CompositeComponent` and can pass client components into it.
+- A server function returns plain, serializable data. Components render it during SSR and hydrate on the client. React Server Components are not used for now ([decision 0011](decisions/0011-no-react-server-components.md)).
 - Load independent sections in parallel (`Promise.all` in the loader).
 - UI never imports `*.server.ts` directly; TanStack Start blocks it from the client bundle.
 

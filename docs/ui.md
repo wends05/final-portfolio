@@ -26,6 +26,7 @@ How to build the interface. shadcn is the component and token base ([decision 00
 - Use `rounded-none` in portfolio components. The design system is square; shadcn primitives keep their radius.
 - When adding a `--text-*` token, also register it in `cn()` in [../src/lib/utils.ts](../src/lib/utils.ts), or `tailwind-merge` may drop it as a colour class.
 - Use semantic tokens, not raw colors or arbitrary values.
+- Build for light mode only for now. The `.dark` block in `src/styles.css` is unused until dark mode is designed ([intent](intent.md#answered-questions)).
 
 Add primitives with the shadcn CLI into `src/components/ui/` and reuse them, such as [button.tsx](../src/components/ui/button.tsx). After any CLI run, diff `src/styles.css` and restore the `var(--role)` lines if the CLI overwrote them.
 
@@ -43,7 +44,7 @@ Sections live in `src/features/public/components/landing/`; shared chrome (navba
 | Description | Who the owner is, in a few sentences |
 | Featured projects | 3 projects in `featuredRank` order, each linking to its case study |
 | Top skills | 3 skill categories in `topRank` order, linking to `/skills` |
-| Contact | Links only (which links is an [open question](intent.md#open-questions)) and a resume download (`public/resume.pdf`) |
+| Contact | LinkedIn and GitHub links, and a resume download (`public/resume.pdf`) |
 | Navbar | Real links to `/`, `/projects`, `/skills`, with accessible labels |
 
 For every page: check keyboard focus, heading order, image alt text, and small-screen layout.

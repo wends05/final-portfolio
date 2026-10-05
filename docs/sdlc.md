@@ -50,8 +50,8 @@ These documents guide behavior; they do not enforce tool permissions. Hooks, PR 
 | --- | --- |
 | Documentation | Source accuracy, relative links, consistency across instructions and topic docs |
 | Tooling/configuration | Relevant lint/format checks, real command execution, failure behavior where applicable |
-| TypeScript or UI | `bun --bun run verify`; affected pages, small screens, keyboard interactions |
-| Behavioral bug fix | Reproduce before fixing and verify the correction; meaningful regression test when appropriate |
+| TypeScript or UI | `bun --bun run verify`, including tests for the changed behavior ([0010](decisions/0010-vitest-tests-in-every-pr.md)); affected pages, small screens, keyboard interactions |
+| Behavioral bug fix | Reproduce with a failing test, then fix it so the test passes |
 | Data or authorization | Relevant tests and reviewed contract/server boundaries; permission before database-changing commands |
 | Deployment | Build, configured startup, target smoke checks, recovery procedure |
 

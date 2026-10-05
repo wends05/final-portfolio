@@ -32,7 +32,7 @@ flowchart TD
 | Homepage | Hero and description that establish who the owner is, three featured projects, three top skills, contact links, and a resume download |
 | Projects | `/projects` lists all projects. Each project has a case-study page covering the problem, approach, and result |
 | Skills | Reusable skills, each linked to the projects that used it |
-| Contact | Links only (email, GitHub, LinkedIn, or similar). No form and no contact backend |
+| Contact | Links only: LinkedIn and GitHub. No form and no contact backend |
 | Resume | A downloadable PDF |
 | Content editing | A protected admin dashboard with full create, edit, and delete for all content; see [Admin dashboard](#admin-dashboard) |
 
@@ -84,9 +84,14 @@ Answered with the owner on 2026-10-04:
 - **Skills:** two levels. Categories (for example Web Development, with a 0–100 confidence) group individual skills (for example React). Projects link to individual skills, and the homepage's top skills are categories.
 - **Collaborators:** projects can credit a team name and collaborators with optional roles.
 
+Answered with the owner on 2026-10-05:
+
+- **Contact links:** LinkedIn and GitHub only, for now.
+- **Dark mode:** light mode only for now. Dark mode is deferred to the week of 2026-10-12 (Linear WD-43).
+- **Tests:** every pull request that changes behavior includes tests, run with Vitest ([decision 0010](decisions/0010-vitest-tests-in-every-pr.md)).
+- **Runtime:** Node.js in production on Vercel; Bun stays the package manager and dev tool. No Bun-only runtime APIs ([decision 0005](decisions/0005-vercel-deployment.md)).
+- **React Server Components:** not used for now; server functions return plain data ([decision 0011](decisions/0011-no-react-server-components.md)).
+
 ## Open questions
 
-- Which contact links should appear?
-- Should the site offer a dark mode toggle? Dark tokens exist in `src/styles.css`, but no toggle does.
-
-Answer these with the owner before implementing the affected area, then update this document.
+None at the moment. Add new ones here, and answer them with the owner before implementing the affected area.

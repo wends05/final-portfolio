@@ -14,7 +14,7 @@ Group code by feature under `src/features/<feature>/`. Within a feature, the fil
 | Path | Role |
 | --- | --- |
 | `<feature>.server.ts` | Server-only functions, including all database access. Never imported by client code. |
-| `<feature>.functions.ts` | Server functions (`createServerFn`) that routes and components call. They wrap `.server.ts` functions. Use `.tsx` when a function returns JSX, such as `createCompositeComponent`. |
+| `<feature>.functions.ts` | Server functions (`createServerFn`) that routes and components call. They wrap `.server.ts` functions. Return plain data, not JSX ([0011](0011-no-react-server-components.md)). |
 | `<feature>.utils.ts` or `utils/` | Extra helpers for that feature |
 | `<feature>.types.ts` or `types/` | Types for that feature |
 | `components/` | React components for that feature, optionally grouped in subfolders |
@@ -63,6 +63,7 @@ None were recorded.
 - The existing source does not fully follow this yet:
   - `src/features/public/lib/intro.ts` holds feature helpers in `lib/` instead of `utils/` or `public.utils.ts`.
   - `src/features/public/public.functions.tsx` imports `../projects/projects.server` with relative paths instead of `#/`.
+  - `public.functions.tsx` returns `createCompositeComponent` sources (JSX) instead of plain data; removed with RSC ([0011](0011-no-react-server-components.md)).
   - `src/features/projects/projects.functions.ts` is empty, and `skills` has no `.functions.ts`.
 
   Align these when the files are next changed; they do not block other work.
