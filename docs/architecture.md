@@ -10,7 +10,7 @@ A TypeScript React app on TanStack Start, running on Node.js in production ([dec
 | --- | --- |
 | [../src/router.tsx](../src/router.tsx) | `getRouter()`: router plus a fresh QueryClient per request, wired for SSR |
 | [../src/routes/__root.tsx](../src/routes/__root.tsx) | HTML document, metadata, stylesheets, scripts, devtools |
-| `src/routes/_public/route.tsx` | Public layout: navbar, page outlet, footer, intro curtain, coming-soon redirect |
+| `src/routes/_public/route.tsx` | Public layout: navbar and [site menu](ui.md#site-menu), page outlet, footer, intro curtain, coming-soon redirect |
 | `src/routes/_dashboard/` | Admin layout and pages |
 | [../src/routeTree.gen.ts](../src/routeTree.gen.ts) | Generated from the route files; never edit by hand |
 
@@ -76,7 +76,7 @@ flowchart LR
 | Location | Responsibility |
 | --- | --- |
 | `src/routes/` | URLs, loaders, page composition |
-| `src/features/<feature>/` | Feature code: `.server.ts`, `.functions.ts`, `utils`, `types`, `components/` ([0009](decisions/0009-feature-folder-structure.md)) |
+| `src/features/<feature>/` | Feature code: `.server.ts`, `.functions.ts`, `utils`, `types`, `components/` ([0009](decisions/0009-feature-folder-structure.md)). Client UI stores (zustand) live in `utils/` ([0013](decisions/0013-zustand-for-client-ui-state.md)) |
 | `src/components/`, `src/components/ui/` | Shared components and shadcn primitives |
 | `src/lib/` | Shared utilities |
 | `src/integrations/` | Prisma runtime and contract, TanStack Query wiring |
