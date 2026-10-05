@@ -68,7 +68,7 @@ Owner authorization comes from an actual instruction; an agent-written status ca
 
 Report a task complete only when its own requirements have evidence. Failed required checks remain failed even if the cause predates the task. Distinguish scoped completion from a clean application baseline, and local verification from deployment. In the completion report include what changed, checks and results, existing failures versus new findings, and anything not checked.
 
-These documents guide behavior; they do not enforce tool permissions. CI runs `verify` on every pull request ([.github/workflows/ci.yml](../.github/workflows/ci.yml)); hooks and automatic stage triggers are not configured.
+These documents guide behavior; they do not enforce tool permissions. CI runs `verify` on every pull request ([.github/workflows/ci.yml](../.github/workflows/ci.yml)), and Claude adds an advisory review that is never a required check ([development.md](development.md#claude-review)); hooks and automatic stage triggers are not configured.
 
 ## Verification by change type
 
