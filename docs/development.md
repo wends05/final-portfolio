@@ -88,10 +88,10 @@ CI runs `bun audit` on every pull request without failing the job ([CI](#ci)).
 
 | Ecosystem | Schedule | Pull requests |
 | --- | --- | --- |
-| `bun` (package.json + bun.lock) | Monthly | `open-pull-requests-limit: 0`: npm version updates are switched off, so Dependabot neither opens PRs nor reports outdated packages. Run `bun outdated` to check by hand. Raising the limit groups minor and patch updates into one `chore:` PR. |
+| `bun` (package.json + bun.lock) | Monthly | One grouped `chore:` PR for all minor and patch updates; each major update gets its own PR. At most 5 open at once (`open-pull-requests-limit: 5`). |
 | `github-actions` | Weekly | One grouped `ci:` PR for all action updates |
 
-To start receiving npm update PRs, raise `open-pull-requests-limit`. CI runs on Dependabot PRs like any other. Workflows triggered by Dependabot can't read repository secrets, so any workflow that needs one must skip Dependabot PRs.
+CI runs on Dependabot PRs like any other; merge them only when `verify` passes. Workflows triggered by Dependabot can't read repository secrets, so any workflow that needs one must skip Dependabot PRs.
 
 ## Build output and deployment
 

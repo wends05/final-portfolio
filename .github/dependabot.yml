@@ -5,7 +5,7 @@ updates:
     directory: "/"
     schedule:
       interval: monthly
-    open-pull-requests-limit: 0
+    open-pull-requests-limit: 5
     groups:
       # minor + patch updates arrive together in one PR;
       # major updates still get their own PR so you can read the changelog
