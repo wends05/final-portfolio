@@ -14,7 +14,7 @@ Use **Vitest** as the test runner, and require tests in every pull request that 
 | Rule | Detail |
 | --- | --- |
 | Runner | Vitest, configured in `vitest.config.ts` |
-| Script | `bun --bun run test` runs `vitest run`; `verify` runs it after the other checks |
+| Script | `test` runs `vitest run` on Node.js; `verify` runs it before the build |
 | Placement | Tests sit beside the code they cover: `projects.server.test.ts` next to `projects.server.ts` |
 | Every PR | A PR that adds or changes behavior adds or updates tests for it. Docs-only and config-only PRs are exempt and say so in the description |
 | CI | `verify`, and so the tests, runs on every PR and must pass to merge |
@@ -61,4 +61,4 @@ Vitest runs on Node.js, the same runtime as production ([0005](0005-vercel-deplo
 
 ## Validation
 
-Not yet implemented; tracked in Linear WD-8.
+On 2026-10-05, Vitest 5.0.3 was added with a first test for the coming-soon gate (`site.utils.test.ts`). A temporary test confirmed that the test step inside `bun --bun run verify` runs on Node.js. `verify` passed locally.

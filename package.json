@@ -1,5 +1,6 @@
 {
   "name": "final-portfolio",
+  "packageManager": "bun@1.4.2",
   "private": true,
   "type": "module",
   "imports": {
@@ -16,6 +17,8 @@
     "check": "biome check",
     "typecheck": "tsc --noEmit",
     "verify": "bun scripts/verify.mjs",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "db:generate": "dotenv -e .env -- prisma generate",
     "db:push": "dotenv -e .env -- prisma db push",
     "db:migrate": "dotenv -e .env -- prisma migrate dev",
@@ -74,7 +77,8 @@
     "oxlint": "^1.86.0",
     "tsx": "^4.23.15",
     "typescript": "^6.0.3",
-    "vite": "^8.3.2"
+    "vite": "^8.3.2",
+    "vitest": "^5.0.3"
   },
   "overrides": {
     "@hono/node-server": "1.19.17",

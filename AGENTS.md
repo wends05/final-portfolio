@@ -19,7 +19,8 @@ bun --bun run check      # Biome: format, lint, import order
 bun --bun run lint:ds    # Oxlint + @shadcn/lint (design-system rules)
 bun --bun run typecheck  # TypeScript
 bun --bun run build      # production build into .output/
-bun --bun run verify     # all four checks; nonzero if any fail
+bun run test             # Vitest (Node.js)
+bun --bun run verify     # check, lint:ds, typecheck, test, build; nonzero if any fail
 ```
 
 `verify` passes on `main`. Keep it passing: a change is not done while `verify` fails. Every pull request that changes behavior includes Vitest tests ([docs/decisions/0010-vitest-tests-in-every-pr.md](docs/decisions/0010-vitest-tests-in-every-pr.md)).
