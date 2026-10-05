@@ -18,8 +18,10 @@ Use **Vitest** as the test runner, and require tests in every pull request that 
 | Placement | Tests sit beside the code they cover: `projects.server.test.ts` next to `projects.server.ts` |
 | Every PR | A PR that adds or changes behavior adds or updates tests for it. Docs-only and config-only PRs are exempt and say so in the description |
 | CI | `verify`, and so the tests, runs on every PR and must pass to merge |
-| Database | Tests never use the production database. Integration tests use a Neon branch or a local Postgres. |
+| Scope | Unit tests only for now: no component, integration, or end-to-end tests |
+| Database | Unit tests never touch a database. They mock the `*.server.ts` modules that query it (`vi.mock`) |
 | External services | Storage and other external services sit behind one `*.server.ts` module each; unit tests replace them with fakes |
+| UI changes | Move logic out of components into `<feature>.utils.ts` (formatting, sorting, link lists, conditions) and unit-test it there. A PR that only changes markup or styles has no unit to test; its description says so |
 
 ```ts
 // vitest.config.ts (sketch)
@@ -44,6 +46,10 @@ flowchart LR
     Test -->|fail| Block["Merge blocked"]
 ```
 
+### Unit tests only, for now
+
+On 2026-10-05 the owner limited the suite to unit tests. Component tests (React rendering in a DOM environment), integration tests against a database, and end-to-end browser tests are deferred. Adding any of them is a later decision that amends this record.
+
 ### Runtime for Vitest
 
 Vitest runs on Node.js, the same runtime as production ([0005](0005-vercel-deployment.md)).
@@ -56,7 +62,8 @@ Vitest runs on Node.js, the same runtime as production ([0005](0005-vercel-deplo
 ## Consequences
 
 - Every behavior PR costs a little more, and regressions show up in CI instead of in production.
-- `verify` gets slower as tests grow. Keep unit tests fast and move slow database tests to a separate script if needed.
+- `verify` gets slower as tests grow. Keep unit tests fast.
+- Rendering, routing, and real queries are not tested automatically. UI PRs are checked by hand (small screens, keyboard) and in review, until component or end-to-end tests are added.
 - The Claude PR review checks that behavior changes come with tests.
 
 ## Validation
