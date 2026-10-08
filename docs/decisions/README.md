@@ -17,6 +17,7 @@ Use this folder for implementation choices whose rationale should survive future
 | [0011: No React Server Components for now](0011-no-react-server-components.md) | Accepted |
 | [0012: Trunk-based pull request workflow](0012-trunk-based-pr-workflow.md) | Accepted |
 | [0013: Admin authentication and authorization](0013-admin-authentication-and-authorization.md) | Proposed |
+| [0014: Vercel deploys only `main` and `development`](0014-vercel-deploys-main-and-development-only.md) | Accepted |
 
 Some choices made before these records began were recorded on 2026-10-05 (0006–0009) with the owner's stated reasons. Do not invent reasons for other earlier choices; existing architecture is documented in [../architecture.md](../architecture.md). Add each new record to the table above.
 
