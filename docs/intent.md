@@ -94,7 +94,7 @@ Answered with the owner on 2026-10-05:
 
 Answered with the owner on 2026-10-08:
 
-- **Admin sign-in:** email and password for the owner's existing account only. There is no sign-up. Admin pages live under `/admin`, and one shared `requireAdmin()` guards every admin server function ([decision 0013](decisions/0013-admin-authentication-and-authorization.md)).
+- **Admin sign-in:** email and password for the owner's existing account only. There is no sign-up, and one shared `requireAdmin()` guards every admin server function ([decision 0013](decisions/0013-admin-authentication-and-authorization.md)).
 
 ## Open questions
 
