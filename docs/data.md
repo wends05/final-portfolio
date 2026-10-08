@@ -47,6 +47,7 @@ erDiagram
 - Queries live in `<feature>.server.ts` and are exposed through `<feature>.functions.ts` ([0009](decisions/0009-feature-folder-structure.md)).
 - Public queries filter on `published = true`.
 - Project pages look up by `slug`.
+- The app reads `neon_auth.user` only to check `role` in `requireAdmin()` ([0013](decisions/0013-admin-authentication-and-authorization.md)), and never writes to the `neon_auth` schema.
 - Prisma Next cannot `.include()` across the `ProjectSkill` junction. Query project↔skill lists with `db.sql` and an explicit join.
 
 ## Content
