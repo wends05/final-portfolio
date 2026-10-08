@@ -40,7 +40,7 @@ flowchart LR
 - One merge per change. `main` keeps every branch commit plus a merge commit per PR, so commit messages on branches matter.
 - Closing keywords keep Linear in sync without manual status changes.
 - Branch protection on `main` (required `verify`, merge commits allowed, auto-delete branches, no direct pushes) completes this workflow; tracked in Linear WD-4.
-- [0013](0013-vercel-deploys-main-and-development-only.md) limits Vercel deployments to `main` and `development`, so a pull request from any other branch has no Vercel preview, unlike the per-PR previews assumed above.
+- [0014](0014-vercel-deploys-main-and-development-only.md) limits Vercel deployments to `main` and `development`, so a pull request from any other branch has no Vercel preview, unlike the per-PR previews assumed above.
 
 ## Validation
 

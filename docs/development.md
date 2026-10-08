@@ -98,7 +98,7 @@ bun run .output/server/index.mjs
 
 ### Vercel
 
-The site deploys on Vercel ([decision 0005](decisions/0005-vercel-deployment.md)) through its Git integration. Only `main` and `development` deploy ([decision 0013](decisions/0013-vercel-deploys-main-and-development-only.md)):
+The site deploys on Vercel ([decision 0005](decisions/0005-vercel-deployment.md)) through its Git integration. Only `main` and `development` deploy ([decision 0014](decisions/0014-vercel-deploys-main-and-development-only.md)):
 
 ```mermaid
 flowchart LR

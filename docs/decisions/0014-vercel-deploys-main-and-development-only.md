@@ -1,4 +1,4 @@
-# 0013: Vercel deploys only `main` and `development`
+# 0014: Vercel deploys only `main` and `development`
 
 Date: 2026-10-09
 Status: Accepted
