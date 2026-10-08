@@ -1,7 +1,7 @@
 # 0013: Admin authentication and authorization
 
 Date: 2026-10-08
-Status: Accepted
+Status: Proposed
 
 ## Context
 
