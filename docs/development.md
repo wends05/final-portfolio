@@ -98,23 +98,41 @@ bun run .output/server/index.mjs
 
 ### Vercel
 
-The site deploys on Vercel ([decision 0005](decisions/0005-vercel-deployment.md)) through its Git integration:
+The site deploys on Vercel ([decision 0005](decisions/0005-vercel-deployment.md)) through its Git integration. Only `main` and `development` deploy ([decision 0013](decisions/0013-vercel-deploys-main-and-development-only.md)):
 
 ```mermaid
 flowchart LR
     Push["git push"] --> Branch{"Branch"}
     Branch -->|main| Prod["Production: portfolio.wends.dev"]
-    Branch -->|other| Preview["Preview URL, behind Vercel login"]
+    Branch -->|development| Preview["Preview URL, behind Vercel login"]
+    Branch -->|any other| None["No deployment"]
 ```
 
-[../vercel.json](../vercel.json) sets the install and build commands. Production runs on Vercel's Node.js runtime ([decision 0005](decisions/0005-vercel-deployment.md)), pinned with `vercel.functions.runtime: "nodejs24.x"` in the Nitro config because the build runs under Bun. Application code must not use Bun-only APIs such as `Bun.s3`:
+[../vercel.json](../vercel.json) sets the install and build commands and which branches deploy. Production runs on Vercel's Node.js runtime ([decision 0005](decisions/0005-vercel-deployment.md)), pinned with `vercel.functions.runtime: "nodejs24.x"` in the Nitro config because the build runs under Bun. Application code must not use Bun-only APIs such as `Bun.s3`:
 
 ```json
 {
   "installCommand": "bun install --frozen-lockfile",
-  "buildCommand": "bun --bun run build"
+  "buildCommand": "bun --bun run build",
+  "git": {
+    "deploymentEnabled": {
+      "**": false,
+      "main": true,
+      "development": true
+    }
+  }
 }
 ```
+
+`git.deploymentEnabled` ([Vercel reference](https://vercel.com/docs/project-configuration/git-configuration#git.deploymentenabled)) turns deployments on or off per branch. Patterns are [minimatch](https://github.com/isaacs/minimatch) globs, and a branch that matches several rules deploys when any matching rule is `true`:
+
+| Rule | Why |
+| --- | --- |
+| `"**": false` | Branches that no rule names deploy by default, so a catch-all turns the rest off. Write `**`, not `*`: `*` does not match `/`, and branch names here look like `feat/short-name`. |
+| `"main": true` | `**` also matches `main`. Without this rule, pushing `main` stops deploying production. |
+| `"development": true` | The only branch that gets previews. |
+
+To deploy another branch, add a `true` rule for its name or a glob such as `"docs/*": true`. A branch that does not deploy has no Vercel preview, so its pull request shows no preview URL.
 
 Set these environment variables in the Vercel project for each environment that needs them; never commit their values:
 
@@ -122,6 +140,8 @@ Set these environment variables in the Vercel project for each environment that 
 | --- | --- |
 | `DATABASE_URL` | Every page that reads the database. Preview deployments without it fail with a database error while reading the contract marker. |
 | `COMING_SOON`, `PREVIEW_TOKEN` | The [coming-soon gate](architecture.md#coming-soon-gate) |
+
+A Preview variable applies to every branch that deploys unless it is scoped. In the Vercel dashboard (Settings → Environment Variables), add the variable for Preview and pick a specific branch to give that branch its own value, such as a `DATABASE_URL` for `development`. A branch-specific value overrides an all-branches Preview value with the same name.
 
 To reproduce the Vercel build locally, which writes the ignored `.vercel/output/` (check `functions/__server.func/.vc-config.json` shows a `nodejs` runtime):
 

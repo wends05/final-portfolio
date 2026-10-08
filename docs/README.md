@@ -14,7 +14,7 @@ These docs describe where the portfolio is going and how to build it: product di
 | [Homepage plan](ui.md#homepage-plan) | Building homepage sections, the intro curtain, or the hero |
 | [Architecture](architecture.md) | Planned routes, the coming-soon gate, data flow, and where code goes |
 | [Development](development.md) | Setup, commands, checks, generated files, and dependency overrides |
-| [Deployment](development.md#vercel) | Vercel setup, environment variables, and what a push to `main` does |
+| [Deployment](development.md#vercel) | Vercel setup, which branches deploy, environment variables, and what a push to `main` does |
 | [Data](data.md) | Models, query rules, and schema changes |
 | [UI conventions](ui.md) | Building sections, cards, navigation, or styles, or enabling design-system lint rules |
 | [Decisions](decisions/README.md) | Recording a significant implementation choice and its rationale |
