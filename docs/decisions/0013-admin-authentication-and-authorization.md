@@ -9,7 +9,7 @@ The admin dashboard lets the owner create, edit, and delete all content ([intent
 
 Already settled: Neon Auth (Better Auth) is provisioned in the `neon_auth` schema, the owner's row has `role = 'admin'` in `neon_auth.user`, and there is no app table for admins ([0003](0003-neon-database-and-portfolio-schema.md)). The coming-soon gate is not authentication ([architecture](../architecture.md#coming-soon-gate)).
 
-On 2026-10-08 the owner confirmed the decisions listed in WD-16 (one shared `requireAdmin()`, admin URLs under `_dashboard`, no sign-up, owner account only) and chose **email/password** as the sign-in method.
+On 2026-10-08 the owner confirmed the decisions listed in WD-16 (one shared `requireAdmin()`, admin URLs under `_dashboard`, no sign-up, owner account only) and chose **email/password** as the sign-in method. The issue gave `/admin/...` and `/admin/sign-in` only as examples, so the `/admin` prefix below is proposed here, not separately confirmed.
 
 What `@neondatabase/auth` offers for a server framework (version `0.5.0-beta`, read from the published package):
 
@@ -79,6 +79,7 @@ Four layers keep a stray or self-created Neon Auth user out of the dashboard: no
 ## Consequences
 
 - Sign-in and the guard are implemented in WD-17 and WD-18. This record changes no code.
+- The `signIn` server function is a public password endpoint. If Neon Auth does not already rate-limit failed sign-ins, WD-17 adds rate limiting before the sign-in page ships.
 - The existing placeholder routes `src/routes/_dashboard/auth` and `src/routes/_dashboard/home` use URLs outside `/admin`; WD-17 and WD-19 replace them.
 - `@neondatabase/auth` must be pinned to an exact version: its `/server` subpath is beta, and minor versions may break it. Prefer the upstream TanStack Start adapter if it ships.
 - The app reads `neon_auth.user` only to look up `role`, and never writes to the `neon_auth` schema. The Prisma contract has no `neon_auth` model today; how to run that query is decided in WD-18, and any contract change needs the owner's approval ([data](../data.md#schema-changes)).
