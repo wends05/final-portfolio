@@ -39,8 +39,20 @@ erDiagram
 | `ProjectCollaborator` | `projectId`, `collaboratorId`, `role?` | Composite key; cascades from both sides |
 
 - IDs are native `uuid`. Prisma Next generates UUIDv7 on insert; the database has no default, so raw SQL inserts must supply `id`.
-- Image fields store storage bucket keys, not URLs. Resolve a key to a public URL when rendering.
+- Image fields store storage bucket keys, not URLs. Resolve keys on the server before returning image URLs to the UI; see [image storage](#image-storage).
 - Rank fields set manual order: `null` means not shown, and the integer is the position. The homepage uses `Project.featuredRank` and `SkillCategory.topRank`.
+
+## Image storage
+
+Use Files SDK with the `files-sdk/neon` adapter for Neon Object Storage ([decision 0005](decisions/0005-vercel-deployment.md#object-storage-client)). Keep client configuration and storage operations in `src/features/storage/storage.server.ts`; feature server modules call it and return plain data through server functions.
+
+- `Project.coverImageKey` and `ProjectImage.key` remain object keys. Do not persist public or presigned URLs in these fields.
+- For a `public_read` bucket, set the adapter's `publicBaseUrl` to the branch endpoint plus bucket path, or to a CDN base URL. `url(key)` then returns a stable public URL. Only place objects intended for anonymous access in such a bucket.
+- Without `publicBaseUrl`, `url(key)` generates an expiring presigned GET URL. Set an explicit lifetime and ensure cached page data does not retain expired URLs. Generating a URL does not confirm that the object exists.
+- Return no image URL for an absent key, and let the UI render a placeholder. Check nested paths and special characters when testing URL resolution.
+- Storage endpoint, bucket, and credentials must correspond to the branch used by the database connection. Configure them separately for local development and each Vercel environment; keep credentials server-only and out of `VITE_` variables.
+
+See the [Neon adapter reference](https://files-sdk.dev/docs/adapters/neon) for configuration and required AWS SDK peers. Upload transport, file limits, key naming, and cleanup policy are tracked separately in Linear WD-27.
 
 ## Query rules
 
