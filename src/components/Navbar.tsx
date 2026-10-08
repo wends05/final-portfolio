@@ -25,8 +25,8 @@ const routes: {
 
 export default function Navbar() {
 	return (
-		<nav className="w-full p-10">
-			<ul className="items-end w-full flex flex-row gap-5">
+		<nav className="page-grid fixed inset-x-0 top-0 z-10 py-6">
+			<ul className="col-span-full flex flex-row items-end gap-5">
 				{routes.map(({ path, Icon }) => (
 					<li key={path}>
 						<Icon size={40} />

@@ -9,8 +9,10 @@ interface SkillsSectionProps {
 
 export default function SkillsSection({ skills }: SkillsSectionProps) {
 	return (
-		<div>
-			Hello world
+		<div className="page-grid min-h-screen pt-10 md:pt-20">
+			<h1 className="col-span-4 w-full text-start">
+				Top skills I have experience with
+			</h1>
 			{skills.map((skill) => (
 				<SkillCard
 					key={skill.id}
