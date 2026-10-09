@@ -110,7 +110,7 @@ flowchart LR
 | `src/features/<feature>/` | Feature code: `.server.ts`, `.functions.ts`, `utils`, `types`, `components/` ([0009](decisions/0009-feature-folder-structure.md)) |
 | `src/components/`, `src/components/ui/` | Shared components and shadcn primitives |
 | `src/lib/` | Shared utilities |
-| `src/integrations/` | Prisma runtime and contract, TanStack Query wiring |
+| `src/integrations/` | Prisma runtime and contract, TanStack Query wiring, GSAP setup (`animations/`) |
 | `src/styles.css`, `src/styles/` | Global styles and tokens ([ui](ui.md)) |
 | `migrations/` | Prisma Next migrations ([data](data.md)) |
 | `vercel.json` | Vercel settings ([0005](decisions/0005-vercel-deployment.md)) |

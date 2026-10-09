@@ -1,0 +1,18 @@
+/*
+ * Reveal footer: the page scrolls up off a footer that stays put behind it.
+ * The content is fixed to the viewport bottom; clip-path on the footer box
+ * clips that fixed content to the box, so only the scrolled-in part shows.
+ */
+
+@utility footer-reveal {
+  position: relative;
+  height: max(90svh, 32rem);
+  clip-path: inset(0);
+}
+
+@utility footer-reveal-content {
+  position: fixed;
+  inset-inline: 0;
+  bottom: 0;
+}
+

@@ -45,6 +45,29 @@ Two linters run side by side and do not overlap ([decision 0008](decisions/0008-
 
 Do not use the `db:*` scripts in `package.json`; they are traditional Prisma commands. Use the Prisma Next commands in [data](data.md#schema-changes).
 
+### Class sorting on save in Zed
+
+Biome's `nursery/useSortedClasses` rule sorts utility classes in JSX `class` and `className` attributes and in `cn`, `clsx`, and `cva` calls. The rule uses information-level diagnostics so existing class order does not block checks, and its fix is explicitly marked `safe` so Zed can apply it on save. Sorting is a lint fix, not part of Biome's formatter.
+
+Install Zed's Biome extension and enable format on save. In Zed user settings or `.zed/settings.json`, use the following language settings (repeat for `JavaScript`, `JSX`, and `TypeScript` when needed):
+
+```json
+{
+  "format_on_save": "on",
+  "languages": {
+    "TSX": {
+      "formatter": { "language_server": { "name": "biome" } },
+      "code_actions_on_format": {
+        "source.fixAll.biome": true,
+        "source.organizeImports.biome": true
+      }
+    }
+  }
+}
+```
+
+The rule remains experimental and uses Biome's built-in utility ordering; it does not read the project's Tailwind theme. See [Biome's class sorting documentation](https://biomejs.dev/linter/rules/use-sorted-classes/) and [Zed integration](https://biomejs.dev/reference/zed/).
+
 ## Validation
 
 Pick checks that fit the change:

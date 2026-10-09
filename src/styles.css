@@ -5,6 +5,8 @@
 @import "@fontsource-variable/geist-mono";
 @import "./styles/portfolio.css";
 @import "./styles/intro.css";
+@import "./styles/footer.css";
+@import "./styles/lenis.css";
 
 @custom-variant dark (&:is(.dark *));
 

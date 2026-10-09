@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { gsap, useGSAP } from "#/lib/gsap";
+import { appGSAP, useAppGSAP } from "#/integrations/animations/gsap";
 import {
 	FULL_MOTION,
 	INTRO_LIFT_AT,
@@ -18,7 +18,7 @@ export default function IntroCurtain({ onActiveChange }: IntroCurtainProps) {
 
 	const [done, setDone] = useState(false);
 
-	useGSAP(
+	useAppGSAP(
 		() => {
 			if (!introPlaying()) return setDone(true);
 			const el = root.current;
@@ -27,12 +27,12 @@ export default function IntroCurtain({ onActiveChange }: IntroCurtainProps) {
 			el.style.animation = "none"; // cancel the CSS fail-safe
 			const counter = { n: 0 };
 
-			gsap
+			appGSAP
 				.matchMedia()
 				.add(
 					{ motion: FULL_MOTION, reduce: REDUCED_MOTION },
 					({ conditions }) => {
-						gsap
+						appGSAP
 							.timeline({
 								onComplete: () => {
 									markIntroSeen();
