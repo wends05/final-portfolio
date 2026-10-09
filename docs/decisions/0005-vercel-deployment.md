@@ -63,7 +63,7 @@ Revisit when Vercel's Bun runtime is generally available and the project moves t
 - Production runs on a mature runtime with source maps, metrics, and bytecode caching.
 - Two more dependencies for storage (`@aws-sdk/client-s3`, `@aws-sdk/s3-request-presigner`). Keep them behind one `storage.server.ts` module so a later switch touches one file.
 - Development runs Vite on Bun (`--bun`) while production runs Node.js. Only Node-compatible APIs are allowed, and CI tests run on Node.js, which catches most gaps.
-- Environment variables (`DATABASE_URL`, `COMING_SOON`, `PREVIEW_TOKEN`, and later the S3 credentials) live in the Vercel project, per environment.
+- Environment variables (`DATABASE_URL`, `COMING_SOON`, and later the S3 credentials) live in the Vercel project, per environment.
 - Every push to `main` deploys to production.
 
 ## Validation
