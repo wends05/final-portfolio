@@ -139,7 +139,7 @@ Set these environment variables in the Vercel project for each environment that 
 | Variable | Needed for |
 | --- | --- |
 | `DATABASE_URL` | Every page that reads the database. Preview deployments without it fail with a database error while reading the contract marker. |
-| `COMING_SOON`, `PREVIEW_TOKEN` | The [coming-soon gate](architecture.md#coming-soon-gate) |
+| `COMING_SOON` | The [coming-soon gate](architecture.md#coming-soon-gate). Vercel applies a changed value only to new deployments, so redeploy after changing it. |
 
 A Preview variable applies to every branch that deploys unless it is scoped. In the Vercel dashboard (Settings → Environment Variables), add the variable for Preview and pick a specific branch to give that branch its own value, such as a `DATABASE_URL` for `development`. A branch-specific value overrides an all-branches Preview value with the same name.
 

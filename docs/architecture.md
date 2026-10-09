@@ -37,20 +37,18 @@ flowchart TD
 
 ## Coming-soon gate
 
-While the site is not ready, public pages redirect to `/coming-soon`. The owner can bypass the gate with a preview cookie:
+While the site is not ready, public pages redirect to `/coming-soon`. One environment variable controls the gate, and there is no bypass for the owner:
 
-| `COMING_SOON` | `preview` cookie matches `PREVIEW_TOKEN` | Result |
-| --- | --- | --- |
-| not `"true"` | any | Site is public; `/coming-soon` redirects to `/` |
-| `"true"` | yes | Site is visible to that browser |
-| `"true"` | no | Public pages redirect to `/coming-soon` |
+| `COMING_SOON` | Result |
+| --- | --- |
+| not `"true"` | Site is public; `/coming-soon` redirects to `/` |
+| `"true"` | Public pages redirect to `/coming-soon` |
 
 ```ts
-// src/features/site/site.functions.ts (intended logic)
-const comingSoon = process.env.COMING_SOON === "true";
-const token = process.env.PREVIEW_TOKEN;
-const hasPreview = !!token && getCookie("preview") === token;
-return { gated: comingSoon && !hasPreview };
+// src/features/site/site.utils.ts
+export function isSiteGated(comingSoon: string | undefined) {
+	return comingSoon === "true";
+}
 ```
 
 The gate is not authentication. Admin pages use Neon Auth ([intent](intent.md#answered-questions)), described below. The `_dashboard` layout is outside the gate, so the owner can sign in while the public site is gated.
