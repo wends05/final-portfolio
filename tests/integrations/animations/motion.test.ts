@@ -1,11 +1,11 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { appGSAP } from "./gsap";
+import { appGSAP } from "#/integrations/animations/gsap";
 import {
 	FULL_MOTION,
 	matchFullMotion,
 	matchMotion,
 	REDUCED_MOTION,
-} from "./motion";
+} from "#/integrations/animations/motion";
 
 type MatchMedia = ReturnType<typeof appGSAP.matchMedia>;
 

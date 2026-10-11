@@ -1,5 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { getProjectMetaLine, getProjectPeriodLabel } from "./project-meta";
+import {
+	getProjectMetaLine,
+	getProjectPeriodLabel,
+} from "#/features/public/utils/project-meta";
 
 const completed = {
 	status: "COMPLETED" as const,

@@ -1,12 +1,14 @@
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
-import { EASES } from "./eases";
+import { EASES } from "#/integrations/animations/eases";
 
 describe("EASES", () => {
 	it("matches the --ease-swiss token in portfolio.css", () => {
 		const css = readFileSync(
-			fileURLToPath(new URL("../../styles/portfolio.css", import.meta.url)),
+			fileURLToPath(
+				new URL("../../../src/styles/portfolio.css", import.meta.url),
+			),
 			"utf8",
 		);
 		const match = css.match(/--ease-swiss:\s*cubic-bezier\(([^)]*)\)/);

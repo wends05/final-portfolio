@@ -7,7 +7,7 @@ import {
 	findEmail,
 	mailtoHref,
 	RESUME_PATH,
-} from "./contact";
+} from "#/features/public/utils/contact";
 
 describe("contact emails", () => {
 	it("picks the main gmail address by default", () => {

@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { followNavigation, isPlainClick } from "./pick";
+import { followNavigation, isPlainClick } from "#/features/public/utils/pick";
 
 const click = (
 	overrides: Partial<Parameters<typeof isPlainClick>[0]> = {},

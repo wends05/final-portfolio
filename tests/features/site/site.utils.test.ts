@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { isSiteGated } from "./site.utils";
+import { isSiteGated } from "#/features/site/site.utils";
 
 describe("isSiteGated", () => {
 	it("is open when COMING_SOON is not 'true'", () => {
