@@ -6,7 +6,7 @@
 
 @utility footer-reveal {
   position: relative;
-  height: max(90svh, 32rem);
+  height: max(60svh, 32rem);
   clip-path: inset(0);
 }
 
@@ -15,4 +15,3 @@
   inset-inline: 0;
   bottom: 0;
 }
-

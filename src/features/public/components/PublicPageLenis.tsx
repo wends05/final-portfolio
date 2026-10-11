@@ -5,12 +5,13 @@ import { appGSAP } from "#/integrations/animations/gsap";
 
 interface PublicPageLenisProps {
 	children: React.ReactNode;
-	introActive: boolean;
+	/** Stops scrolling while the intro curtain or the menu covers the page. */
+	scrollLocked: boolean;
 }
 
 export default function PublicPageLenis({
 	children,
-	introActive,
+	scrollLocked,
 }: PublicPageLenisProps) {
 	const lenis = useLenis();
 
@@ -25,12 +26,12 @@ export default function PublicPageLenis({
 
 	useEffect(() => {
 		if (!lenis) return;
-		if (introActive) {
+		if (scrollLocked) {
 			lenis.stop();
 		} else {
 			lenis.start();
 		}
-	}, [introActive, lenis]);
+	}, [scrollLocked, lenis]);
 
 	useEffect(() => {
 		if (!lenis) return;
