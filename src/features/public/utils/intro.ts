@@ -15,3 +15,8 @@ export function markIntroSeen() {
 		sessionStorage.setItem(INTRO_KEY, "1");
 	} catch {}
 }
+
+/** Ends a pending intro without playing it or remembering it as seen. */
+export function skipIntro() {
+	if (introPlaying()) document.documentElement.dataset.intro = "seen";
+}

@@ -13,6 +13,7 @@ import { Route as PublicRouteRouteImport } from './routes/_public/route'
 import { Route as ComingSoonRouteImport } from './routes/coming-soon'
 import { Route as DashboardHomeRouteImport } from './routes/_dashboard/home'
 import { Route as PublicIndexRouteImport } from './routes/_public/index'
+import { Route as PublicSplatRouteImport } from './routes/_public/$'
 import { Route as PublicProjectsRouteRouteImport } from './routes/_public/projects/route'
 import { Route as DashboardAuthIndexRouteImport } from './routes/_dashboard/auth/index'
 import { Route as PublicProjectsIndexRouteImport } from './routes/_public/projects/index'
@@ -37,6 +38,11 @@ const DashboardHomeRoute = DashboardHomeRouteImport.update({
 const PublicIndexRoute = PublicIndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => PublicRouteRoute,
+} as any)
+const PublicSplatRoute = PublicSplatRouteImport.update({
+  id: '/$',
+  path: '/$',
   getParentRoute: () => PublicRouteRoute,
 } as any)
 const PublicProjectsRouteRoute = PublicProjectsRouteRouteImport.update({
@@ -75,6 +81,7 @@ export interface FileRoutesByFullPath {
   '/coming-soon': typeof ComingSoonRoute
   '/projects': typeof PublicProjectsRouteRouteWithChildren
   '/home': typeof DashboardHomeRoute
+  '/$': typeof PublicSplatRoute
   '/projects/$': typeof PublicProjectsSplatRoute
   '/skills/$slug': typeof PublicSkillsSlugRoute
   '/auth/': typeof DashboardAuthIndexRoute
@@ -84,6 +91,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/coming-soon': typeof ComingSoonRoute
   '/home': typeof DashboardHomeRoute
+  '/$': typeof PublicSplatRoute
   '/': typeof PublicIndexRoute
   '/projects/$': typeof PublicProjectsSplatRoute
   '/skills/$slug': typeof PublicSkillsSlugRoute
@@ -97,6 +105,7 @@ export interface FileRoutesById {
   '/coming-soon': typeof ComingSoonRoute
   '/_public/projects': typeof PublicProjectsRouteRouteWithChildren
   '/_dashboard/home': typeof DashboardHomeRoute
+  '/_public/$': typeof PublicSplatRoute
   '/_public/': typeof PublicIndexRoute
   '/_public/projects/$': typeof PublicProjectsSplatRoute
   '/_public/skills/$slug': typeof PublicSkillsSlugRoute
@@ -111,6 +120,7 @@ export interface FileRouteTypes {
     | '/coming-soon'
     | '/projects'
     | '/home'
+    | '/$'
     | '/projects/$'
     | '/skills/$slug'
     | '/auth/'
@@ -120,6 +130,7 @@ export interface FileRouteTypes {
   to:
     | '/coming-soon'
     | '/home'
+    | '/$'
     | '/'
     | '/projects/$'
     | '/skills/$slug'
@@ -132,6 +143,7 @@ export interface FileRouteTypes {
     | '/coming-soon'
     | '/_public/projects'
     | '/_dashboard/home'
+    | '/_public/$'
     | '/_public/'
     | '/_public/projects/$'
     | '/_public/skills/$slug'
@@ -175,6 +187,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof PublicIndexRouteImport
+      parentRoute: typeof PublicRouteRoute
+    }
+    '/_public/$': {
+      id: '/_public/$'
+      path: '/$'
+      fullPath: '/$'
+      preLoaderRoute: typeof PublicSplatRouteImport
       parentRoute: typeof PublicRouteRoute
     }
     '/_public/projects': {
@@ -237,6 +256,7 @@ const PublicProjectsRouteRouteWithChildren =
 
 interface PublicRouteRouteChildren {
   PublicProjectsRouteRoute: typeof PublicProjectsRouteRouteWithChildren
+  PublicSplatRoute: typeof PublicSplatRoute
   PublicIndexRoute: typeof PublicIndexRoute
   PublicSkillsSlugRoute: typeof PublicSkillsSlugRoute
   PublicSkillsIndexRoute: typeof PublicSkillsIndexRoute
@@ -244,6 +264,7 @@ interface PublicRouteRouteChildren {
 
 const PublicRouteRouteChildren: PublicRouteRouteChildren = {
   PublicProjectsRouteRoute: PublicProjectsRouteRouteWithChildren,
+  PublicSplatRoute: PublicSplatRoute,
   PublicIndexRoute: PublicIndexRoute,
   PublicSkillsSlugRoute: PublicSkillsSlugRoute,
   PublicSkillsIndexRoute: PublicSkillsIndexRoute,

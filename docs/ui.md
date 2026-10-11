@@ -53,6 +53,18 @@ Sections live in `src/features/public/components/landing/`. The navbar, footer a
 
 For every page: check keyboard focus, heading order, image alt text, and small-screen layout.
 
+## Error pages
+
+Not-found and error pages share one template, [ErrorPage](../src/features/site/components/ErrorPage.tsx): a small label, a large lowercase title over a rule, then the path, the explanation, and two actions. The copy and actions for each kind live in `getErrorPageCopy` in [../src/features/site/site.utils.ts](../src/features/site/site.utils.ts).
+
+- The router's `defaultNotFoundComponent` renders the 404, and `defaultErrorComponent` ([RouteErrorPage](../src/features/site/components/RouteErrorPage.tsx)) renders errors.
+- Throw `notFound()` from a loader when content doesn't exist. Unpublished content 404s the same way as missing content.
+- Unknown URLs fall through to the catch-all `routes/_public/$.tsx`, so the layout's coming-soon gate runs first and the 404 renders inside the layout.
+- A server-rendering error returns HTTP 500. An error after the page has loaded in the browser shows the same page; "Try again" calls `router.invalidate()`, which re-runs the loaders.
+- An error in the `/_public` layout itself renders without the Navbar, so that page draws its own wordmark (`standalone`).
+- Error details show in development only (`getSafeErrorDetail`). In production, [../src/start.ts](../src/start.ts) serializes every `Error` as a generic message, so database and storage messages never reach the page source; function middleware logs the real error on the server.
+- Error pages are `noindex`, and the intro curtain does not play on them.
+
 ## Smooth scroll
 
 [Lenis](https://github.com/darkroomengineering/lenis) smooths wheel and trackpad scrolling on the public pages.
