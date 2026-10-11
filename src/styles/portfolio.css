@@ -8,6 +8,8 @@ html {
   scrollbar-width: thin;
   scrollbar-color: var(--steel-grey) transparent;
   scrollbar-gutter: stable; /* no layout jump when a classic scrollbar returns */
+  /* In-page jumps (native and Lenis) land clear of the fixed navbar. */
+  scroll-padding-top: var(--navbar-height);
 }
 
 :root {
@@ -32,6 +34,9 @@ html {
   --rule-inverse: var(--steel-grey);
   --focus: var(--ink-black);
   --focus-inverse: var(--paper);
+
+  /* The fixed navbar: py-4 around its 44px (leading-11) row. */
+  --navbar-height: 4.75rem;
 }
 
 @theme {
@@ -90,6 +95,7 @@ html {
 
 @media (width >= 48rem) {
   :root {
+    --navbar-height: 5.25rem; /* md:py-5 */
     --text-heading-l: 2.5rem;
     --text-heading-l--line-height: 1.05;
     --text-heading-m: 1.75rem;
