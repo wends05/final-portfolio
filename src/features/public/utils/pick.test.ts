@@ -1,5 +1,5 @@
-import { describe, expect, it } from "vitest";
-import { isPlainClick } from "./pick";
+import { describe, expect, it, vi } from "vitest";
+import { followNavigation, isPlainClick } from "./pick";
 
 const click = (
 	overrides: Partial<Parameters<typeof isPlainClick>[0]> = {},
@@ -35,5 +35,43 @@ describe("isPlainClick", () => {
 
 	it("leaves a left click with several modifiers to the browser", () => {
 		expect(isPlainClick(click({ metaKey: true, shiftKey: true }))).toBe(false);
+	});
+});
+
+describe("followNavigation", () => {
+	it("calls onArrive when the navigation resolves", async () => {
+		const onArrive = vi.fn();
+		const onFail = vi.fn();
+		await expect(
+			followNavigation(() => Promise.resolve(), { onArrive, onFail }),
+		).resolves.toBe(true);
+		expect(onArrive).toHaveBeenCalledOnce();
+		expect(onFail).not.toHaveBeenCalled();
+	});
+
+	it("calls onFail instead of rejecting when the navigation rejects", async () => {
+		const onArrive = vi.fn();
+		const onFail = vi.fn();
+		await expect(
+			followNavigation(() => Promise.reject(new Error("offline")), {
+				onArrive,
+				onFail,
+			}),
+		).resolves.toBe(false);
+		expect(onFail).toHaveBeenCalledOnce();
+		expect(onArrive).not.toHaveBeenCalled();
+	});
+
+	it("calls onFail when starting the navigation throws", async () => {
+		const onFail = vi.fn();
+		await expect(
+			followNavigation(
+				() => {
+					throw new Error("bad route");
+				},
+				{ onArrive: vi.fn(), onFail },
+			),
+		).resolves.toBe(false);
+		expect(onFail).toHaveBeenCalledOnce();
 	});
 });

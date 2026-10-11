@@ -44,6 +44,7 @@ export default function LandingSkillsSection(
 		},
 		navigate: (slug) =>
 			router.navigate({ to: "/skills/$slug", params: { slug } }),
+		onCancel: () => setPicking(null),
 	});
 
 	return (

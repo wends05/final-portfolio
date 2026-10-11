@@ -75,6 +75,10 @@ export default function LandingProjectsSection(
 		},
 		navigate: (slug) =>
 			router.navigate({ to: "/projects/$", params: { _splat: slug } }),
+		onCancel: () => {
+			pickStarted.current = false;
+			setPicking(null);
+		},
 	});
 
 	return (

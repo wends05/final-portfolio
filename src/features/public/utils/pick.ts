@@ -14,6 +14,31 @@ type ClickLike = Pick<
 	"button" | "metaKey" | "ctrlKey" | "shiftKey" | "altKey"
 >;
 
+interface NavigationHandlers {
+	onArrive: () => void;
+	onFail: () => void;
+}
+
+/**
+ * Runs a pick's navigation and calls `onArrive` once it resolves, or `onFail`
+ * if it throws or rejects (offline, a failed route load). It never rejects
+ * itself, so a failed navigation can't surface as an unhandled rejection.
+ * Resolves to whether the navigation arrived.
+ */
+export async function followNavigation(
+	navigate: () => Promise<unknown>,
+	{ onArrive, onFail }: NavigationHandlers,
+): Promise<boolean> {
+	try {
+		await navigate();
+	} catch {
+		onFail();
+		return false;
+	}
+	onArrive();
+	return true;
+}
+
 /**
  * True for a plain left click: the one click a pick animation takes over.
  * Any modifier (new tab, new window, download) or another mouse button is
