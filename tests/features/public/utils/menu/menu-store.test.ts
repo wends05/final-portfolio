@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { createMenuStore } from "./menu-store";
+import { createMenuStore } from "#/features/public/utils/menu/menu-store";
 
 function openStore() {
 	const store = createMenuStore();

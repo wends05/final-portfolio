@@ -3,7 +3,7 @@ import {
 	PINNED_TEXT_SCROLL,
 	pinnedTextPad,
 	pinnedTextRunway,
-} from "./pinned-text";
+} from "#/features/public/utils/pinned-text";
 
 const scroll = {
 	fadeIn: 25,

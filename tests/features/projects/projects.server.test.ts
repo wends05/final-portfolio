@@ -1,7 +1,10 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import {
+	getFeaturedProjects,
+	getProjects,
+} from "#/features/projects/projects.server";
 import { fetchImageWithKey } from "#/integrations/neon/storage/storage.server";
 import { db } from "#/integrations/prisma/db";
-import { getFeaturedProjects, getProjects } from "./projects.server";
 
 vi.mock("#/integrations/prisma/db", () => ({
 	db: { orm: { public: { Project: {} } } },

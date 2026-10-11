@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
+import { getTopSkillCategories } from "#/features/skills/skills.server";
 import { db } from "#/integrations/prisma/db";
-import { getTopSkillCategories } from "./skills.server";
 
 vi.mock("#/integrations/prisma/db", () => ({
 	db: { orm: { public: { SkillCategory: {} } } },

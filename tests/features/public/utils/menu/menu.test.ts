@@ -1,5 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { isCurrentPage, isCurrentSection } from "./menu";
+import {
+	isCurrentPage,
+	isCurrentSection,
+} from "#/features/public/utils/menu/menu";
 
 describe("isCurrentPage", () => {
 	it("matches the exact path", () => {
