@@ -33,7 +33,7 @@ erDiagram
 | `Project` | `id`, `slug`, `title`, `description`, `coverImageKey?`, `githubUrl?`, `liveUrl?`, `status`, `featuredRank?`, `published`, `teamName?`, `metadata`, `startedAt?`, `endedAt?`, `createdAt`, `updatedAt` | `slug` and `featuredRank` unique. `status` is `ONGOING` or `COMPLETED`. `published` defaults to `false`. `metadata` is `jsonb` for keys that have not earned a column. Dates are `YYYY-MM-DD` strings. |
 | `ProjectImage` | `id`, `projectId`, `key`, `alt`, `order` | Cascades with its project. `alt` is required. |
 | `SkillCategory` | `id`, `slug`, `name`, `overview`, `confidence?`, `topRank?`, `createdAt`, `updatedAt` | `slug` and `topRank` unique. `confidence` is 0–100, enforced by the admin form. |
-| `Skill` | `id`, `categoryId`, `slug`, `name`, `createdAt` | `slug` unique. A category with skills cannot be deleted. |
+| `Skill` | `id`, `categoryId`, `name`, `createdAt` | `name` unique ignoring case (unique index on `lower(name)`), so "React" and "react" cannot both exist. Skills have no slug or page of their own; they are listed by name under their category. A category with skills cannot be deleted. |
 | `ProjectSkill` | `projectId`, `skillId` | Composite key; cascades from both sides |
 | `Collaborator` | `id`, `name`, `profileUrl?` | People credited on projects; they do not sign in |
 | `ProjectCollaborator` | `projectId`, `collaboratorId`, `role?` | Composite key; cascades from both sides |

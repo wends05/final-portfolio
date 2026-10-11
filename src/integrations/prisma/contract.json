@@ -590,13 +590,6 @@
                   "codecId": "pg/text@1",
                   "kind": "scalar"
                 }
-              },
-              "slug": {
-                "nullable": false,
-                "type": {
-                  "codecId": "pg/text@1",
-                  "kind": "scalar"
-                }
               }
             },
             "relations": {
@@ -658,9 +651,6 @@
                 },
                 "name": {
                   "column": "name"
-                },
-                "slug": {
-                  "column": "slug"
                 }
               },
               "namespaceId": "public",
@@ -1182,11 +1172,6 @@
                   "codecId": "pg/text@1",
                   "nativeType": "text",
                   "nullable": false
-                },
-                "slug": {
-                  "codecId": "pg/text@1",
-                  "nativeType": "text",
-                  "nullable": false
                 }
               },
               "foreignKeys": [
@@ -1216,6 +1201,12 @@
                   "name": "Skill_categoryId_idx_15c304f2",
                   "prefix": "Skill_categoryId_idx",
                   "unique": false
+                },
+                {
+                  "expression": "lower(\"name\")",
+                  "name": "skill_name_lower_79c07e41",
+                  "prefix": "skill_name_lower",
+                  "unique": true
                 }
               ],
               "primaryKey": {
@@ -1223,13 +1214,7 @@
                   "id"
                 ]
               },
-              "uniques": [
-                {
-                  "columns": [
-                    "slug"
-                  ]
-                }
-              ]
+              "uniques": []
             },
             "SkillCategory": {
               "columns": {
@@ -1309,7 +1294,7 @@
         "kind": "postgres-schema"
       }
     },
-    "storageHash": "600f1821fac1c9ecf7a44b218390f31f839d3ff85fe4ef848f3c13a7ae79c7bc"
+    "storageHash": "df8db59c2b681469b18814a17a0b0e025778f39573b97d56aba0345c528db22e"
   },
   "execution": {
     "executionHash": "c22ca61793559bd53013691ec5e65c694155d50c9737b6679796c69e30f86f28",

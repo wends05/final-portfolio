@@ -1441,58 +1441,58 @@ type ContractBase = Omit<
       readonly defaults: readonly [
         {
           readonly ref: {
+            readonly entry: 'Collaborator';
+            readonly field: 'id';
             readonly namespace: 'public';
-            readonly table: 'Collaborator';
-            readonly column: 'id';
           };
           readonly onCreate: { readonly kind: 'generator'; readonly id: 'uuidv7' };
         },
         {
           readonly ref: {
+            readonly entry: 'Project';
+            readonly field: 'id';
             readonly namespace: 'public';
-            readonly table: 'Project';
-            readonly column: 'id';
           };
           readonly onCreate: { readonly kind: 'generator'; readonly id: 'uuidv7' };
         },
         {
           readonly ref: {
+            readonly entry: 'Project';
+            readonly field: 'updatedAt';
             readonly namespace: 'public';
-            readonly table: 'Project';
-            readonly column: 'updatedAt';
           };
           readonly onCreate: { readonly kind: 'generator'; readonly id: 'timestampNow' };
           readonly onUpdate: { readonly kind: 'generator'; readonly id: 'timestampNow' };
         },
         {
           readonly ref: {
+            readonly entry: 'ProjectImage';
+            readonly field: 'id';
             readonly namespace: 'public';
-            readonly table: 'ProjectImage';
-            readonly column: 'id';
           };
           readonly onCreate: { readonly kind: 'generator'; readonly id: 'uuidv7' };
         },
         {
           readonly ref: {
+            readonly entry: 'Skill';
+            readonly field: 'id';
             readonly namespace: 'public';
-            readonly table: 'Skill';
-            readonly column: 'id';
           };
           readonly onCreate: { readonly kind: 'generator'; readonly id: 'uuidv7' };
         },
         {
           readonly ref: {
+            readonly entry: 'SkillCategory';
+            readonly field: 'id';
             readonly namespace: 'public';
-            readonly table: 'SkillCategory';
-            readonly column: 'id';
           };
           readonly onCreate: { readonly kind: 'generator'; readonly id: 'uuidv7' };
         },
         {
           readonly ref: {
+            readonly entry: 'SkillCategory';
+            readonly field: 'updatedAt';
             readonly namespace: 'public';
-            readonly table: 'SkillCategory';
-            readonly column: 'updatedAt';
           };
           readonly onCreate: { readonly kind: 'generator'; readonly id: 'timestampNow' };
           readonly onUpdate: { readonly kind: 'generator'; readonly id: 'timestampNow' };

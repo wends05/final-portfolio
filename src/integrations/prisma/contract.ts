@@ -70,11 +70,22 @@ export const contract = defineContract(
 			fields: {
 				id: field.id.uuidv7Native(),
 				categoryId: field.uuidNative(),
-				slug: field.text().unique(),
 				name: field.text(),
 				createdAt: field.temporal.createdAtString(),
 			},
-		});
+		}).sql(({ cols, constraints }) => ({
+			indexes: [
+				// Names are unique ignoring case: "React" and "react" are one skill
+				constraints.index({
+					expression: {
+						fields: [cols.name],
+						render: ([name]) => `lower("${name?.name}")`,
+					},
+					unique: true,
+					name: "skill_name_lower",
+				}),
+			],
+		}));
 
 		const ProjectSkill = model("ProjectSkill", {
 			fields: {
