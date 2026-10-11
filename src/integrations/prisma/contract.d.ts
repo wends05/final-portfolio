@@ -34,9 +34,9 @@ import type {
 } from '@prisma/orm-postgres/contract/types';
 
 export type StorageHash =
-  StorageHashBase<'df8db59c2b681469b18814a17a0b0e025778f39573b97d56aba0345c528db22e'>;
+  StorageHashBase<'e7f60d2935fcdad0ee76a8e73fd0a613817bd610cdab40dcc80178815511c04b'>;
 export type ExecutionHash =
-  ExecutionHashBase<'c22ca61793559bd53013691ec5e65c694155d50c9737b6679796c69e30f86f28'>;
+  ExecutionHashBase<'602fd42b6ba0b6e852de5122e96fdd20503712ff381e4bec081223ef7fd50919'>;
 export type ProfileHash =
   ProfileHashBase<'3916f444a8a17ad749191acf9e08dad97d1a327b88c2f1d45d12f240296aa8b2'>;
 
@@ -626,6 +626,7 @@ type ContractBase = Omit<
                   readonly nativeType: 'timestamptz';
                   readonly codecId: 'pg/timestamptz-string@1';
                   readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
                 };
                 readonly description: {
                   readonly nativeType: 'text';
@@ -903,6 +904,7 @@ type ContractBase = Omit<
                   readonly nativeType: 'timestamptz';
                   readonly codecId: 'pg/timestamptz-string@1';
                   readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
                 };
                 readonly id: {
                   readonly nativeType: 'uuid';
@@ -957,6 +959,7 @@ type ContractBase = Omit<
                   readonly nativeType: 'timestamptz';
                   readonly codecId: 'pg/timestamptz-string@1';
                   readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
                 };
                 readonly id: {
                   readonly nativeType: 'uuid';
@@ -1544,14 +1547,6 @@ type ContractBase = Omit<
           };
         },
         {
-          readonly onCreate: { readonly id: 'timestampNow'; readonly kind: 'generator' };
-          readonly ref: {
-            readonly entry: 'Project';
-            readonly field: 'createdAt';
-            readonly namespace: 'public';
-          };
-        },
-        {
           readonly onCreate: { readonly id: 'uuidv7'; readonly kind: 'generator' };
           readonly ref: {
             readonly entry: 'Project';
@@ -1577,26 +1572,10 @@ type ContractBase = Omit<
           };
         },
         {
-          readonly onCreate: { readonly id: 'timestampNow'; readonly kind: 'generator' };
-          readonly ref: {
-            readonly entry: 'Skill';
-            readonly field: 'createdAt';
-            readonly namespace: 'public';
-          };
-        },
-        {
           readonly onCreate: { readonly id: 'uuidv7'; readonly kind: 'generator' };
           readonly ref: {
             readonly entry: 'Skill';
             readonly field: 'id';
-            readonly namespace: 'public';
-          };
-        },
-        {
-          readonly onCreate: { readonly id: 'timestampNow'; readonly kind: 'generator' };
-          readonly ref: {
-            readonly entry: 'SkillCategory';
-            readonly field: 'createdAt';
             readonly namespace: 'public';
           };
         },

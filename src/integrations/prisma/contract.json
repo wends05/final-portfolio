@@ -816,6 +816,10 @@
                 },
                 "createdAt": {
                   "codecId": "pg/timestamptz-string@1",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
                   "nativeType": "timestamptz",
                   "nullable": false
                 },
@@ -1160,6 +1164,10 @@
                 },
                 "createdAt": {
                   "codecId": "pg/timestamptz-string@1",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
                   "nativeType": "timestamptz",
                   "nullable": false
                 },
@@ -1225,6 +1233,10 @@
                 },
                 "createdAt": {
                   "codecId": "pg/timestamptz-string@1",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
                   "nativeType": "timestamptz",
                   "nullable": false
                 },
@@ -1294,10 +1306,10 @@
         "kind": "postgres-schema"
       }
     },
-    "storageHash": "df8db59c2b681469b18814a17a0b0e025778f39573b97d56aba0345c528db22e"
+    "storageHash": "e7f60d2935fcdad0ee76a8e73fd0a613817bd610cdab40dcc80178815511c04b"
   },
   "execution": {
-    "executionHash": "c22ca61793559bd53013691ec5e65c694155d50c9737b6679796c69e30f86f28",
+    "executionHash": "602fd42b6ba0b6e852de5122e96fdd20503712ff381e4bec081223ef7fd50919",
     "mutations": {
       "defaults": [
         {
@@ -1308,17 +1320,6 @@
           "ref": {
             "entry": "Collaborator",
             "field": "id",
-            "namespace": "public"
-          }
-        },
-        {
-          "onCreate": {
-            "id": "timestampNow",
-            "kind": "generator"
-          },
-          "ref": {
-            "entry": "Project",
-            "field": "createdAt",
             "namespace": "public"
           }
         },
@@ -1361,34 +1362,12 @@
         },
         {
           "onCreate": {
-            "id": "timestampNow",
-            "kind": "generator"
-          },
-          "ref": {
-            "entry": "Skill",
-            "field": "createdAt",
-            "namespace": "public"
-          }
-        },
-        {
-          "onCreate": {
             "id": "uuidv7",
             "kind": "generator"
           },
           "ref": {
             "entry": "Skill",
             "field": "id",
-            "namespace": "public"
-          }
-        },
-        {
-          "onCreate": {
-            "id": "timestampNow",
-            "kind": "generator"
-          },
-          "ref": {
-            "entry": "SkillCategory",
-            "field": "createdAt",
             "namespace": "public"
           }
         },

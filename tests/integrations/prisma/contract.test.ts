@@ -19,6 +19,17 @@ describe("Skill storage", () => {
 	});
 });
 
+describe("createdAt", () => {
+	it.each(["Project", "Skill", "SkillCategory"] as const)(
+		"%s.createdAt defaults to now() in the database",
+		(table) => {
+			expect(tables[table].columns.createdAt).toMatchObject({
+				default: { kind: "function", expression: "now()" },
+			});
+		},
+	);
+});
+
 describe("SkillCategory storage", () => {
 	it("keeps its slug for the category page URL", () => {
 		expect(Object.keys(tables.SkillCategory.columns)).toContain("slug");
