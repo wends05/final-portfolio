@@ -5,7 +5,7 @@ import {
 	getSafeErrorDetail,
 	isSiteGated,
 	shouldHideError,
-} from "./site.utils";
+} from "#/features/site/site.utils";
 
 describe("isSiteGated", () => {
 	it("is open when COMING_SOON is not 'true'", () => {

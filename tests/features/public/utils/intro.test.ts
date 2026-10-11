@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { skipIntro } from "./intro";
+import { skipIntro } from "#/features/public/utils/intro";
 
 function stubDocument(intro: string | undefined) {
 	const dataset: Record<string, string | undefined> = { intro };

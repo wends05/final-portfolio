@@ -16,7 +16,7 @@ The docs describe direction and conventions, not what is implemented today. When
 
 ## What to check
 
-- **Tests (ADR 0010).** A change that adds or changes behavior needs a Vitest test beside the code (`foo.server.ts` and `foo.server.test.ts`). Report a behavior change that arrives without tests. Docs-only and config-only changes are exempt when the description says so.
+- **Tests (ADR 0010).** A change that adds or changes behavior needs a Vitest test in `tests/`, at the path that mirrors `src/` (`src/features/foo/foo.server.ts` and `tests/features/foo/foo.server.test.ts`). Report a behavior change that arrives without tests. Docs-only and config-only changes are exempt when the description says so.
 - **Server boundary (ADR 0009, 0011, 0005).** Database access stays in `*.server.ts` files and server functions. Server functions return plain data, not JSX. Flag React Server Components, Bun-only runtime APIs (such as `Bun.s3`), and client code that imports a `*.server.ts` file.
 - **Data layer (`docs/data.md`).** The data layer is Prisma Next. Flag `@prisma/client`, `@prisma/adapter-pg`, a `schema.prisma`, and use of the `db:*` scripts. Public queries filter on `published = true`. Project-to-skill lists use `db.sql` with an explicit join.
 - **Generated files.** Flag hand edits to `src/routeTree.gen.ts`, `src/integrations/prisma/contract.json`, and `src/integrations/prisma/contract.d.ts`, and any change under `.delta/`. Flag rewritten migration history.

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { getPresentationState } from "./presentation";
+import { getPresentationState } from "#/features/public/utils/presentation";
 
 describe("getPresentationState", () => {
 	it("starts on the first project with an empty bar", () => {

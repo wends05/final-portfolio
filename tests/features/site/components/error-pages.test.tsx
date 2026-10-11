@@ -9,8 +9,8 @@ import {
 } from "@tanstack/react-router";
 import { renderToString } from "react-dom/server";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import ErrorPage from "./ErrorPage";
-import RouteErrorPage from "./RouteErrorPage";
+import ErrorPage from "#/features/site/components/ErrorPage";
+import RouteErrorPage from "#/features/site/components/RouteErrorPage";
 
 // A router wired like src/router.tsx, with one page whose loader we control.
 function setup(loader: () => unknown) {

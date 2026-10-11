@@ -15,7 +15,7 @@ Use **Vitest** as the test runner, and require tests in every pull request that 
 | --- | --- |
 | Runner | Vitest, configured in `vitest.config.ts` |
 | Script | `test` runs `vitest run` on Node.js; `verify` runs it before the build |
-| Placement | Tests sit beside the code they cover: `projects.server.test.ts` next to `projects.server.ts` |
+| Placement | Tests live in the top-level `tests/` folder, at paths that mirror `src/`: `tests/features/projects/projects.server.test.ts` covers `src/features/projects/projects.server.ts`. They import the code under test through `#/` aliases (amended 2026-10-11, see [Test placement](#test-placement)) |
 | Every PR | A PR that adds or changes behavior adds or updates tests for it. Docs-only and config-only PRs are exempt and say so in the description |
 | CI | `verify`, and so the tests, runs on every PR and must pass to merge |
 | Scope | Unit tests only for now: no component, integration, or end-to-end tests |
@@ -30,7 +30,7 @@ import { defineConfig } from "vitest/config";
 export default defineConfig({
   resolve: { tsconfigPaths: true },
   test: {
-    include: ["src/**/*.test.{ts,tsx}"],
+    include: ["tests/**/*.test.{ts,tsx}"],
     environment: "node",
   },
 });
@@ -49,6 +49,10 @@ flowchart LR
 ### Unit tests only, for now
 
 On 2026-10-05 the owner limited the suite to unit tests. Component tests (React rendering in a DOM environment), integration tests against a database, and end-to-end browser tests are deferred. Adding any of them is a later decision that amends this record.
+
+### Test placement
+
+Tests first sat beside the code they covered (`projects.server.test.ts` next to `projects.server.ts`). On 2026-10-11 the owner moved them into a top-level `tests/` folder that mirrors `src/` (WD-59), so `src/` holds only application code. Tests reach the code through `#/` aliases rather than relative imports, so a test does not break when its folder depth changes. Biome's scope includes `tests/**` ([0008](0008-biome-linter-and-formatter.md)).
 
 ### Runtime for Vitest
 

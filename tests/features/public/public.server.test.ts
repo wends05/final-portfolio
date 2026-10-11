@@ -1,7 +1,10 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { getFeaturedProjects } from "#/features/projects/projects.server";
+import {
+	getHomepageData,
+	HOMEPAGE_FEATURED_LIMIT,
+} from "#/features/public/public.server";
 import { getTopSkillCategories } from "#/features/skills/skills.server";
-import { getHomepageData, HOMEPAGE_FEATURED_LIMIT } from "./public.server";
 
 vi.mock("#/features/projects/projects.server", () => ({
 	getFeaturedProjects: vi.fn(),
