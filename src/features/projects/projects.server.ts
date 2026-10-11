@@ -9,9 +9,9 @@ export interface GetProjectsOptions {
 	skip: number;
 }
 
-async function getProjectsCoverImageUrls(
-	projects: Scalars<Models.public_Project>[],
-): Promise<ProjectWithCoverImageUrl[]> {
+async function getProjectsCoverImageUrls<
+	T extends Scalars<Models.public_Project>,
+>(projects: T[]): Promise<(T & ProjectWithCoverImageUrl)[]> {
 	const projectsWithImages = await Promise.all(
 		projects.map(async (project) => {
 			const coverImageUrl = await fetchImageWithKey(
@@ -29,6 +29,7 @@ async function getProjectsCoverImageUrls(
 export async function getFeaturedProjects({ limit = 3 }: { limit?: number }) {
 	const projects = await db.orm.public.Project.where({ published: true })
 		.where((p) => p.featuredRank.isNotNull())
+		.include("skills", (skill) => skill.select("name"))
 		.orderBy((p) => p.featuredRank.asc())
 		.limit(limit)
 		.all();

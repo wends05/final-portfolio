@@ -5,13 +5,9 @@ import {
 } from "@phosphor-icons/react";
 import { SplitText } from "gsap/SplitText";
 import { useRef } from "react";
+import { INTRO_HERO_DELAY, introPlaying } from "#/features/public/utils/intro";
 import { appGSAP, useAppGSAP } from "#/integrations/animations/gsap";
-import {
-	FULL_MOTION,
-	INTRO_HERO_DELAY,
-	introPlaying,
-	REDUCED_MOTION,
-} from "../../lib/intro";
+import { matchMotion } from "#/integrations/animations/motion";
 
 const links: { href: string; label: string; Icon: Icon }[] = [
 	{ label: "GitHub", Icon: GithubLogoIcon, href: "https://github.com/wends05" },
@@ -32,56 +28,52 @@ export default function HeroSection() {
 			const el = root.current;
 			const name = nameRef.current;
 			if (!el || !name) return;
-			const reveals = appGSAP.utils.toArray<HTMLElement>("[data-reveal]", el);
+			const q = appGSAP.utils.selector(el);
+			const reveals = q("[data-reveal]") as HTMLElement[];
 			for (const item of reveals) item.style.animation = "none"; // cancel the CSS fail-safe
 			const delay = introPlaying() ? INTRO_HERO_DELAY : 0;
 
-			appGSAP
-				.matchMedia()
-				.add(
-					{ motion: FULL_MOTION, reduce: REDUCED_MOTION },
-					({ conditions }) => {
-						const tl = appGSAP.timeline({ delay });
+			matchMotion(({ reduce }) => {
+				const tl = appGSAP.timeline({ delay });
 
-						if (conditions?.reduce) {
-							tl.fromTo(
-								reveals,
-								{ autoAlpha: 0 },
-								{ autoAlpha: 1, duration: 0.8, ease: "none" },
-							);
-							return;
-						}
+				if (reduce) {
+					tl.fromTo(
+						reveals,
+						{ autoAlpha: 0 },
+						{ autoAlpha: 1, duration: 0.8, ease: "none" },
+					);
+					return;
+				}
 
-						// Words rise out of their own masks; the h1 itself is shown
-						// at once because the masks already hide the words.
-						const split = SplitText.create(name, {
-							type: "words",
-							mask: "words",
-						});
-						appGSAP.set(name, { autoAlpha: 1 });
-						tl.from(
-							split.words,
-							{
-								yPercent: 110,
-								duration: 1.2,
-								ease: "swiss",
-								stagger: 0.1,
-							},
-							0.3,
-						).fromTo(
-							reveals.filter((item) => item !== name),
-							{ autoAlpha: 0, y: 24 },
-							{
-								autoAlpha: 1,
-								y: 0,
-								duration: 0.9,
-								ease: "swiss",
-								stagger: 0.1,
-							},
-							1,
-						);
+				// Words rise out of their own masks; the h1 itself is shown
+				// at once because the masks already hide the words.
+				const split = SplitText.create(name, {
+					type: "words",
+					mask: "words",
+				});
+				appGSAP.set(name, { autoAlpha: 1 });
+				tl.from(
+					split.words,
+					{
+						yPercent: 110,
+						duration: 1.2,
+						ease: "swiss",
+						stagger: 0.1,
 					},
+					0.3,
+				).fromTo(
+					reveals.filter((item) => item !== name),
+					{ autoAlpha: 0, y: 24 },
+					{
+						autoAlpha: 1,
+						y: 0,
+						duration: 0.9,
+						ease: "swiss",
+						stagger: 0.1,
+					},
+					1,
 				);
+			});
 		},
 		{ scope: root },
 	);

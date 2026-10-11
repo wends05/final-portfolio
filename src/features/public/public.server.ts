@@ -1,5 +1,5 @@
 import { getFeaturedProjects } from "#/features/projects/projects.server";
-import { getTopSkills } from "#/features/skills/skills.server";
+import { getTopSkillCategories } from "#/features/skills/skills.server";
 
 export const HOMEPAGE_FEATURED_LIMIT = 3;
 
@@ -7,7 +7,7 @@ export const HOMEPAGE_FEATURED_LIMIT = 3;
 export async function getHomepageData() {
 	const [projects, skills] = await Promise.all([
 		getFeaturedProjects({ limit: HOMEPAGE_FEATURED_LIMIT }),
-		getTopSkills({ limit: HOMEPAGE_FEATURED_LIMIT }),
+		getTopSkillCategories({ limit: HOMEPAGE_FEATURED_LIMIT }),
 	]);
 	return { projects, skills };
 }

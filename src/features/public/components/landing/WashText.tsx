@@ -1,0 +1,27 @@
+import { cn } from "#/lib/utils";
+
+interface WashTextProps {
+	children: string;
+	className?: string;
+}
+
+/**
+ * Text with an ink wash for list picks. The wash is an ink box holding a paper
+ * copy of the text, hidden by its clip-path until usePickTransition reveals it
+ * left to right, so the text turns ink at the wash's edge.
+ */
+export default function WashText({ children, className }: WashTextProps) {
+	return (
+		<span className={cn("relative inline-block", className)}>
+			<span
+				aria-hidden
+				data-pick-wash
+				className="absolute inset-y-0 right-[-0.08em] left-[-0.12em] whitespace-nowrap bg-ink pl-[0.12em] text-paper"
+				style={{ clipPath: "inset(0% 100% 0% 0%)" }}
+			>
+				{children}
+			</span>
+			{children}
+		</span>
+	);
+}
