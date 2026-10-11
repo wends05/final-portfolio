@@ -59,6 +59,7 @@ See the [Neon adapter reference](https://files-sdk.dev/docs/adapters/neon) for c
 - Queries live in `<feature>.server.ts` and are exposed through `<feature>.functions.ts` ([0009](decisions/0009-feature-folder-structure.md)).
 - Public queries filter on `published = true`.
 - Project pages look up by `slug`.
+- The app reads `neon_auth.user` only to check `role` in `requireAdmin()` ([0013](decisions/0013-admin-authentication-and-authorization.md)), and never writes to the `neon_auth` schema.
 - Many-to-many relations (`Project.skills`, `Skill.projects`) load through their junction with `.include()`, for example `.include("skills", (skill) => skill.select("name"))`; the junction table needs no explicit join.
 
 ## Content

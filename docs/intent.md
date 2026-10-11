@@ -92,6 +92,10 @@ Answered with the owner on 2026-10-05:
 - **Runtime:** Node.js in production on Vercel; Bun stays the package manager and dev tool. No Bun-only runtime APIs ([decision 0005](decisions/0005-vercel-deployment.md)).
 - **React Server Components:** not used for now; server functions return plain data ([decision 0011](decisions/0011-no-react-server-components.md)).
 
+Answered with the owner on 2026-10-08:
+
+- **Admin sign-in:** email and password for the owner's existing account only. There is no sign-up, and one shared `requireAdmin()` guards every admin server function ([decision 0013](decisions/0013-admin-authentication-and-authorization.md)).
+
 ## Open questions
 
 None at the moment. Add new ones here, and answer them with the owner before implementing the affected area.

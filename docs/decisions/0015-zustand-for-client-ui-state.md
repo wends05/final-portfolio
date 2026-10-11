@@ -1,4 +1,4 @@
-# 0013: Zustand for shared client UI state
+# 0015: Zustand for shared client UI state
 
 Date: 2026-10-09
 Status: Accepted

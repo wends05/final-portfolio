@@ -76,7 +76,7 @@ Revisit when Vercel's Bun runtime is generally available and the project moves t
 - Storage uses `files-sdk` plus its Neon adapter's AWS SDK peers. Keep the client and configuration behind one `storage.server.ts` module so callers do not depend on provider-specific APIs.
 - Neon Function environment injection does not configure Vercel automatically. Supply the branch's storage endpoint, region, credentials, bucket name, and optional public base URL in the appropriate Vercel environment; they must match the branch used by `DATABASE_URL`.
 - Development runs Vite on Bun (`--bun`) while production runs Node.js. Only Node-compatible APIs are allowed, and CI tests run on Node.js, which catches most gaps.
-- Environment variables (`DATABASE_URL`, `COMING_SOON`, `PREVIEW_TOKEN`, and later the S3 credentials) live in the Vercel project, per environment.
+- Environment variables (`DATABASE_URL`, `COMING_SOON`, and later the S3 credentials) live in the Vercel project, per environment.
 - Every push to `main` deploys to production.
 
 ## Validation
