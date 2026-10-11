@@ -1,0 +1,125 @@
+[
+  {
+    "id": "dropConstraint.Skill.Skill_slug_key",
+    "label": "Drop constraint \"Skill_slug_key\" on \"Skill\"",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "unique",
+        "name": "Skill_slug_key",
+        "table": "Skill"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"Skill_slug_key\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "Skill_slug_key",
+          "public",
+          "\"public\".\"Skill\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "drop constraint \"Skill_slug_key\"",
+        "sql": "ALTER TABLE \"public\".\"Skill\" DROP CONSTRAINT \"Skill_slug_key\""
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"Skill_slug_key\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "Skill_slug_key",
+          "public",
+          "\"public\".\"Skill\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "dropColumn.Skill.slug",
+    "label": "Drop column \"slug\" from \"Skill\"",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "slug",
+        "table": "Skill"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"slug\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Skill",
+          "slug"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "drop column \"slug\"",
+        "sql": "ALTER TABLE \"public\".\"Skill\" DROP COLUMN \"slug\""
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"slug\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Skill",
+          "slug"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.Skill.skill_name_lower_79c07e41",
+    "label": "Create index \"skill_name_lower_79c07e41\" on \"Skill\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "skill_name_lower_79c07e41",
+        "table": "Skill"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"skill_name_lower_79c07e41\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"skill_name_lower_79c07e41\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"skill_name_lower_79c07e41\"",
+        "sql": "CREATE UNIQUE INDEX \"skill_name_lower_79c07e41\" ON \"public\".\"Skill\" (lower(\"name\"))",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"skill_name_lower_79c07e41\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"skill_name_lower_79c07e41\""
+        ]
+      }
+    ]
+  }
+]
