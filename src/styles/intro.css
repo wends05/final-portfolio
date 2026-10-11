@@ -4,9 +4,11 @@
   background: color-mix(in srgb, var(--paper), var(--ink-black) 10%);
 }
 
-:root[data-intro="play"] {
+/* Scroll lock: no scrolling, no scrollbar. Only while the curtain is in the
+   page, so a server-rendered error page (no curtain) scrolls before hydration. */
+:root[data-intro="play"]:has(.intro-curtain) {
   overflow: hidden;
-} /* scroll lock: no scrolling, no scrollbar */
+}
 
 :root[data-intro="play"] .intro-curtain {
   display: flex;
