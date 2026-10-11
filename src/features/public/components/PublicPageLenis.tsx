@@ -1,6 +1,12 @@
+import { useRouter } from "@tanstack/react-router";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ReactLenis, useLenis } from "lenis/react";
 import { useEffect } from "react";
+import {
+	isInPageJump,
+	LENIS_OPTIONS,
+	settleLenis,
+} from "#/features/public/utils/smooth-scroll";
 import { appGSAP } from "#/integrations/animations/gsap";
 
 interface PublicPageLenisProps {
@@ -14,6 +20,7 @@ export default function PublicPageLenis({
 	scrollLocked,
 }: PublicPageLenisProps) {
 	const lenis = useLenis();
+	const router = useRouter();
 
 	useEffect(() => {
 		if (!lenis) return;
@@ -44,11 +51,17 @@ export default function PublicPageLenis({
 		return () => appGSAP.ticker.remove(update);
 	}, [lenis]);
 
+	// Links, router.navigate and back/forward all pass through here, before
+	// scroll restoration moves the page. Anchor jumps keep their glide.
+	useEffect(() => {
+		if (!lenis) return;
+		return router.subscribe("onBeforeNavigate", (event) => {
+			if (!isInPageJump(event)) settleLenis(lenis);
+		});
+	}, [lenis, router]);
+
 	return (
-		<ReactLenis
-			root
-			options={{ autoRaf: false, respectReducedMotion: true, lerp: 0.2 }}
-		>
+		<ReactLenis root options={LENIS_OPTIONS}>
 			{children}
 		</ReactLenis>
 	);
