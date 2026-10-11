@@ -27,7 +27,7 @@ Code shared across features goes in the global folders, alongside TanStack Start
 | `src/components/` | Shared components (`RollingText`) |
 | `src/components/ui/` | shadcn primitives ([0007](0007-shadcn-component-and-token-base.md)) |
 | `src/lib/` | Shared utilities (`utils.ts` with `cn()`) |
-| `src/integrations/` | Third-party wiring (Prisma, TanStack Query, GSAP and the reduced-motion queries in `animations/`) |
+| `src/integrations/` | Third-party wiring (Prisma, TanStack Query, Neon object storage in `neon/storage/`, GSAP and the reduced-motion queries in `animations/`) |
 | `src/styles.css`, `src/styles/` | Global styles and tokens |
 | `src/routes/`, `src/router.tsx`, `src/routeTree.gen.ts` | TanStack Start routing ([0006](0006-tanstack-start-application-stack.md)) |
 

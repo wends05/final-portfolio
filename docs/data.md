@@ -44,7 +44,7 @@ erDiagram
 
 ## Image storage
 
-Use Files SDK with the `files-sdk/neon` adapter for Neon Object Storage ([decision 0005](decisions/0005-vercel-deployment.md#object-storage-client)). Keep client configuration and storage operations in `src/features/storage/storage.server.ts`; feature server modules call it and return plain data through server functions.
+Use Files SDK with the `files-sdk/neon` adapter for Neon Object Storage ([decision 0005](decisions/0005-vercel-deployment.md#object-storage-client)). Keep client configuration and storage operations in `src/integrations/neon/storage/storage.server.ts`; feature server modules call it and return plain data through server functions.
 
 - `Project.coverImageKey` and `ProjectImage.key` remain object keys. Do not persist public or presigned URLs in these fields.
 - For a `public_read` bucket, set the adapter's `publicBaseUrl` to the branch endpoint plus bucket path, or to a CDN base URL. `url(key)` then returns a stable public URL. Only place objects intended for anonymous access in such a bucket.

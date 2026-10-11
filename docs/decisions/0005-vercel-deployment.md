@@ -36,7 +36,7 @@ Do not use Bun-only runtime APIs (`Bun.s3`, `Bun.sql`, `Bun.password`, and simil
 
 ### Object storage client
 
-On 2026-10-06, the owner chose **Files SDK with the `files-sdk/neon` adapter** for Neon Object Storage, following [Neon's recommendation](https://github.com/neondatabase/agent-skills/blob/main/skills/neon-object-storage/SKILL.md). The adapter uses the AWS S3 client internally and enforces Neon's path-style addressing. Use its unified upload, delete, existence-check, and URL APIs behind `src/features/storage/storage.server.ts`; routes and components receive plain data through existing server functions.
+On 2026-10-06, the owner chose **Files SDK with the `files-sdk/neon` adapter** for Neon Object Storage, following [Neon's recommendation](https://github.com/neondatabase/agent-skills/blob/main/skills/neon-object-storage/SKILL.md). The adapter uses the AWS S3 client internally and enforces Neon's path-style addressing. Use its unified upload, delete, existence-check, and URL APIs behind `src/integrations/neon/storage/storage.server.ts`; routes and components receive plain data through existing server functions.
 
 Install `files-sdk` with the adapter's peer dependencies: `@aws-sdk/client-s3`, `@aws-sdk/s3-presigned-post`, and `@aws-sdk/s3-request-presigner`. The [adapter documentation](https://files-sdk.dev/docs/adapters/neon) lists additional optional peers for multipart and progress-enabled uploads.
 
