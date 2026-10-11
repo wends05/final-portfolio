@@ -1,15 +1,17 @@
 import { db } from "#/integrations/prisma/db";
+import type { LandingSkillCategory } from "./skills.types";
 
-interface TopSkillsProps {
-	limit: number;
-}
-
-export async function getTopSkills({ limit = 3 }: TopSkillsProps) {
+export async function getTopSkillCategories({
+	limit = 3,
+}: {
+	limit?: number;
+}): Promise<LandingSkillCategory[]> {
 	const topSkills = await db.orm.public.SkillCategory.where((c) =>
 		c.topRank.isNotNull(),
 	)
 		.orderBy((c) => c.topRank.asc())
 		.limit(limit)
+		.include("skills", (s) => s.select("name", "id"))
 		.all();
 	return topSkills;
 }

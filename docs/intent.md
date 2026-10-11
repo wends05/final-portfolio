@@ -32,7 +32,7 @@ flowchart TD
 | Homepage | Hero and description that establish who the owner is, three featured projects, three top skills, contact links, and a resume download |
 | Projects | `/projects` lists all projects. Each project has a case-study page covering the problem, approach, and result |
 | Skills | Reusable skills, each linked to the projects that used it |
-| Contact | Links only: LinkedIn and GitHub. No form and no contact backend |
+| Contact | Links only: LinkedIn, GitHub, and email (main and school addresses, main picked by default). No form and no contact backend |
 | Resume | A downloadable PDF |
 | Content editing | A protected admin dashboard with full create, edit, and delete for all content; see [Admin dashboard](#admin-dashboard) |
 
@@ -86,7 +86,7 @@ Answered with the owner on 2026-10-04:
 
 Answered with the owner on 2026-10-05:
 
-- **Contact links:** LinkedIn and GitHub only, for now.
+- **Contact links:** LinkedIn and GitHub only, for now. On 2026-10-11 the owner added email: both addresses are offered, with the main (Gmail) address picked by default.
 - **Dark mode:** light mode only for now. Dark mode is deferred to the week of 2026-10-12 (Linear WD-43).
 - **Tests:** every pull request that changes behavior includes tests, run with Vitest ([decision 0010](decisions/0010-vitest-tests-in-every-pr.md)).
 - **Runtime:** Node.js in production on Vercel; Bun stays the package manager and dev tool. No Bun-only runtime APIs ([decision 0005](decisions/0005-vercel-deployment.md)).

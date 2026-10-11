@@ -1,17 +1,41 @@
+import type { Scalars } from "@prisma/orm-postgres/family-contract/types";
+import { fetchImageWithKey } from "#/integrations/neon/storage/storage.server";
+import type { Models } from "#/integrations/prisma/contract.d";
 import { db } from "#/integrations/prisma/db";
+import type { ProjectWithCoverImageUrl } from "./projects.types";
 
 export interface GetProjectsOptions {
 	take: number;
 	skip: number;
 }
 
+async function getProjectsCoverImageUrls<
+	T extends Scalars<Models.public_Project>,
+>(projects: T[]): Promise<(T & ProjectWithCoverImageUrl)[]> {
+	const projectsWithImages = await Promise.all(
+		projects.map(async (project) => {
+			const coverImageUrl = await fetchImageWithKey(
+				project.coverImageKey ?? undefined,
+			);
+			return {
+				...project,
+				coverImageUrl,
+			};
+		}),
+	);
+	return projectsWithImages;
+}
+
 export async function getFeaturedProjects({ limit = 3 }: { limit?: number }) {
 	const projects = await db.orm.public.Project.where({ published: true })
 		.where((p) => p.featuredRank.isNotNull())
+		.include("skills", (skill) => skill.select("name"))
 		.orderBy((p) => p.featuredRank.asc())
 		.limit(limit)
 		.all();
-	return projects;
+
+	const projectsWithImages = await getProjectsCoverImageUrls(projects);
+	return projectsWithImages;
 }
 
 export async function getProjects({ take, skip }: GetProjectsOptions) {
@@ -20,7 +44,9 @@ export async function getProjects({ take, skip }: GetProjectsOptions) {
 		.offset(skip)
 		.limit(take)
 		.all();
-	return projects;
+
+	const projectsWithImages = await getProjectsCoverImageUrls(projects);
+	return projectsWithImages;
 }
 
 export async function getProjectBySlug(slug: string) {

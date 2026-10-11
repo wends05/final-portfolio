@@ -4,6 +4,12 @@
  * shadcn variables at the roles. Paint with roles, not palette names.
  */
 
+html {
+  scrollbar-width: thin;
+  scrollbar-color: var(--steel-grey) transparent;
+  scrollbar-gutter: stable; /* no layout jump when a classic scrollbar returns */
+}
+
 :root {
   /* Palette */
   --ink-black: #04151f;
@@ -130,16 +136,23 @@
 
 /* 4 columns on phones, 12 from md, capped at --container-grid */
 @utility page-grid {
+  --page-pad: 1rem;
+  --page-gap: 1rem;
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  column-gap: 1rem;
-  padding-inline: 1rem;
+  column-gap: var(--page-gap);
+  padding-inline: var(--page-pad);
   max-width: var(--container-grid);
   margin-inline: auto;
 
   @variant md {
+    --page-pad: 1.5rem;
     grid-template-columns: repeat(12, minmax(0, 1fr));
-    column-gap: 1.5rem;
-    padding-inline: 3rem;
   }
+}
+
+/* First-line indent of one page-grid column (plus its gap) for an element
+   spanning N columns: `indent-span-4 md:indent-span-8`. */
+@utility indent-span-* {
+  text-indent: calc((100% + var(--page-gap)) / --value(integer));
 }

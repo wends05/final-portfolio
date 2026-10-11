@@ -24,10 +24,10 @@ export async function getHomepageData() {
 }
 
 // public.functions.ts
-export const getHomepage = createServerFn().handler(() => getHomepageData());
+export const getHomepageFn = createServerFn().handler(() => getHomepageData());
 
 // routes/_public/index.tsx
-loader: () => getHomepage(),
+loader: () => getHomepageFn(),
 ```
 
 ```mermaid
@@ -54,4 +54,4 @@ Removing RSC from the code is tracked in Linear: replace `createCompositeCompone
 
 ## Validation
 
-Decision only. On 2026-10-05, TanStack's [server components guide](https://tanstack.com/start/latest/docs/framework/react/guide/server-components) and [RSC blog post](https://tanstack.com/blog/react-server-components) were reviewed. Implemented the same day (Linear WD-49): the homepage loads `getHomepage()` (plain data), `@vitejs/plugin-rsc` and the `rsc` option are removed, and `components.json` has `"rsc": false`. `verify` passed with tests for `getHomepageData`; the dev server rendered both sections during SSR and hydrated without warnings.
+Decision only. On 2026-10-05, TanStack's [server components guide](https://tanstack.com/start/latest/docs/framework/react/guide/server-components) and [RSC blog post](https://tanstack.com/blog/react-server-components) were reviewed. Implemented the same day (Linear WD-49): the homepage loads `getHomepageFn()` (plain data), `@vitejs/plugin-rsc` and the `rsc` option are removed, and `components.json` has `"rsc": false`. `verify` passed with tests for `getHomepageData`; the dev server rendered both sections during SSR and hydrated without warnings.
