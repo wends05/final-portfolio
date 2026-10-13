@@ -78,7 +78,7 @@ flowchart LR
 ```ts
 // <feature>.functions.ts (intended shape)
 export const deleteProject = createServerFn({ method: "POST" })
-  .inputValidator(deleteProjectSchema)
+  .validator(deleteProjectSchema)
   .handler(async ({ data }) => {
     await requireAdmin(); // always the first line
     return deleteProjectById(data.id);
