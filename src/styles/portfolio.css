@@ -157,6 +157,20 @@ html {
   }
 }
 
+/* Keyboard focus ring: a 2px solid `--focus` outline on :focus-visible only.
+   Change the color or gap with focus-visible:outline-* utilities, such as
+   focus-visible:outline-focus-inverse on ink. Do not pair outline-none with
+   focus-visible:outline-2: outline-none also sets --tw-outline-style: none,
+   which outline-2 reads, so no ring draws. */
+@utility focus-ring {
+  outline-style: none;
+
+  &:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
+  }
+}
+
 /* First-line indent of one page-grid column (plus its gap) for an element
    spanning N columns: `indent-span-4 md:indent-span-8`. */
 @utility indent-span-* {

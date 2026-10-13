@@ -36,7 +36,7 @@ export default function MenuItem({ item, pathname, ref }: MenuItemProps) {
 						pick(item.to);
 					}
 				}}
-				className="flex items-center gap-4 pt-3 pb-2 text-display-xl outline-none focus-visible:outline-2 focus-visible:outline-focus-inverse focus-visible:outline-offset-2 group-hover/list:not-hover:text-inverse-muted md:gap-6"
+				className="flex items-center gap-4 pt-3 pb-2 text-display-xl focus-ring focus-visible:outline-focus-inverse group-hover/list:not-hover:text-inverse-muted md:gap-6"
 			>
 				<span
 					aria-hidden

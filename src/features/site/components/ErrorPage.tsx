@@ -20,7 +20,7 @@ interface ErrorPageProps {
 }
 
 const actionBase =
-	"type-label flex min-h-11 w-full cursor-pointer items-center justify-between gap-2 border px-4 outline-none transition-colors duration-150 ease-swiss focus-visible:outline-2 focus-visible:outline-ring focus-visible:outline-offset-2";
+	"type-label flex min-h-11 w-full cursor-pointer items-center justify-between gap-2 border px-4 focus-ring transition-colors duration-150 ease-swiss";
 
 const actionStyles = {
 	primary: cn(
@@ -52,7 +52,7 @@ export default function ErrorPage({
 					<Link
 						to="/"
 						aria-label="wends.dev, home"
-						className="col-span-full w-fit font-semibold text-heading-s leading-11 tracking-tight outline-none focus-visible:outline-2 focus-visible:outline-ring focus-visible:outline-offset-2"
+						className="col-span-full w-fit font-semibold text-heading-s leading-11 tracking-tight focus-ring"
 					>
 						wends.dev
 					</Link>

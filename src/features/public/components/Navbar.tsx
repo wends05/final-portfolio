@@ -15,10 +15,8 @@ export default function Navbar() {
 
 	// Over the ink menu the bar turns paper, and so does its focus ring.
 	const focusRing = cn(
-		"outline-none focus-visible:outline-2 focus-visible:outline-offset-2",
-		!isClosed
-			? "focus-visible:outline-focus-inverse"
-			: "focus-visible:outline-ring",
+		"focus-ring",
+		!isClosed && "focus-visible:outline-focus-inverse",
 	);
 
 	return (
