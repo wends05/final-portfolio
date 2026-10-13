@@ -101,6 +101,7 @@ flowchart LR
 - A server function returns plain, serializable data. Components render it during SSR and hydrate on the client. React Server Components are not used for now ([decision 0011](decisions/0011-no-react-server-components.md)).
 - Load independent sections in parallel (`Promise.all` in the loader).
 - UI never imports `*.server.ts` directly; TanStack Start blocks it from the client bundle.
+- Server functions accept same-origin calls only. The CSRF middleware in [../src/start.ts](../src/start.ts) checks `Sec-Fetch-Site`, then `Origin`, then `Referer`, and answers anything else, including requests with none of those headers, with a 403. Page requests are not checked.
 
 ## Folder ownership
 

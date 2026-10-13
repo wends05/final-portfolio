@@ -1,5 +1,9 @@
 import { createSerializationAdapter } from "@tanstack/react-router";
-import { createMiddleware, createStart } from "@tanstack/react-start";
+import {
+	createCsrfMiddleware,
+	createMiddleware,
+	createStart,
+} from "@tanstack/react-start";
 import {
 	PUBLIC_ERROR_MESSAGE,
 	shouldHideError,
@@ -27,7 +31,15 @@ const logServerErrors = createMiddleware({ type: "function" }).server(
 	},
 );
 
+// Server functions are same-origin RPC endpoints: refuse calls from other
+// sites (checked by Sec-Fetch-Site, then Origin, then Referer) with a 403.
+// Page requests are left alone.
+export const csrfMiddleware = createCsrfMiddleware({
+	filter: (ctx) => ctx.handlerType === "serverFn",
+});
+
 export const startInstance = createStart(() => ({
+	requestMiddleware: [csrfMiddleware],
 	serializationAdapters: [hideErrorDetails],
 	functionMiddleware: [logServerErrors],
 }));
