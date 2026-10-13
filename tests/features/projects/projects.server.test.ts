@@ -1,6 +1,8 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
+	getAllProjects,
 	getFeaturedProjects,
+	getProjectPage,
 	getProjects,
 } from "#/features/projects/projects.server";
 import { fetchImageWithKey } from "#/integrations/neon/storage/storage.server";
@@ -16,13 +18,22 @@ vi.mock("#/integrations/neon/storage/storage.server", () => ({
 type Call = { method: string; args: unknown[] };
 
 // Stands in for a Prisma Next collection: each builder method records its
-// arguments and returns the builder, and `all()` resolves to `rows`.
-function mockCollection(rows: unknown[]) {
+// arguments and returns the builder, `all()` resolves to `rows`, and
+// `first()` to `first`.
+function mockCollection(rows: unknown[], first: unknown = null) {
 	const calls: Call[] = [];
 	const builder: Record<string, unknown> = {
 		all: vi.fn(async () => rows),
+		first: vi.fn(async () => first),
 	};
-	for (const method of ["where", "include", "orderBy", "limit", "offset"]) {
+	for (const method of [
+		"where",
+		"include",
+		"orderBy",
+		"limit",
+		"offset",
+		"select",
+	]) {
 		builder[method] = (...args: unknown[]) => {
 			calls.push({ method, args });
 			return builder;
@@ -128,5 +139,131 @@ describe("getProjects", () => {
 		expect(run(calls, "orderBy")).toEqual(["createdAt desc"]);
 		expect(run(calls, "offset")).toEqual([20]);
 		expect(run(calls, "limit")).toEqual([10]);
+	});
+});
+
+describe("getAllProjects", () => {
+	beforeEach(() => {
+		vi.mocked(fetchImageWithKey).mockReset();
+		vi.mocked(fetchImageWithKey).mockImplementation(async (key) =>
+			key ? `https://cdn.test/${key}` : null,
+		);
+	});
+
+	it("loads published projects with their skill names", async () => {
+		const calls = mockCollection([]);
+		await getAllProjects();
+		expect(run(calls, "where")).toEqual([{ published: true }]);
+		const include = calls.find((call) => call.method === "include");
+		expect(include?.args[0]).toBe("skills");
+		const select = include?.args[1] as (r: typeof relation) => unknown;
+		expect(select(relation)).toEqual(["name"]);
+	});
+
+	it("returns them in the /projects order with cover URLs", async () => {
+		mockCollection([
+			project({ slug: "old", featuredRank: null, createdAt: "2023-01-01" }),
+			project({ slug: "featured", featuredRank: 1, createdAt: "2020-01-01" }),
+			project({ slug: "new", featuredRank: null, createdAt: "2025-01-01" }),
+		]);
+		const result = await getAllProjects();
+		expect(result.map((p) => p.slug)).toEqual(["featured", "new", "old"]);
+		expect(result[0].coverImageUrl).toBe(
+			"https://cdn.test/covers/taskflow.png",
+		);
+	});
+});
+
+describe("getProjectPage", () => {
+	const listedRows = [
+		{ slug: "taskflow", title: "Taskflow", featuredRank: 1, createdAt: "2024" },
+		{ slug: "ledger", title: "Ledger", featuredRank: null, createdAt: "2025" },
+	];
+	const row = (overrides: Record<string, unknown> = {}) => ({
+		...project({ title: "Taskflow", status: "COMPLETED" }),
+		skills: [{ name: "React" }, { name: "Vite" }],
+		images: [
+			{ key: "shots/1.png", alt: "The board" },
+			{ key: "shots/missing.png", alt: "Gone" },
+		],
+		collaborators: [
+			{ role: "design", collaborator: { name: "Ana", profileUrl: null } },
+			{
+				role: null,
+				collaborator: { name: "Ben", profileUrl: "https://b.test" },
+			},
+			{ role: "art", collaborator: null },
+		],
+		...overrides,
+	});
+
+	beforeEach(() => {
+		vi.mocked(fetchImageWithKey).mockReset();
+		vi.mocked(fetchImageWithKey).mockImplementation(async (key) =>
+			key && !key.includes("missing") ? `https://cdn.test/${key}` : null,
+		);
+	});
+
+	it("is null when no published project has the slug", async () => {
+		const calls = mockCollection(listedRows, null);
+		expect(await getProjectPage("draft")).toBeNull();
+		expect(run(calls, "where")).toContainEqual({
+			slug: "draft",
+			published: true,
+		});
+	});
+
+	it("keeps the cover on the project, out of the gallery", async () => {
+		mockCollection(listedRows, row());
+		const page = await getProjectPage("taskflow");
+		expect(page?.project.coverImageUrl).toBe(
+			"https://cdn.test/covers/taskflow.png",
+		);
+		expect(page?.gallery.map((image) => image.alt)).not.toContain(
+			"Screenshot of Taskflow",
+		);
+	});
+
+	it("lists the gallery in order, dropping images without a URL", async () => {
+		mockCollection(listedRows, row({ coverImageKey: null }));
+		const page = await getProjectPage("taskflow");
+		expect(page?.gallery).toEqual([
+			{ url: "https://cdn.test/shots/1.png", alt: "The board" },
+		]);
+		expect(page?.project.coverImageUrl).toBeNull();
+	});
+
+	it("loads the gallery in its set order", async () => {
+		const calls = mockCollection(listedRows, row());
+		await getProjectPage("taskflow");
+		const include = calls.find(
+			(call) => call.method === "include" && call.args[0] === "images",
+		);
+		expect(include).toBeDefined();
+	});
+
+	it("flattens collaborators into credits, skipping missing people", async () => {
+		mockCollection(listedRows, row());
+		const page = await getProjectPage("taskflow");
+		expect(page?.credits).toEqual([
+			{ name: "Ana", role: "design", profileUrl: null },
+			{ name: "Ben", role: null, profileUrl: "https://b.test" },
+		]);
+	});
+
+	it("keeps the skill names on the project", async () => {
+		mockCollection(listedRows, row());
+		const page = await getProjectPage("taskflow");
+		expect(page?.project.skills).toEqual([{ name: "React" }, { name: "Vite" }]);
+	});
+
+	it("places the project in the /projects order", async () => {
+		mockCollection(listedRows, row());
+		const page = await getProjectPage("taskflow");
+		expect(page).toMatchObject({
+			position: 1,
+			total: 2,
+			next: { slug: "ledger", title: "Ledger" },
+		});
 	});
 });

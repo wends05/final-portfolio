@@ -9,6 +9,9 @@ interface WashTextProps {
  * Text with an ink wash for list picks. The wash is an ink box holding a paper
  * copy of the text, hidden by its clip-path until usePickTransition reveals it
  * left to right, so the text turns ink at the wash's edge.
+ *
+ * The copy may wrap: its box is 0.08em wider than the text's, so a title that
+ * runs over several lines breaks at the same words in both.
  */
 export default function WashText({ children, className }: WashTextProps) {
 	return (
@@ -16,7 +19,7 @@ export default function WashText({ children, className }: WashTextProps) {
 			<span
 				aria-hidden
 				data-pick-wash
-				className="absolute inset-y-0 right-[-0.08em] left-[-0.12em] whitespace-nowrap bg-ink pl-[0.12em] text-paper"
+				className="absolute inset-y-0 right-[-0.08em] left-[-0.12em] bg-ink pl-[0.12em] text-paper"
 				style={{ clipPath: "inset(0% 100% 0% 0%)" }}
 			>
 				{children}

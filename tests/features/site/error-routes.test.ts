@@ -1,13 +1,13 @@
 import { isNotFound, isRedirect } from "@tanstack/react-router";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-const { getProjectBySlugFn, getSiteGate } = vi.hoisted(() => ({
-	getProjectBySlugFn: vi.fn(),
+const { getProjectPageFn, getSiteGate } = vi.hoisted(() => ({
+	getProjectPageFn: vi.fn(),
 	getSiteGate: vi.fn(),
 }));
 
 vi.mock("#/features/projects/projects.functions", () => ({
-	getProjectBySlugFn,
+	getProjectPageFn,
 }));
 vi.mock("#/features/site/site.functions", () => ({ getSiteGate }));
 // The layout component pulls in GSAP and Lenis; these tests only need the
@@ -57,23 +57,33 @@ describe("project page loader", () => {
 
 	it("throws notFound when no published project has the slug", async () => {
 		// getProjectBySlug filters on published, so drafts come back null too.
-		getProjectBySlugFn.mockResolvedValue(null);
+		getProjectPageFn.mockResolvedValue(null);
 
 		await expect(load("draft-or-missing")).rejects.toSatisfy(isNotFound);
-		expect(getProjectBySlugFn).toHaveBeenCalledWith({
+		expect(getProjectPageFn).toHaveBeenCalledWith({
 			data: { slug: "draft-or-missing" },
 		});
 	});
 
 	it("throws notFound for an empty slug without querying", async () => {
 		await expect(load("")).rejects.toSatisfy(isNotFound);
-		expect(getProjectBySlugFn).not.toHaveBeenCalled();
+		expect(getProjectPageFn).not.toHaveBeenCalled();
 	});
 
-	it("returns the project when it exists", async () => {
-		const project = { slug: "portfolio", title: "Portfolio" };
-		getProjectBySlugFn.mockResolvedValue(project);
+	it("returns the page when the project exists", async () => {
+		const page = { project: { slug: "portfolio", title: "Portfolio" } };
+		getProjectPageFn.mockResolvedValue(page);
 
-		await expect(load("portfolio")).resolves.toEqual({ project });
+		await expect(load("portfolio")).resolves.toEqual({ page });
+	});
+
+	it("falls back to a mock project in development", async () => {
+		// Vitest runs in development mode, like `bun run dev`.
+		getProjectPageFn.mockResolvedValue(null);
+
+		const { page } = (await load("capycopy")) as {
+			page: { project: { slug: string } };
+		};
+		expect(page.project.slug).toBe("capycopy");
 	});
 });

@@ -22,7 +22,7 @@ Route groups that start with `_` (`_public`, `_dashboard`) are pathless layouts 
 | --- | --- | --- |
 | `/` | `_public/index.tsx` | Hero, description, 3 featured projects, 3 top skill categories, contact links, resume download |
 | `/projects` | `_public/projects/index.tsx` | All published projects |
-| `/projects/<slug>` | `_public/projects/$slug.tsx` | Case study for one project |
+| `/projects/<slug>` | `_public/projects/$.tsx` | Case study for one project. A splat, so deeper paths 404 inside the layout |
 | `/skills` | `_public/skills.tsx` | Skill categories and skills, each linked to the projects that use them |
 | `/coming-soon` | `coming-soon.tsx` | Holding page while the site is gated; `noindex` |
 | `/admin/sign-in` | `admin/sign-in.tsx` | Owner sign-in; outside the guarded layout, `noindex` |

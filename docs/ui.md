@@ -170,15 +170,62 @@ Find elements by scope:
 - With reduced motion the text is not split and does not move.
 
 
+## Page entrance
+
+Every page enters the same way, title first ([WD-51](https://linear.app/wends/issue/WD-51), step 5): the title's lines rise out of their masks (720ms, `swiss`), then the rest fades up 16px, 400ms each, 60ms apart. The title card and the 150ms fades between pages come with the rest of WD-51.
+
+- [usePageEntrance](../src/features/public/hooks/usePageEntrance.ts) plays it: mark the `h1` with `data-entrance-title` and each block that should follow with `data-entrance`. They play in document order.
+- Timing lives in `ENTRANCE_TIMING` in [utils/entrance.ts](../src/features/public/utils/entrance.ts). After 10 items the stagger stops growing, so long lists don't drag.
+- On a tab's first load the entrance waits for the intro curtain (`INTRO_HERO_DELAY`), like the hero.
+- [entrance.css](../src/styles/entrance.css) hides both kinds of element until the hook runs, only when JavaScript is on, with the same 10 second fail-safe as the intro.
+- The title is split into lines with SplitText while it rises and unsplit afterwards, so it rewraps normally on resize. The masks get padding cancelled by a negative margin so descenders aren't clipped.
+- Pass a `key` when the content can change without the route remounting: the case study passes the slug, so "next project" plays the entrance again.
+- Reduced motion: everything fades in together, nothing moves.
+- A hidden tab runs no animation frames, so the entrance waits and plays when the tab is shown.
+
 ## List pick
 
-A list pick is a plain left click on a row that starts a transition: the rest of the stage fades, an ink wash sweeps across the picked title, the title fades, then the router navigates. It covers the landing skill rows and a project's "Read more" ([WD-51](https://linear.app/wends/issue/WD-51)).
+A list pick is a plain left click on a row that starts a transition: the rest of the stage fades, an ink wash sweeps across the picked title, the title fades, then the router navigates. It covers the landing skill rows, a project's "Read more", and the `/projects` tiles ([WD-51](https://linear.app/wends/issue/WD-51)).
 
 - [usePickTransition](../src/features/public/hooks/usePickTransition.ts) owns the timeline. Each section passes the elements to animate and the navigation.
-- [WashText](../src/features/public/components/landing/WashText.tsx) draws the wash: an ink box holding a paper copy of the text, hidden by its clip-path.
+- [WashText](../src/features/public/components/landing/WashText.tsx) draws the wash: an ink box holding a paper copy of the text, hidden by its clip-path. The copy wraps with the text, so titles over several lines wash too.
 - `PICK_TIMING` in [utils/pick.ts](../src/features/public/utils/pick.ts) holds the seconds. `isPlainClick` decides which clicks the pick takes; modifier and middle clicks stay normal links.
 - Lenis stops for the pick, so scrolling can't change what is on stage, and starts again once the route resolves.
 - The card blocks have CSS transitions on opacity; the hook sets `transition: none` first, or each GSAP frame would lag behind.
 - [LandingProjectsSection](../src/features/public/components/landing/LandingProjectsSection.tsx) ignores ScrollTrigger updates from the moment of the click, because stopping Lenis fires one more update with a wrong progress.
 - Reduced motion: everything fades together in `reducedFade`, then the router navigates.
 - If the navigation fails (offline, a failed route load), `followNavigation` in `utils/pick.ts` catches it: the timeline reverts so the list shows again, Lenis restarts, and the section's `onCancel` clears the pick so the visitor can try again.
+
+## Projects pages
+
+The design lives on the canvas's "/projects page" tab, in the ★ boards `ProjectsFlowGrid`, `ProjectsFlowPage` and their phone versions. Code is in `src/features/projects/`.
+
+**`/projects`** ([ProjectsPage](../src/features/projects/components/ProjectsPage.tsx)): a details panel on the left (5 columns, sticky under the navbar) and a tile grid on the right (7 columns: 3 tiles across, 2 below `lg`). Featured projects come first by `featuredRank`, then the rest newest first (`orderProjectsForIndex`).
+
+```mermaid
+flowchart LR
+    Scroll["scroll"] --> Active["active: tile nearest the line"]
+    Hover["mouse hover / keyboard focus"] --> Hovered["hovered: stays after the pointer leaves"]
+    Pick["pick"] --> Pinned["pinned: frozen for the transition"]
+    Active & Hovered & Pinned --> Shown["shown = pinned ?? hovered ?? active"]
+```
+
+- [useShownProject](../src/features/projects/hooks/useShownProject.ts) owns which project the panel shows. The scroll line is `INDEX_FOCUS_LINE` in `projects.utils.ts`: the middle of the viewport on wide screens, 30% down the space below the strip on phones.
+- Hover is an enhancement, never required, so phones and desktops get the same page: only `pointerType === "mouse"` hovers and only `:focus-visible` focus counts, so touch stays on scroll and tap. The other tiles dim while a mouse is over the grid.
+- Every project's details render stacked in one grid cell (`col-start-1 row-start-1`), with only the shown one visible and the rest `inert`, so the panel keeps the tallest one's height and doesn't jump.
+- Clicking a tile or "Read more" is a [list pick](#list-pick) whose wash runs on the panel's title, not on the tile.
+- Phones: the panel becomes a strip under the navbar (number, title, two lines), featured tiles are full-width cards, and the rest are thumbnail-and-title rows.
+
+**`/projects/<slug>`** ([ProjectCaseStudy](../src/features/projects/components/ProjectCaseStudy.tsx)) follows the canvas's ★ A5 board, which comes from the owner's "Artboard 5 copy":
+
+- The header: the project's number in the margin column (its place in the `/projects` order), the title across 8 columns, and "by <team>" at the right end of the title's last line. No team name, no byline.
+- The links as buttons under the title (`ProjectLinkButtons`, live site solid and first), and again at the end beside the next project, so they are there before and after reading.
+- The cover on the left (6 columns, 4:3) with the label/value list and the credits under it, and the write-up beside the cover under an "about" line that holds the date and status (`getProjectDateLine`). Explicit grid rows from `md` place them; on phones they stack as cover, write-up, details.
+- The stack is not shown: it is not a column of the project.
+- [ProjectGallery](../src/features/projects/components/ProjectGallery.tsx) is the `ProjectImage` rows only, in their `order`, one at a time with the alt text as the caption. The cover is never one of them. Slides change instantly; the counter and ‹ › buttons show only with more than one image, and the section is left out with none.
+- Credits come from `ProjectCollaborator`: one ruled row per person with the role on the right, linked when the person has a profile URL.
+- "next project" wraps from the last project to the first.
+- The label/value list shows only the `metadata` column (`getMetadataRows`), never fields that have a place of their own. Write it as an object (`{ "event": "Odyssey 2024" }`) or, when order matters, as a list (`[{ "label": "event", "value": "Odyssey 2024" }]`): `jsonb` stores object keys shortest first, not in the order typed. Values can be text, numbers, booleans, or lists of those. With no rows the list is left out.
+- The label/value list is a `grid-cols-subgrid`, so labels and values sit on the page columns (1 + 3 on phones, 2 + 4 from `md`).
+
+While the database has no published projects, both routes fall back to the mocks in `features/projects/utils/project-mocks.ts`, in development only (`import.meta.env.DEV`). Production shows the empty state and 404s.
