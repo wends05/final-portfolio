@@ -100,7 +100,7 @@ The workflow needs the `CLAUDE_CODE_OAUTH_TOKEN` repository secret, created with
 - Edit route files, then use route generation; do not manually patch `src/routeTree.gen.ts`.
 - Edit `src/integrations/prisma/contract.ts`, then emit its generated `contract.json` and `contract.d.ts`. Emission does not apply database migrations.
 - Treat migration snapshots and references as tool-managed artifacts. Do not rewrite migration history casually.
-- Keep `bun.lock` aligned with intentional dependency changes. Several dependency ranges use `latest`; inspect installed versions before applying version-specific advice.
+- Keep `bun.lock` aligned with intentional dependency changes. TanStack Start and Router use caret ranges from their stable releases ([decision 0006](decisions/0006-tanstack-start-application-stack.md)); several other ranges use `latest`. Inspect installed versions before applying version-specific advice.
 - Use `#/` imports ([../tsconfig.json](../tsconfig.json) maps `#/*` to `src/*`; there is no `@/*`). Check imports in files the shadcn CLI generates, since `components.json` still names `@/` for some aliases.
 
 ## Dependency overrides
