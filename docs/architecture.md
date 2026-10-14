@@ -22,7 +22,7 @@ Route groups that start with `_` (`_public`, `_dashboard`) are pathless layouts 
 | --- | --- | --- |
 | `/` | `_public/index.tsx` | Hero, description, 3 featured projects, 3 top skill categories, contact links, resume download |
 | `/projects` | `_public/projects/index.tsx` | All published projects |
-| `/projects/<slug>` | `_public/projects/$slug.tsx` | Case study for one project |
+| `/projects/<slug>` | `_public/projects/$.tsx` | Case study for one project. A splat, so deeper paths 404 inside the layout |
 | `/skills` | `_public/skills.tsx` | Skill categories and skills, each linked to the projects that use them |
 | `/coming-soon` | `coming-soon.tsx` | Holding page while the site is gated; `noindex` |
 | `/admin/sign-in` | `admin/sign-in.tsx` | Owner sign-in; outside the guarded layout, `noindex` |
@@ -101,6 +101,7 @@ flowchart LR
 - A server function returns plain, serializable data. Components render it during SSR and hydrate on the client. React Server Components are not used for now ([decision 0011](decisions/0011-no-react-server-components.md)).
 - Load independent sections in parallel (`Promise.all` in the loader).
 - UI never imports `*.server.ts` directly; TanStack Start blocks it from the client bundle.
+- Server functions accept same-origin calls only. The CSRF middleware in [../src/start.ts](../src/start.ts) checks `Sec-Fetch-Site`, then `Origin`, then `Referer`, and answers anything else, including requests with none of those headers, with a 403. Page requests are not checked.
 
 ## Folder ownership
 
