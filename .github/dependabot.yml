@@ -6,6 +6,11 @@ updates:
     schedule:
       interval: monthly
     open-pull-requests-limit: 5
+    ignore:
+      # types must match the Node.js runtime (24 on Vercel and in CI, ADR 0005);
+      # raise this bound when the runtime moves to a new major
+      - dependency-name: "@types/node"
+        versions: [">=25"]
     groups:
       # minor + patch updates arrive together in one PR;
       # major updates still get their own PR so you can read the changelog
