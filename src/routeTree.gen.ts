@@ -13,11 +13,12 @@ import { Route as PublicRouteRouteImport } from './routes/_public/route'
 import { Route as ComingSoonRouteImport } from './routes/coming-soon'
 import { Route as DashboardHomeRouteImport } from './routes/_dashboard/home'
 import { Route as PublicIndexRouteImport } from './routes/_public/index'
-import { Route as PublicProjectsRouteRouteImport } from './routes/_public/projects/route'
-import { Route as PublicSkillsRouteImport } from './routes/_public/skills'
+import { Route as PublicSplatRouteImport } from './routes/_public/$'
 import { Route as DashboardAuthIndexRouteImport } from './routes/_dashboard/auth/index'
 import { Route as PublicProjectsIndexRouteImport } from './routes/_public/projects/index'
 import { Route as PublicProjectsSplatRouteImport } from './routes/_public/projects/$'
+import { Route as PublicSkillsIndexRouteImport } from './routes/_public/skills/index'
+import { Route as PublicSkillsSlugRouteImport } from './routes/_public/skills/$slug'
 
 const PublicRouteRoute = PublicRouteRouteImport.update({
   id: '/_public',
@@ -38,14 +39,9 @@ const PublicIndexRoute = PublicIndexRouteImport.update({
   path: '/',
   getParentRoute: () => PublicRouteRoute,
 } as any)
-const PublicProjectsRouteRoute = PublicProjectsRouteRouteImport.update({
-  id: '/projects',
-  path: '/projects',
-  getParentRoute: () => PublicRouteRoute,
-} as any)
-const PublicSkillsRoute = PublicSkillsRouteImport.update({
-  id: '/skills',
-  path: '/skills',
+const PublicSplatRoute = PublicSplatRouteImport.update({
+  id: '/$',
+  path: '/$',
   getParentRoute: () => PublicRouteRoute,
 } as any)
 const DashboardAuthIndexRoute = DashboardAuthIndexRouteImport.update({
@@ -54,78 +50,96 @@ const DashboardAuthIndexRoute = DashboardAuthIndexRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const PublicProjectsIndexRoute = PublicProjectsIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => PublicProjectsRouteRoute,
+  id: '/projects/',
+  path: '/projects/',
+  getParentRoute: () => PublicRouteRoute,
 } as any)
 const PublicProjectsSplatRoute = PublicProjectsSplatRouteImport.update({
-  id: '/$',
-  path: '/$',
-  getParentRoute: () => PublicProjectsRouteRoute,
+  id: '/projects/$',
+  path: '/projects/$',
+  getParentRoute: () => PublicRouteRoute,
+} as any)
+const PublicSkillsIndexRoute = PublicSkillsIndexRouteImport.update({
+  id: '/skills/',
+  path: '/skills/',
+  getParentRoute: () => PublicRouteRoute,
+} as any)
+const PublicSkillsSlugRoute = PublicSkillsSlugRouteImport.update({
+  id: '/skills/$slug',
+  path: '/skills/$slug',
+  getParentRoute: () => PublicRouteRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof PublicIndexRoute
   '/coming-soon': typeof ComingSoonRoute
-  '/projects': typeof PublicProjectsRouteRouteWithChildren
   '/home': typeof DashboardHomeRoute
-  '/skills': typeof PublicSkillsRoute
+  '/$': typeof PublicSplatRoute
   '/projects/$': typeof PublicProjectsSplatRoute
+  '/skills/$slug': typeof PublicSkillsSlugRoute
   '/auth/': typeof DashboardAuthIndexRoute
   '/projects/': typeof PublicProjectsIndexRoute
+  '/skills/': typeof PublicSkillsIndexRoute
 }
 export interface FileRoutesByTo {
   '/coming-soon': typeof ComingSoonRoute
   '/home': typeof DashboardHomeRoute
-  '/skills': typeof PublicSkillsRoute
+  '/$': typeof PublicSplatRoute
   '/': typeof PublicIndexRoute
   '/projects/$': typeof PublicProjectsSplatRoute
+  '/skills/$slug': typeof PublicSkillsSlugRoute
   '/auth': typeof DashboardAuthIndexRoute
   '/projects': typeof PublicProjectsIndexRoute
+  '/skills': typeof PublicSkillsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_public': typeof PublicRouteRouteWithChildren
   '/coming-soon': typeof ComingSoonRoute
-  '/_public/projects': typeof PublicProjectsRouteRouteWithChildren
   '/_dashboard/home': typeof DashboardHomeRoute
-  '/_public/skills': typeof PublicSkillsRoute
+  '/_public/$': typeof PublicSplatRoute
   '/_public/': typeof PublicIndexRoute
   '/_public/projects/$': typeof PublicProjectsSplatRoute
+  '/_public/skills/$slug': typeof PublicSkillsSlugRoute
   '/_dashboard/auth/': typeof DashboardAuthIndexRoute
   '/_public/projects/': typeof PublicProjectsIndexRoute
+  '/_public/skills/': typeof PublicSkillsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/coming-soon'
-    | '/projects'
     | '/home'
-    | '/skills'
+    | '/$'
     | '/projects/$'
+    | '/skills/$slug'
     | '/auth/'
     | '/projects/'
+    | '/skills/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/coming-soon'
     | '/home'
-    | '/skills'
+    | '/$'
     | '/'
     | '/projects/$'
+    | '/skills/$slug'
     | '/auth'
     | '/projects'
+    | '/skills'
   id:
     | '__root__'
     | '/_public'
     | '/coming-soon'
-    | '/_public/projects'
     | '/_dashboard/home'
-    | '/_public/skills'
+    | '/_public/$'
     | '/_public/'
     | '/_public/projects/$'
+    | '/_public/skills/$slug'
     | '/_dashboard/auth/'
     | '/_public/projects/'
+    | '/_public/skills/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -165,18 +179,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PublicIndexRouteImport
       parentRoute: typeof PublicRouteRoute
     }
-    '/_public/projects': {
-      id: '/_public/projects'
-      path: '/projects'
-      fullPath: '/projects'
-      preLoaderRoute: typeof PublicProjectsRouteRouteImport
-      parentRoute: typeof PublicRouteRoute
-    }
-    '/_public/skills': {
-      id: '/_public/skills'
-      path: '/skills'
-      fullPath: '/skills'
-      preLoaderRoute: typeof PublicSkillsRouteImport
+    '/_public/$': {
+      id: '/_public/$'
+      path: '/$'
+      fullPath: '/$'
+      preLoaderRoute: typeof PublicSplatRouteImport
       parentRoute: typeof PublicRouteRoute
     }
     '/_dashboard/auth/': {
@@ -188,44 +195,51 @@ declare module '@tanstack/react-router' {
     }
     '/_public/projects/': {
       id: '/_public/projects/'
-      path: '/'
+      path: '/projects'
       fullPath: '/projects/'
       preLoaderRoute: typeof PublicProjectsIndexRouteImport
-      parentRoute: typeof PublicProjectsRouteRoute
+      parentRoute: typeof PublicRouteRoute
     }
     '/_public/projects/$': {
       id: '/_public/projects/$'
-      path: '/$'
+      path: '/projects/$'
       fullPath: '/projects/$'
       preLoaderRoute: typeof PublicProjectsSplatRouteImport
-      parentRoute: typeof PublicProjectsRouteRoute
+      parentRoute: typeof PublicRouteRoute
+    }
+    '/_public/skills/': {
+      id: '/_public/skills/'
+      path: '/skills'
+      fullPath: '/skills/'
+      preLoaderRoute: typeof PublicSkillsIndexRouteImport
+      parentRoute: typeof PublicRouteRoute
+    }
+    '/_public/skills/$slug': {
+      id: '/_public/skills/$slug'
+      path: '/skills/$slug'
+      fullPath: '/skills/$slug'
+      preLoaderRoute: typeof PublicSkillsSlugRouteImport
+      parentRoute: typeof PublicRouteRoute
     }
   }
 }
 
-interface PublicProjectsRouteRouteChildren {
-  PublicProjectsSplatRoute: typeof PublicProjectsSplatRoute
-  PublicProjectsIndexRoute: typeof PublicProjectsIndexRoute
-}
-
-const PublicProjectsRouteRouteChildren: PublicProjectsRouteRouteChildren = {
-  PublicProjectsSplatRoute: PublicProjectsSplatRoute,
-  PublicProjectsIndexRoute: PublicProjectsIndexRoute,
-}
-
-const PublicProjectsRouteRouteWithChildren =
-  PublicProjectsRouteRoute._addFileChildren(PublicProjectsRouteRouteChildren)
-
 interface PublicRouteRouteChildren {
-  PublicProjectsRouteRoute: typeof PublicProjectsRouteRouteWithChildren
-  PublicSkillsRoute: typeof PublicSkillsRoute
+  PublicSplatRoute: typeof PublicSplatRoute
   PublicIndexRoute: typeof PublicIndexRoute
+  PublicProjectsSplatRoute: typeof PublicProjectsSplatRoute
+  PublicSkillsSlugRoute: typeof PublicSkillsSlugRoute
+  PublicProjectsIndexRoute: typeof PublicProjectsIndexRoute
+  PublicSkillsIndexRoute: typeof PublicSkillsIndexRoute
 }
 
 const PublicRouteRouteChildren: PublicRouteRouteChildren = {
-  PublicProjectsRouteRoute: PublicProjectsRouteRouteWithChildren,
-  PublicSkillsRoute: PublicSkillsRoute,
+  PublicSplatRoute: PublicSplatRoute,
   PublicIndexRoute: PublicIndexRoute,
+  PublicProjectsSplatRoute: PublicProjectsSplatRoute,
+  PublicSkillsSlugRoute: PublicSkillsSlugRoute,
+  PublicProjectsIndexRoute: PublicProjectsIndexRoute,
+  PublicSkillsIndexRoute: PublicSkillsIndexRoute,
 }
 
 const PublicRouteRouteWithChildren = PublicRouteRoute._addFileChildren(
@@ -243,10 +257,11 @@ export const routeTree = rootRouteImport
   ._addFileTypes<FileRouteTypes>()
 
 import type { getRouter } from './router.tsx'
-import type { createStart } from '@tanstack/react-start'
+import type { startInstance } from './start.ts'
 declare module '@tanstack/react-start' {
   interface Register {
     ssr: true
     router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
   }
 }

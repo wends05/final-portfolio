@@ -10,6 +10,7 @@
 		"includes": [
 			"scripts/**/*.mjs",
 			"**/src/**/*",
+			"**/tests/**/*",
 			"**/.vscode/**/*",
 			"**/index.html",
 			"**/vite.config.ts",
@@ -31,6 +32,15 @@
 		"enabled": true,
 		"rules": {
 			"preset": "recommended",
+			"nursery": {
+				"useSortedClasses": {
+					"level": "info",
+					"fix": "safe",
+					"options": {
+						"functions": ["cn", "clsx", "cva"]
+					}
+				}
+			},
 			"style": {
 				"noNonNullAssertion": "off"
 			}

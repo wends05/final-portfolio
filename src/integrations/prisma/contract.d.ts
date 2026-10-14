@@ -34,9 +34,9 @@ import type {
 } from '@prisma/orm-postgres/contract/types';
 
 export type StorageHash =
-  StorageHashBase<'600f1821fac1c9ecf7a44b218390f31f839d3ff85fe4ef848f3c13a7ae79c7bc'>;
+  StorageHashBase<'e7f60d2935fcdad0ee76a8e73fd0a613817bd610cdab40dcc80178815511c04b'>;
 export type ExecutionHash =
-  ExecutionHashBase<'c22ca61793559bd53013691ec5e65c694155d50c9737b6679796c69e30f86f28'>;
+  ExecutionHashBase<'602fd42b6ba0b6e852de5122e96fdd20503712ff381e4bec081223ef7fd50919'>;
 export type ProfileHash =
   ProfileHashBase<'3916f444a8a17ad749191acf9e08dad97d1a327b88c2f1d45d12f240296aa8b2'>;
 
@@ -294,7 +294,6 @@ export type FieldOutputTypes = {
       readonly createdAt: CodecTypes['pg/timestamptz-string@1']['output'];
       readonly id: CodecTypes['pg/uuid@1']['output'];
       readonly name: CodecTypes['pg/text@1']['output'];
-      readonly slug: CodecTypes['pg/text@1']['output'];
     };
     readonly SkillCategory: {
       readonly confidence: CodecTypes['pg/int4@1']['output'] | null;
@@ -354,7 +353,6 @@ export type FieldInputTypes = {
       readonly createdAt: CodecTypes['pg/timestamptz-string@1']['input'];
       readonly id: CodecTypes['pg/uuid@1']['input'];
       readonly name: CodecTypes['pg/text@1']['input'];
-      readonly slug: CodecTypes['pg/text@1']['input'];
     };
     readonly SkillCategory: {
       readonly confidence: CodecTypes['pg/int4@1']['input'] | null;
@@ -414,7 +412,6 @@ export type StorageColumnTypes = {
       readonly createdAt: CodecTypes['pg/timestamptz-string@1']['output'];
       readonly id: CodecTypes['pg/uuid@1']['output'];
       readonly name: CodecTypes['pg/text@1']['output'];
-      readonly slug: CodecTypes['pg/text@1']['output'];
     };
     readonly SkillCategory: {
       readonly confidence: CodecTypes['pg/int4@1']['output'] | null;
@@ -474,7 +471,6 @@ export type StorageColumnInputTypes = {
       readonly createdAt: CodecTypes['pg/timestamptz-string@1']['input'];
       readonly id: CodecTypes['pg/uuid@1']['input'];
       readonly name: CodecTypes['pg/text@1']['input'];
-      readonly slug: CodecTypes['pg/text@1']['input'];
     };
     readonly SkillCategory: {
       readonly confidence: CodecTypes['pg/int4@1']['input'] | null;
@@ -548,7 +544,6 @@ export namespace Models {
     createdAt: CodecTypes['pg/timestamptz-string@1']['output'];
     id: CodecTypes['pg/uuid@1']['output'];
     name: CodecTypes['pg/text@1']['output'];
-    slug: CodecTypes['pg/text@1']['output'];
     category: public_SkillCategory;
     projects: public_Project[];
     readonly [RelationKeys]?: 'category' | 'projects';
@@ -631,6 +626,7 @@ type ContractBase = Omit<
                   readonly nativeType: 'timestamptz';
                   readonly codecId: 'pg/timestamptz-string@1';
                   readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
                 };
                 readonly description: {
                   readonly nativeType: 'text';
@@ -908,6 +904,7 @@ type ContractBase = Omit<
                   readonly nativeType: 'timestamptz';
                   readonly codecId: 'pg/timestamptz-string@1';
                   readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
                 };
                 readonly id: {
                   readonly nativeType: 'uuid';
@@ -919,20 +916,21 @@ type ContractBase = Omit<
                   readonly codecId: 'pg/text@1';
                   readonly nullable: false;
                 };
-                readonly slug: {
-                  readonly nativeType: 'text';
-                  readonly codecId: 'pg/text@1';
-                  readonly nullable: false;
-                };
               };
               primaryKey: { readonly columns: readonly ['id'] };
-              uniques: readonly [{ readonly columns: readonly ['slug'] }];
+              uniques: readonly [];
               indexes: readonly [
                 {
                   readonly name: 'Skill_categoryId_idx_15c304f2';
                   readonly prefix: 'Skill_categoryId_idx';
                   readonly columns: readonly ['categoryId'];
                   readonly unique: false;
+                },
+                {
+                  readonly name: 'skill_name_lower_79c07e41';
+                  readonly prefix: 'skill_name_lower';
+                  readonly expression: 'lower("name")';
+                  readonly unique: true;
                 },
               ];
               foreignKeys: readonly [
@@ -961,6 +959,7 @@ type ContractBase = Omit<
                   readonly nativeType: 'timestamptz';
                   readonly codecId: 'pg/timestamptz-string@1';
                   readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
                 };
                 readonly id: {
                   readonly nativeType: 'uuid';
@@ -1388,10 +1387,6 @@ type ContractBase = Omit<
                 readonly nullable: false;
                 readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
               };
-              readonly slug: {
-                readonly nullable: false;
-                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
-              };
             };
             readonly relations: {
               readonly category: {
@@ -1433,7 +1428,6 @@ type ContractBase = Omit<
                 readonly createdAt: { readonly column: 'createdAt' };
                 readonly id: { readonly column: 'id' };
                 readonly name: { readonly column: 'name' };
-                readonly slug: { readonly column: 'slug' };
               };
             };
           };
@@ -1553,14 +1547,6 @@ type ContractBase = Omit<
           };
         },
         {
-          readonly onCreate: { readonly id: 'timestampNow'; readonly kind: 'generator' };
-          readonly ref: {
-            readonly entry: 'Project';
-            readonly field: 'createdAt';
-            readonly namespace: 'public';
-          };
-        },
-        {
           readonly onCreate: { readonly id: 'uuidv7'; readonly kind: 'generator' };
           readonly ref: {
             readonly entry: 'Project';
@@ -1586,26 +1572,10 @@ type ContractBase = Omit<
           };
         },
         {
-          readonly onCreate: { readonly id: 'timestampNow'; readonly kind: 'generator' };
-          readonly ref: {
-            readonly entry: 'Skill';
-            readonly field: 'createdAt';
-            readonly namespace: 'public';
-          };
-        },
-        {
           readonly onCreate: { readonly id: 'uuidv7'; readonly kind: 'generator' };
           readonly ref: {
             readonly entry: 'Skill';
             readonly field: 'id';
-            readonly namespace: 'public';
-          };
-        },
-        {
-          readonly onCreate: { readonly id: 'timestampNow'; readonly kind: 'generator' };
-          readonly ref: {
-            readonly entry: 'SkillCategory';
-            readonly field: 'createdAt';
             readonly namespace: 'public';
           };
         },

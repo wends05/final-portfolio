@@ -1,0 +1,152 @@
+import { getProjectPeriodLabel } from "#/features/public/utils/project-meta";
+import type { ProjectLinkTarget, ProjectSummary } from "./projects.types";
+
+type Orderable = Pick<ProjectSummary, "featuredRank" | "createdAt">;
+
+/**
+ * The /projects order: featured projects by their rank, then the rest newest
+ * first. Returns a new array.
+ */
+export function orderProjectsForIndex<T extends Orderable>(projects: T[]): T[] {
+	const featured: T[] = [];
+	const rest: T[] = [];
+	for (const project of projects) {
+		(project.featuredRank == null ? rest : featured).push(project);
+	}
+	featured.sort((a, b) => (a.featuredRank ?? 0) - (b.featuredRank ?? 0));
+	// ISO timestamps sort by plain string comparison.
+	rest.sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+	return [...featured, ...rest];
+}
+
+/**
+ * Where `slug` sits in an ordered list (from 1), and the project after it,
+ * wrapping from the last to the first. Null when the slug isn't listed.
+ */
+export function getProjectPosition<T extends ProjectLinkTarget>(
+	ordered: T[],
+	slug: string,
+): { position: number; total: number; next: ProjectLinkTarget | null } | null {
+	const index = ordered.findIndex((project) => project.slug === slug);
+	if (index === -1) return null;
+	const after = ordered[(index + 1) % ordered.length];
+	return {
+		position: index + 1,
+		total: ordered.length,
+		next: ordered.length > 1 ? { slug: after.slug, title: after.title } : null,
+	};
+}
+
+/**
+ * Where the /projects scroll line sits, as a share of the viewport below the
+ * sticky panel: the middle on wide screens, higher up on phones.
+ */
+export const INDEX_FOCUS_LINE = { wide: 0.5, narrow: 0.3 };
+
+/**
+ * Index of the box whose vertical centre is closest to `line`, a y position in
+ * the viewport. 0 when there are no boxes.
+ */
+export function nearestIndex(
+	boxes: { top: number; height: number }[],
+	line: number,
+): number {
+	let nearest = 0;
+	let best = Number.POSITIVE_INFINITY;
+	boxes.forEach((box, index) => {
+		const distance = Math.abs(box.top + box.height / 2 - line);
+		if (distance < best) {
+			best = distance;
+			nearest = index;
+		}
+	});
+	return nearest;
+}
+
+/** Steps a carousel by `delta`, wrapping at both ends. */
+export function stepSlide(current: number, delta: number, count: number) {
+	if (count <= 0) return 0;
+	return (((current + delta) % count) + count) % count;
+}
+
+/** A two-digit counter: 1 → "01". */
+export const padIndex = (n: number) => String(n).padStart(2, "0");
+
+/**
+ * The project's external links that are set, labelled for display. The live
+ * site comes first: it is the one the page shows as the solid button.
+ */
+export function getProjectLinks(
+	project: Pick<ProjectSummary, "githubUrl" | "liveUrl">,
+): { label: string; href: string }[] {
+	return [
+		{ label: "live site", href: project.liveUrl },
+		{ label: "github", href: project.githubUrl },
+	].filter((link): link is { label: string; href: string } => !!link.href);
+}
+
+/**
+ * When the project happened and whether it is done, for the case study's
+ * "about" line: "Sep 2024 – now · ongoing", or just the status without dates.
+ */
+export function getProjectDateLine(
+	project: Pick<ProjectSummary, "status" | "startedAt" | "endedAt">,
+): string {
+	// An ongoing project without a start date already reads "ongoing".
+	const parts = new Set([
+		getProjectPeriodLabel(project),
+		project.status.toLowerCase(),
+	]);
+	return [...parts].filter(Boolean).join(" · ");
+}
+
+export interface ProjectMetaRow {
+	label: string;
+	value: string;
+}
+
+/** A metadata value as display text, or null when it has nothing to show. */
+function metadataText(value: unknown): string | null {
+	if (typeof value === "string") return value.trim() || null;
+	if (typeof value === "number" || typeof value === "boolean") {
+		return String(value);
+	}
+	if (Array.isArray(value)) {
+		const parts = value.map(metadataText).filter((part) => part !== null);
+		return parts.length ? parts.join(" · ") : null;
+	}
+	return null;
+}
+
+/**
+ * The case-study label/value list, read from the project's `metadata` column.
+ *
+ * - An object maps labels to values: `{ "event": "Odyssey 2024" }`. Postgres
+ *   `jsonb` doesn't keep key order (it stores shorter keys first), so use
+ *   the list form when order matters.
+ * - A list keeps its order: `[{ "label": "event", "value": "Odyssey 2024" }]`.
+ *
+ * Values may be text, numbers, booleans, or lists of those (joined with " · ").
+ * Anything else, and empty values, is left out.
+ */
+export function getMetadataRows(metadata: unknown): ProjectMetaRow[] {
+	const pairs: [unknown, unknown][] = Array.isArray(metadata)
+		? metadata.map((entry) =>
+				entry && typeof entry === "object"
+					? [
+							(entry as Record<string, unknown>).label,
+							(entry as Record<string, unknown>).value,
+						]
+					: [null, null],
+			)
+		: metadata && typeof metadata === "object"
+			? Object.entries(metadata)
+			: [];
+
+	return pairs.flatMap(([label, value]) => {
+		const text = metadataText(value);
+		return typeof label === "string" && label.trim() && text
+			? [{ label: label.trim(), value: text }]
+			: [];
+	});
+}

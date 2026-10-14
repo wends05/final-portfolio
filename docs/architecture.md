@@ -10,8 +10,8 @@ A TypeScript React app on TanStack Start, running on Node.js in production ([dec
 | --- | --- |
 | [../src/router.tsx](../src/router.tsx) | `getRouter()`: router plus a fresh QueryClient per request, wired for SSR |
 | [../src/routes/__root.tsx](../src/routes/__root.tsx) | HTML document, metadata, stylesheets, scripts, devtools |
-| `src/routes/_public/route.tsx` | Public layout: navbar, page outlet, footer, intro curtain, coming-soon redirect |
-| `src/routes/_dashboard/` | Admin layout and pages |
+| `src/routes/_public/route.tsx` | Public layout: navbar and [site menu](ui.md#site-menu), page outlet, footer, intro curtain, coming-soon redirect |
+| `src/routes/_dashboard/`, `src/routes/admin/` | Admin layout and pages (`_dashboard`, guarded), and the sign-in page (`admin/`, unguarded) |
 | [../src/routeTree.gen.ts](../src/routeTree.gen.ts) | Generated from the route files; never edit by hand |
 
 ## Planned routes
@@ -22,37 +22,68 @@ Route groups that start with `_` (`_public`, `_dashboard`) are pathless layouts 
 | --- | --- | --- |
 | `/` | `_public/index.tsx` | Hero, description, 3 featured projects, 3 top skill categories, contact links, resume download |
 | `/projects` | `_public/projects/index.tsx` | All published projects |
-| `/projects/<slug>` | `_public/projects/$slug.tsx` | Case study for one project |
+| `/projects/<slug>` | `_public/projects/$.tsx` | Case study for one project. A splat, so deeper paths 404 inside the layout |
 | `/skills` | `_public/skills.tsx` | Skill categories and skills, each linked to the projects that use them |
 | `/coming-soon` | `coming-soon.tsx` | Holding page while the site is gated; `noindex` |
-| Admin URLs | `_dashboard/…` | Sign-in and create/edit screens for projects and skills, owner only. Exact URLs to be decided with the admin work. |
+| `/admin/sign-in` | `admin/sign-in.tsx` | Owner sign-in; outside the guarded layout, `noindex` |
+| `/admin`, `/admin/…` | `_dashboard/admin/…` | Dashboard home and the create/edit screens for each content type; owner only, `noindex` |
 
 ```mermaid
 flowchart TD
     Home["/"] --> Projects["/projects"] --> Detail["/projects/&lt;slug&gt;"]
     Home --> Skills["/skills"] --> Detail
-    Admin["_dashboard (owner only)"]
+    SignIn["/admin/sign-in"] --> Admin["/admin/… (_dashboard, owner only)"]
 ```
 
 ## Coming-soon gate
 
-While the site is not ready, public pages redirect to `/coming-soon`. The owner can bypass the gate with a preview cookie:
+While the site is not ready, public pages redirect to `/coming-soon`. One environment variable controls the gate, and there is no bypass for the owner:
 
-| `COMING_SOON` | `preview` cookie matches `PREVIEW_TOKEN` | Result |
-| --- | --- | --- |
-| not `"true"` | any | Site is public; `/coming-soon` redirects to `/` |
-| `"true"` | yes | Site is visible to that browser |
-| `"true"` | no | Public pages redirect to `/coming-soon` |
+| `COMING_SOON` | Result |
+| --- | --- |
+| not `"true"` | Site is public; `/coming-soon` redirects to `/` |
+| `"true"` | Public pages redirect to `/coming-soon` |
 
 ```ts
-// src/features/site/site.functions.ts (intended logic)
-const comingSoon = process.env.COMING_SOON === "true";
-const token = process.env.PREVIEW_TOKEN;
-const hasPreview = !!token && getCookie("preview") === token;
-return { gated: comingSoon && !hasPreview };
+// src/features/site/site.utils.ts
+export function isSiteGated(comingSoon: string | undefined) {
+	return comingSoon === "true";
+}
 ```
 
-The gate is not authentication. Admin pages use Neon Auth ([intent](intent.md#answered-questions)).
+The gate is not authentication. Admin pages use Neon Auth ([intent](intent.md#answered-questions)), described below. The `_dashboard` layout is outside the gate, so the owner can sign in while the public site is gated.
+
+## Admin authentication
+
+Recorded in [decision 0013](decisions/0013-admin-authentication-and-authorization.md). The owner signs in with email and password; there is no sign-up. The app's own server functions talk to Neon Auth (Better Auth), so the browser never calls it and no `/api/auth/*` proxy is mounted. The session is a cookie.
+
+```mermaid
+flowchart LR
+    SignIn["/admin/sign-in"] --> Fn["auth.functions.ts<br/>signIn / signOut"]
+    Fn --> Auth["auth.server.ts<br/>Neon Auth session"]
+    Layout["_dashboard beforeLoad"] --> Check["auth.functions.ts<br/>session check"]
+    Check --> Auth
+    Admin["Admin *.functions.ts"] --> Require["requireAdmin()"]
+    Require --> Auth
+    Require --> Role["neon_auth.user.role = 'admin'"]
+```
+
+| Layer | Rule |
+| --- | --- |
+| Security boundary | Every admin server function calls `requireAdmin()` first. It throws 401 without a session and 403 for a signed-in user whose `role` is not `admin`. The role is read from the database on each call. |
+| Route guard | `_dashboard`'s `beforeLoad` redirects signed-out users to `/admin/sign-in` and shows a 403 page to non-admins. It is a UX layer and never replaces `requireAdmin()`. |
+| Sign-in route | Lives outside `_dashboard`, so the redirect cannot loop. It follows a `redirect` search param only for paths that start with `/admin`. |
+| Code | `src/features/auth/` per [0009](decisions/0009-feature-folder-structure.md); admin content features import `requireAdmin` from its `.server.ts`. |
+
+```ts
+// <feature>.functions.ts (intended shape)
+export const deleteProject = createServerFn({ method: "POST" })
+  .validator(deleteProjectSchema)
+  .handler(async ({ data }) => {
+    await requireAdmin(); // always the first line
+    return deleteProjectById(data.id);
+  });
+```
 
 ## Data flow
 
@@ -70,18 +101,19 @@ flowchart LR
 - A server function returns plain, serializable data. Components render it during SSR and hydrate on the client. React Server Components are not used for now ([decision 0011](decisions/0011-no-react-server-components.md)).
 - Load independent sections in parallel (`Promise.all` in the loader).
 - UI never imports `*.server.ts` directly; TanStack Start blocks it from the client bundle.
+- Server functions accept same-origin calls only. The CSRF middleware in [../src/start.ts](../src/start.ts) checks `Sec-Fetch-Site`, then `Origin`, then `Referer`, and answers anything else, including requests with none of those headers, with a 403. Page requests are not checked.
 
 ## Folder ownership
 
 | Location | Responsibility |
 | --- | --- |
 | `src/routes/` | URLs, loaders, page composition |
-| `src/features/<feature>/` | Feature code: `.server.ts`, `.functions.ts`, `utils`, `types`, `components/` ([0009](decisions/0009-feature-folder-structure.md)) |
+| `src/features/<feature>/` | Feature code: `.server.ts`, `.functions.ts`, `utils`, `types`, `hooks/`, `components/` ([0009](decisions/0009-feature-folder-structure.md)). Client UI stores (zustand) live in `utils/` ([0015](decisions/0015-zustand-for-client-ui-state.md)) |
 | `src/components/`, `src/components/ui/` | Shared components and shadcn primitives |
 | `src/lib/` | Shared utilities |
-| `src/integrations/` | Prisma runtime and contract, TanStack Query wiring |
+| `src/integrations/` | Prisma runtime and contract, TanStack Query wiring, GSAP setup (`animations/`) |
 | `src/styles.css`, `src/styles/` | Global styles and tokens ([ui](ui.md)) |
 | `migrations/` | Prisma Next migrations ([data](data.md)) |
 | `vercel.json` | Vercel settings ([0005](decisions/0005-vercel-deployment.md)) |
 
-Expected features: `public` (landing page), `projects`, `skills`, `site` (gate), and an admin feature for the dashboard.
+Expected features: `public` (landing page), `projects`, `skills`, `site` (gate), `auth` (admin sign-in and `requireAdmin()`), and an admin feature for the dashboard.

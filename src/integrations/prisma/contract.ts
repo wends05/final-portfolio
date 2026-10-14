@@ -2,6 +2,7 @@ import {
 	defineContract,
 	enumType,
 	member,
+	now,
 } from "@prisma/orm-postgres/contract-builder";
 
 const ProjectStatus = enumType(
@@ -13,6 +14,11 @@ const ProjectStatus = enumType(
 
 // Calendar date (no time), surfaced as a YYYY-MM-DD string
 const dateColumn = { codecId: "pg/date-string@1", nativeType: "date" } as const;
+
+const timestamptzColumn = {
+	codecId: "pg/timestamptz-string@1",
+	nativeType: "timestamptz",
+} as const;
 
 export const contract = defineContract(
 	{ enums: { ProjectStatus } },
@@ -35,7 +41,8 @@ export const contract = defineContract(
 				metadata: field.json().defaultSql("'{}'::jsonb"),
 				startedAt: field.column(dateColumn).optional(),
 				endedAt: field.column(dateColumn).optional(),
-				createdAt: field.temporal.createdAtString(),
+				// Set by the database (DEFAULT now()), so rows inserted outside the app get it too
+				createdAt: field.column(timestamptzColumn).default(now()),
 				updatedAt: field.temporal.updatedAtString(),
 			},
 		});
@@ -61,7 +68,8 @@ export const contract = defineContract(
 				confidence: field.int().optional(),
 				// null = not a top skill; 1..n sets homepage order
 				topRank: field.int().optional().unique(),
-				createdAt: field.temporal.createdAtString(),
+				// Set by the database (DEFAULT now()), so rows inserted outside the app get it too
+				createdAt: field.column(timestamptzColumn).default(now()),
 				updatedAt: field.temporal.updatedAtString(),
 			},
 		});
@@ -70,11 +78,23 @@ export const contract = defineContract(
 			fields: {
 				id: field.id.uuidv7Native(),
 				categoryId: field.uuidNative(),
-				slug: field.text().unique(),
 				name: field.text(),
-				createdAt: field.temporal.createdAtString(),
+				// Set by the database (DEFAULT now()), so rows inserted outside the app get it too
+				createdAt: field.column(timestamptzColumn).default(now()),
 			},
-		});
+		}).sql(({ cols, constraints }) => ({
+			indexes: [
+				// Names are unique ignoring case: "React" and "react" are one skill
+				constraints.index({
+					expression: {
+						fields: [cols.name],
+						render: ([name]) => `lower("${name?.name}")`,
+					},
+					unique: true,
+					name: "skill_name_lower",
+				}),
+			],
+		}));
 
 		const ProjectSkill = model("ProjectSkill", {
 			fields: {

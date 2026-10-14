@@ -584,26 +584,26 @@ type ContractBase = Omit<
       readonly defaults: readonly [
         {
           readonly ref: {
+            readonly entry: 'Project';
+            readonly field: 'id';
             readonly namespace: 'public';
-            readonly table: 'Project';
-            readonly column: 'id';
           };
           readonly onCreate: { readonly kind: 'generator'; readonly id: 'uuidv7' };
         },
         {
           readonly ref: {
+            readonly entry: 'Project';
+            readonly field: 'updatedAt';
             readonly namespace: 'public';
-            readonly table: 'Project';
-            readonly column: 'updatedAt';
           };
           readonly onCreate: { readonly kind: 'generator'; readonly id: 'timestampNow' };
           readonly onUpdate: { readonly kind: 'generator'; readonly id: 'timestampNow' };
         },
         {
           readonly ref: {
+            readonly entry: 'Skill';
+            readonly field: 'id';
             readonly namespace: 'public';
-            readonly table: 'Skill';
-            readonly column: 'id';
           };
           readonly onCreate: { readonly kind: 'generator'; readonly id: 'uuidv7' };
         },

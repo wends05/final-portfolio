@@ -18,15 +18,16 @@ Group code by feature under `src/features/<feature>/`. Within a feature, the fil
 | `<feature>.utils.ts` or `utils/` | Extra helpers for that feature |
 | `<feature>.types.ts` or `types/` | Types for that feature |
 | `components/` | React components for that feature, optionally grouped in subfolders |
+| `hooks/` | React hooks for that feature, one per file named after the hook (`usePickTransition.ts`). Hooks used across features go in the shared layer instead. |
 
 Code shared across features goes in the global folders, alongside TanStack Start's own files:
 
 | Path | Role |
 | --- | --- |
-| `src/components/` | Shared components (`Navbar`, `Footer`) |
+| `src/components/` | Shared components (`RollingText`) |
 | `src/components/ui/` | shadcn primitives ([0007](0007-shadcn-component-and-token-base.md)) |
-| `src/lib/` | Shared utilities (`utils.ts` with `cn()`, `gsap.ts`) |
-| `src/integrations/` | Third-party wiring (Prisma, TanStack Query) |
+| `src/lib/` | Shared utilities (`utils.ts` with `cn()`) |
+| `src/integrations/` | Third-party wiring (Prisma, TanStack Query, Neon object storage in `neon/storage/`, GSAP and the reduced-motion queries in `animations/`) |
 | `src/styles.css`, `src/styles/` | Global styles and tokens |
 | `src/routes/`, `src/router.tsx`, `src/routeTree.gen.ts` | TanStack Start routing ([0006](0006-tanstack-start-application-stack.md)) |
 
@@ -49,7 +50,9 @@ flowchart LR
     Comp --> Global["#/components, #/lib"]
 ```
 
-Import across folders with the `#/` alias (`#/features/projects/projects.server`).
+Import across folders with the `#/` alias (`#/features/projects/projects.server`). Relative imports are only for files in the same folder (`./SkillCard`).
+
+Shared code in `src/components/`, `src/lib/`, and `src/integrations/` never imports from `src/features/`. When a shared file needs something a feature holds, move that thing to the shared layer.
 
 ## Alternatives
 
@@ -61,8 +64,7 @@ None were recorded.
 - Routes stay thin: they compose feature components and call `*.functions.ts`.
 - One feature may call another feature's `.server.ts` from its own server code; `public.server.ts` does this for projects and skills.
 - The existing source does not fully follow this yet:
-  - `src/features/public/lib/intro.ts` holds feature helpers in `lib/` instead of `utils/` or `public.utils.ts`.
-  - `src/features/projects/projects.functions.ts` is empty, and `skills` has no `.functions.ts`.
+  - `projects` and `skills` have no `.functions.ts` yet; add one when a public route first calls their server code.
 
   Align these when the files are next changed; they do not block other work.
 

@@ -36,7 +36,8 @@ None were recorded; the choice predates these records and rests on the owner's p
 
 - Routes, loaders, and server functions follow TanStack conventions; the folder layout builds on them ([0009](0009-feature-folder-structure.md)).
 - Server-only code relies on TanStack Start's import protection, which by default denies `**/*.server.*` files in the client bundle.
-- Most `@tanstack/*` dependencies are pinned to `latest`, and Nitro 3 is recent. Upgrades can change behavior; check installed versions before applying version-specific advice.
+- TanStack Start is stable from `@tanstack/react-start` 1.169. Start and Router packages use caret ranges from their first stable versions, so an install never resolves a release candidate. Other `@tanstack/*` dependencies (Query, devtools) still use `latest`, and Nitro 3 is a beta. Upgrades can change behavior; check installed versions before applying version-specific advice.
+- Start requires Vite 8. Server functions and middleware validate input with `.validator()`; the release candidate's `.inputValidator()` is removed. See TanStack's [Migrate from the Release Candidate](https://tanstack.com/start/latest/docs/framework/react/migrate-from-release-candidate) guide.
 
 ## Validation
 

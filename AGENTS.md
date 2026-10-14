@@ -29,7 +29,7 @@ bun --bun run verify     # check, lint:ds, typecheck, test, build; nonzero if an
 
 - Do not edit generated files by hand: `src/routeTree.gen.ts` (route generator) and `src/integrations/prisma/contract.json` / `contract.d.ts` (`contract:emit`). See [docs/development.md](docs/development.md#generated-files) and [docs/data.md](docs/data.md).
 - Keep database access in `*.server.ts` modules and server functions; UI receives plain data through route loaders and server functions. Do not use React Server Components or Bun-only runtime APIs ([docs/decisions/0011-no-react-server-components.md](docs/decisions/0011-no-react-server-components.md), [docs/decisions/0005-vercel-deployment.md](docs/decisions/0005-vercel-deployment.md)).
-- Follow the feature folder layout in [docs/decisions/0009-feature-folder-structure.md](docs/decisions/0009-feature-folder-structure.md): `<feature>.server.ts`, `<feature>.functions.ts`, `utils`, `types`, and `components/` per feature; shared code in `#/components` and `#/lib`.
+- Follow the feature folder layout in [docs/decisions/0009-feature-folder-structure.md](docs/decisions/0009-feature-folder-structure.md): `<feature>.server.ts`, `<feature>.functions.ts`, `utils`, `types`, `hooks/`, and `components/` per feature; shared code in `#/components` and `#/lib`.
 - Ask before running anything that changes a database (`db:push`, `db:migrate`, `db:seed`, migration apply). Never print or commit `DATABASE_URL` or the contents of `.env`.
 - `.delta/` holds tool-managed clones and worktrees. Do not edit, lint, or commit it.
 - Pushing `main` deploys to production on Vercel ([docs/development.md](docs/development.md#vercel)). Don't push to `main`; all changes go through pull requests.

@@ -1,0 +1,15 @@
+/* Page entrance (usePageEntrance). With JavaScript on (the head script sets
+   data-intro), the title and items start hidden so they don't flash before
+   GSAP takes over. With JavaScript off there's no data-intro: no hiding. */
+:root[data-intro] [data-entrance-title],
+:root[data-intro] [data-entrance] {
+  visibility: hidden;
+  /* Fail-safe if the app never runs; the hook sets animation: none. */
+  animation: entrance-failsafe-show 0s 10s forwards;
+}
+
+@keyframes entrance-failsafe-show {
+  to {
+    visibility: visible;
+  }
+}

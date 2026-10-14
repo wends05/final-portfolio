@@ -1,4 +1,4 @@
-<!-- Title: conventional commit, e.g. "feat: add navbar links". It becomes the squash commit on main. -->
+<!-- Title: conventional commit, e.g. "feat: add navbar links". It becomes the merge commit's description on main; keep the branch's own commits conventional too. -->
 
 ## Linear
 
