@@ -46,7 +46,7 @@ flowchart LR
     PR -->|merge commit| Main["main"] --> Prod["production"]
 ```
 
-1. **Branch** from `main` as `<type>/<short-name>`: `feat/navbar-links`, `fix/gate-cookie`, `docs/git-workflow`. Don't use Linear's generated branch names.
+1. **Branch** from `main` as `<type>/<short-name>`: `feat/navbar-links`, `fix/gate-cookie`, `docs/git-workflow`. Don't use Linear's generated branch names. Dependabot's `dependabot/...` branches are the only exception ([decision 0016](decisions/0016-dependabot-dependency-updates.md)).
 2. **Commit** with conventional commits (`feat:`, `fix:`, `refactor:`, `docs:`, `ci:`, `chore:`, `test:`).
 3. **Open a PR** whose title is a conventional commit. Fill in [the template](../.github/pull_request_template.md), and reference Linear issues in the description:
 

@@ -32,4 +32,7 @@ jobs:
 
       - run: bun install --frozen-lockfile
 
+      - run: bun audit
+        continue-on-error: true # advisory: report, don't block (ADR 0016)
+
       - run: bun --bun run verify
