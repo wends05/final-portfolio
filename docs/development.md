@@ -83,7 +83,7 @@ Tests use Vitest ([decision 0010](decisions/0010-vitest-tests-in-every-pr.md)) a
 
 ### CI
 
-[../.github/workflows/ci.yml](../.github/workflows/ci.yml) runs `verify` on every pull request and every push to `main`. It installs the Bun version pinned in `package.json` (`packageManager`) and Node.js 24 for the tests. It also runs `bun audit` before `verify` as a non-blocking step: advisories show in the log but don't fail the job, because `braces` has no fix yet.
+[../.github/workflows/ci.yml](../.github/workflows/ci.yml) runs `verify` on every pull request and every push to `main`. It installs the Bun version pinned in `package.json` (`packageManager`) and Node.js 24 for the tests. It also runs `bun audit` before `verify` as a non-blocking step: advisories show in the log but don't fail the job, so an advisory without a published fix doesn't block every pull request ([decision 0016](decisions/0016-dependabot-dependency-updates.md)).
 
 `verify` must pass before a change is done. Report results in chat or the PR, not in these docs. For UI work, also check affected pages on small screens and with the keyboard. See [sdlc.md](sdlc.md#verification-by-change-type).
 
@@ -111,18 +111,32 @@ The workflow needs the `CLAUDE_CODE_OAUTH_TOKEN` repository secret, created with
 bun audit
 ```
 
-CI runs `bun audit` on every pull request without failing the job ([CI](#ci)).
+CI runs `bun audit` on every pull request without failing the job ([CI](#ci)). Fix advisories in their own pull request, through an update or an override.
 
 ### Dependabot
 
-[../.github/dependabot.yml](../.github/dependabot.yml) configures two update streams:
+Dependabot opens the update pull requests; nobody bumps versions by hand ([decision 0016](decisions/0016-dependabot-dependency-updates.md)). [../.github/dependabot.yml](../.github/dependabot.yml) configures two update streams:
 
 | Ecosystem | Schedule | Pull requests |
 | --- | --- | --- |
-| `bun` (package.json + bun.lock) | Monthly | One grouped `chore:` PR for all minor and patch updates; each major update gets its own PR. At most 5 open at once (`open-pull-requests-limit: 5`). |
-| `github-actions` | Weekly | One grouped `ci:` PR for all action updates |
+| `bun` (`package.json` + `bun.lock`) | Monthly | One grouped `chore:` PR for all minor and patch updates; each major update gets its own PR. At most 5 open at once (`open-pull-requests-limit: 5`). |
+| `github-actions` (`uses:` lines in `.github/workflows/`) | Weekly | One grouped `ci:` PR for all action updates |
 
-CI runs on Dependabot PRs like any other; merge them only when `verify` passes. Workflows triggered by Dependabot can't read repository secrets, so any workflow that needs one must skip Dependabot PRs.
+Neither schedule sets a `time`, so GitHub picks the time of day. A run with nothing to update opens no PR.
+
+To handle a Dependabot PR:
+
+1. Wait for CI. `verify` must pass; `bun audit` only reports.
+2. For a major update, read the package's changelog and check what it breaks.
+3. Merge with a merge commit, like any other PR ([sdlc.md](sdlc.md#git-workflow)). Nothing merges automatically.
+
+Dependabot PRs differ from other PRs:
+
+- Branches are named `dependabot/...`, an exception to `<type>/<short-name>`.
+- Workflows they trigger can't read repository secrets. The Claude review skips them ([Claude review](#claude-review)); any new workflow that needs a secret must skip them too.
+- They have no Vercel preview, like every branch except `main` and `development`.
+
+`dependabot.yml` configures version updates only; Dependabot security updates are a separate repository setting.
 
 ## Build output and deployment
 

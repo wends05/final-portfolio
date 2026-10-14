@@ -19,6 +19,7 @@ Use this folder for implementation choices whose rationale should survive future
 | [0013: Admin authentication and authorization](0013-admin-authentication-and-authorization.md) | Proposed |
 | [0014: Vercel deploys only `main` and `development`](0014-vercel-deploys-main-and-development-only.md) | Accepted |
 | [0015: Zustand for shared client UI state](0015-zustand-for-client-ui-state.md) | Accepted |
+| [0016: Dependabot for dependency and action updates](0016-dependabot-dependency-updates.md) | Accepted |
 
 Some choices made before these records began were recorded on 2026-10-05 (0006–0009) with the owner's stated reasons. Do not invent reasons for other earlier choices; existing architecture is documented in [../architecture.md](../architecture.md). Add each new record to the table above.
 
