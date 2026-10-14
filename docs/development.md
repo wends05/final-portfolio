@@ -124,6 +124,8 @@ Dependabot opens the update pull requests; nobody bumps versions by hand ([decis
 
 Neither schedule sets a `time`, so GitHub picks the time of day. A run with nothing to update opens no PR.
 
+`@types/node` stays on the Node.js major that production runs (24, [decision 0005](decisions/0005-vercel-deployment.md)): `dependabot.yml` ignores `@types/node` 25 and later. When the runtime moves to a new major, bump `@types/node` to match and raise that bound in the same PR.
+
 To handle a Dependabot PR:
 
 1. Wait for CI. `verify` must pass; `bun audit` only reports.
