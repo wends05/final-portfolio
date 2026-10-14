@@ -23,7 +23,7 @@ flowchart LR
 
 - `src/styles/portfolio.css` defines the palette (`--ink-black`, `--paper`, `--steel-grey`, `--dim-grey`), the semantic roles (`--surface`, `--text`, `--text-muted`, `--rule`, `--focus`…), the `--text-*` type scale, `--font-label`, `--ease-swiss`, `--container-grid`, and the `type-label`, `type-meta`, `type-index` and `page-grid` utilities.
 - `src/styles.css` imports it and remaps the shadcn values, for example `--background: var(--surface)`, `--primary: var(--surface-accent)`, `--border: var(--rule-soft)`, `--ring: var(--focus)`. Its `@theme inline` block adds colour utilities such as `bg-ink`, `border-rule`, `bg-inverse` and `text-inverse-muted`.
-- `src/lib/utils.ts` extends `tailwind-merge` with the custom font sizes so `cn()` does not treat `text-display-l` as a colour.
+- `src/lib/utils.ts` extends the class merger with the custom font sizes so `cn()` does not treat `text-display-l` as a colour. Since [decision 0017](0017-cn-package-for-class-merging.md) the merger is the `cn` package (`createCn` from `cn/config`), not `tailwind-merge`.
 - Outfit and Geist Mono come from `@fontsource-variable/*`. Oxanium was removed.
 
 ## Alternatives

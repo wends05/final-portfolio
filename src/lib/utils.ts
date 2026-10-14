@@ -1,9 +1,8 @@
-import { type ClassValue, clsx } from "clsx";
-import { extendTailwindMerge } from "tailwind-merge";
+import { createCn } from "cn/config";
 
 // Custom --text-* sizes from src/styles/portfolio.css; without them
-// tailwind-merge reads `text-display-l` as a color and drops one of the pair.
-const twMerge = extendTailwindMerge({
+// the merger reads `text-display-l` as a color and drops one of the pair.
+export const cn = createCn({
 	extend: {
 		classGroups: {
 			"font-size": [
@@ -24,7 +23,3 @@ const twMerge = extendTailwindMerge({
 		},
 	},
 });
-
-export function cn(...inputs: ClassValue[]) {
-	return twMerge(clsx(inputs));
-}
