@@ -23,7 +23,7 @@ export default function LandingSkillCard({
 			data-slug={skillCategory.slug}
 			to="/skills/$slug"
 			params={{ slug: skillCategory.slug }}
-			className="flex flex-row justify-between gap-6 border-t outline-none last:border-b focus-visible:outline-2 focus-visible:outline-offset-2"
+			className="flex flex-row justify-between gap-6 border-t last:border-b focus-ring"
 			onClick={(e) => {
 				if (!isPlainClick(e)) return;
 				e.preventDefault();

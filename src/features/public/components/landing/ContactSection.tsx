@@ -73,7 +73,7 @@ function ContactTile({ link }: { link: ContactLink }) {
 				? { download: RESUME_FILENAME }
 				: { target: "_blank", rel: "noopener noreferrer" })}
 			className={cn(
-				"group flex min-h-30 flex-col justify-between gap-6 border border-rule p-4 outline-none transition-[background-color,color,scale] duration-200 ease-swiss focus-visible:outline-2 focus-visible:outline-offset-3 active:scale-98 sm:aspect-3/4 sm:p-5",
+				"group flex min-h-30 flex-col justify-between gap-6 border border-rule p-4 focus-ring transition-[background-color,color,scale] duration-200 ease-swiss focus-visible:outline-offset-3 active:scale-98 sm:aspect-3/4 sm:p-5",
 				download
 					? "bg-ink text-paper"
 					: "hover:bg-ink hover:text-paper focus-visible:bg-ink focus-visible:text-paper",
@@ -139,7 +139,7 @@ function EmailPanel() {
 					{EMAILS.map((option) => (
 						<label
 							key={option.id}
-							className="type-label relative inline-flex min-h-11 cursor-pointer items-center border border-rule px-4 transition-colors duration-150 ease-swiss has-checked:bg-ink has-checked:text-paper has-focus-visible:outline-2 has-focus-visible:outline-offset-2"
+							className="type-label relative inline-flex min-h-11 cursor-pointer items-center border border-rule px-4 transition-colors duration-150 ease-swiss has-checked:bg-ink has-checked:text-paper has-focus-visible:outline-2 has-focus-visible:outline-ring has-focus-visible:outline-offset-2"
 						>
 							<input
 								type="radio"
@@ -159,14 +159,14 @@ function EmailPanel() {
 			</fieldset>
 			<a
 				href={mailtoHref(email.address)}
-				className="wrap-anywhere w-fit text-heading-l outline-none hover:underline focus-visible:outline-2 focus-visible:outline-offset-4"
+				className="wrap-anywhere w-fit text-heading-l focus-ring hover:underline focus-visible:outline-offset-4"
 			>
 				{email.address}
 			</a>
 			<div className="flex flex-wrap items-center gap-2">
 				<a
 					href={mailtoHref(email.address)}
-					className="type-label inline-flex min-h-11 items-center gap-2 border border-rule bg-ink px-4 text-paper outline-none focus-visible:outline-2 focus-visible:outline-offset-2"
+					className="type-label inline-flex min-h-11 items-center gap-2 border border-rule bg-ink px-4 text-paper focus-ring"
 				>
 					Write an email
 					<ArrowRightIcon size={16} aria-hidden />
@@ -174,7 +174,7 @@ function EmailPanel() {
 				<button
 					type="button"
 					onClick={copy}
-					className="type-label inline-flex min-h-11 items-center border border-rule px-4 outline-none transition-colors duration-150 ease-swiss hover:bg-ink hover:text-paper focus-visible:outline-2 focus-visible:outline-offset-2 active:bg-ink active:text-paper"
+					className="type-label inline-flex min-h-11 items-center border border-rule px-4 focus-ring transition-colors duration-150 ease-swiss hover:bg-ink hover:text-paper active:bg-ink active:text-paper"
 				>
 					{copied ? "Copied" : "Copy address"}
 				</button>
