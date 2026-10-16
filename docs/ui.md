@@ -27,7 +27,7 @@ How to build the interface. shadcn is the component and token base ([decision 00
 - Spacing uses Tailwind's default 4px scale (`p-4` = 16px).
 - Base styles: `body` uses `text-body`; `h1`, `h2`, `h3` use `text-display-l`, `text-heading-l`, `text-heading-m`.
 - Use `rounded-none` in portfolio components. The design system is square; shadcn primitives keep their radius.
-- When adding a `--text-*` token, also register it in `cn()` in [../src/lib/utils.ts](../src/lib/utils.ts), or `tailwind-merge` may drop it as a colour class.
+- When adding a `--text-*` token, also register it in the `font-size` class group in [../src/lib/utils.ts](../src/lib/utils.ts), or `cn()` reads it as a colour class and drops one of the pair. `cn()` comes from the [`cn`](https://github.com/shadcn-ui/cn) package ([decision 0017](decisions/0017-cn-package-for-class-merging.md)); import it from `#/lib/utils`, not from `cn`.
 - Use semantic tokens, not raw colors or arbitrary values.
 - Give every custom focusable element `focus-ring`. Do not combine `outline-none` with `focus-visible:outline-2`: in Tailwind v4, `outline-none` also sets `--tw-outline-style: none`, and `outline-2` reads that variable, so no ring draws. shadcn primitives keep their own `focus-visible:ring-*` box-shadow ring.
 - Values JavaScript needs (durations, eases, scroll distances) live in TypeScript and reach CSS as custom properties, as `PinnedText` and `CoverEdge` do. Values only CSS uses stay in CSS.

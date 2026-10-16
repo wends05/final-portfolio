@@ -27,6 +27,8 @@ flowchart LR
 
 Major updates get their own pull request so each changelog can be read and each breaking change verified on its own.
 
+`@types/node` is ignored from version 25: its major must match the Node.js runtime (24, [0005](0005-vercel-deployment.md)), not the newest release. Raise the bound when the runtime changes.
+
 [../../.github/workflows/ci.yml](../../.github/workflows/ci.yml) runs `bun audit` before `verify` on every pull request and every push to `main`, with `continue-on-error: true`. Advisories show in the job log but do not fail the job.
 
 ## Alternatives
