@@ -4,7 +4,7 @@ How data is stored and accessed. The database choice and schema rationale are in
 
 ## Database
 
-**Neon Postgres**: project `portfolio`, branch `production`, database `neondb`, reached through `DATABASE_URL`. App tables live in `public`; Neon Auth (Better Auth) lives in `neon_auth`.
+**Neon Postgres**: project `portfolio`, branch `production`, database `neondb`, reached through `DATABASE_URL`. App tables live in `public`. A `neon_auth` schema exists from an earlier Neon Auth setup and the app does not use it.
 
 The data layer is **Prisma Next** (`@prisma/orm-postgres`), not traditional Prisma Client. Use the `prisma-8` skill. Do not use `@prisma/client`, `@prisma/adapter-pg`, a `schema.prisma`, or the `db:*` scripts in `package.json`; they belong to traditional Prisma.
 
@@ -61,7 +61,7 @@ See the [Neon adapter reference](https://files-sdk.dev/docs/adapters/neon) for c
 - Queries live in `<feature>.server.ts` and are exposed through `<feature>.functions.ts` ([0009](decisions/0009-feature-folder-structure.md)).
 - Public queries filter on `published = true`.
 - Project pages look up by `slug`.
-- The app reads `neon_auth.user` only to check `role` in `requireAdmin()` ([0013](decisions/0013-admin-authentication-and-authorization.md)), and never writes to the `neon_auth` schema.
+- The app does not read or write the `neon_auth` schema. Admin access uses a password and a signed cookie, with no database lookup ([0019](decisions/0019-owner-password-admin-auth.md)).
 - Many-to-many relations (`Project.tools`, `Tool.projects`, `Skill.tools`, `Tool.skills`) load through their junction with `.include()`, for example `.include("tools", (tool) => tool.select("name"))`; the junction table needs no explicit join.
 
 ## Content

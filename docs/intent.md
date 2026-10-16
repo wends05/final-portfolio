@@ -61,7 +61,7 @@ Edge cases the dashboard must handle include:
 - Unpublished projects: never shown publicly, even if ranked.
 - Confidence outside 0–100, missing required fields (such as image `alt`), invalid URLs and dates (`endedAt` before `startedAt`).
 - Concurrent edits and failed saves: no silent data loss.
-- Only the owner (`neon_auth.user.role = 'admin'`) can reach the dashboard or call its server functions.
+- Only the owner, holding a valid signed session cookie, can reach the dashboard or call its server functions ([decision 0019](decisions/0019-owner-password-admin-auth.md)).
 
 ## Non-goals
 
@@ -77,7 +77,7 @@ Changing the data model or adding auth is significant; record the chosen approac
 
 Answered with the owner on 2026-10-04:
 
-- **Admin authentication:** Neon Auth (Better Auth). The owner's user has `role = 'admin'` in `neon_auth.user`; no app table.
+- **Admin authentication:** first answered as Neon Auth (Better Auth); replaced on 2026-10-11, see below.
 - **Case-study URLs:** a unique `slug` field, so URLs are `/projects/<slug>`.
 - **Case-study content:** a `description` field for now; problem, approach, and result fields may come later.
 - **Resume:** a static file at `public/resume.pdf`, replaced by commit.
@@ -94,7 +94,11 @@ Answered with the owner on 2026-10-05:
 
 Answered with the owner on 2026-10-08:
 
-- **Admin sign-in:** email and password for the owner's existing account only. There is no sign-up, and one shared `requireAdmin()` guards every admin server function ([decision 0013](decisions/0013-admin-authentication-and-authorization.md)).
+- **Admin sign-in:** email and password for the owner's existing account only. There is no sign-up, and one shared `requireAdmin()` guards every admin server function. Replaced on 2026-10-11.
+
+Answered with the owner on 2026-10-11:
+
+- **Admin sign-in:** one owner password and a signed session cookie, with no auth provider, user table, role, or sign-up. One shared `requireAdmin()` still guards every admin server function ([decision 0019](decisions/0019-owner-password-admin-auth.md)).
 
 ## Open questions
 

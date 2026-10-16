@@ -16,12 +16,13 @@ Use this folder for implementation choices whose rationale should survive future
 | [0010: Vitest, with tests in every pull request](0010-vitest-tests-in-every-pr.md) | Accepted |
 | [0011: No React Server Components for now](0011-no-react-server-components.md) | Accepted |
 | [0012: Trunk-based pull request workflow](0012-trunk-based-pr-workflow.md) | Accepted |
-| [0013: Admin authentication and authorization](0013-admin-authentication-and-authorization.md) | Proposed |
+| [0013: Admin authentication and authorization](0013-admin-authentication-and-authorization.md) | Superseded by 0019 |
 | [0014: Vercel deploys only `main` and `development`](0014-vercel-deploys-main-and-development-only.md) | Accepted |
 | [0015: Zustand for shared client UI state](0015-zustand-for-client-ui-state.md) | Accepted |
 | [0016: Dependabot for dependency and action updates](0016-dependabot-dependency-updates.md) | Accepted |
 | [0017: The `cn` package for class merging](0017-cn-package-for-class-merging.md) | Accepted |
 | [0018: Skills group tools](0018-skills-group-tools.md) | Accepted |
+| [0019: Owner password and signed cookie for admin access](0019-owner-password-admin-auth.md) | Accepted |
 
 Some choices made before these records began were recorded on 2026-10-05 (0006–0009) with the owner's stated reasons. Do not invent reasons for other earlier choices; existing architecture is documented in [../architecture.md](../architecture.md). Add each new record to the table above.
 

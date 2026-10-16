@@ -1,7 +1,9 @@
 # 0013: Admin authentication and authorization
 
 Date: 2026-10-08
-Status: Proposed
+Status: Superseded
+
+Superseded by [0019](0019-owner-password-admin-auth.md). The owner chose a password and a signed cookie over Neon Auth on 2026-10-11. This record is kept for its rationale.
 
 ## Context
 

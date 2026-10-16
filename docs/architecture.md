@@ -52,34 +52,34 @@ export function isSiteGated(comingSoon: string | undefined) {
 }
 ```
 
-The gate is not authentication. Admin pages use Neon Auth ([intent](intent.md#answered-questions)), described below. The `_dashboard` layout is outside the gate, so the owner can sign in while the public site is gated.
+The gate is not authentication. Admin pages use an owner password and a signed session cookie ([intent](intent.md#answered-questions)), described below. The `_dashboard` layout is outside the gate, so the owner can sign in while the public site is gated.
 
 ## Admin authentication
 
-Recorded in [decision 0013](decisions/0013-admin-authentication-and-authorization.md). The owner signs in with email and password; there is no sign-up. The app's own server functions talk to Neon Auth (Better Auth), so the browser never calls it and no `/api/auth/*` proxy is mounted. The session is a cookie.
+Recorded in [decision 0019](decisions/0019-owner-password-admin-auth.md). The owner signs in with one password; there is no auth provider, user table, role, or sign-up. A valid signed `admin_session` cookie means the owner.
 
 ```mermaid
 flowchart LR
     SignIn["/admin/sign-in"] --> Fn["auth.functions.ts<br/>signIn / signOut"]
-    Fn --> Auth["auth.server.ts<br/>Neon Auth session"]
-    Layout["_dashboard beforeLoad"] --> Check["auth.functions.ts<br/>session check"]
-    Check --> Auth
-    Admin["Admin *.functions.ts"] --> Require["requireAdmin()"]
-    Require --> Auth
-    Require --> Role["neon_auth.user.role = 'admin'"]
+    Fn --> Utils["auth.utils.ts<br/>verifyPassword, signSession"]
+    Layout["_dashboard beforeLoad"] --> Check["auth.functions.ts<br/>getAdminSession"]
+    Check --> Utils
+    Admin["Admin *.functions.ts"] --> Require["requireAdmin()<br/>auth.server.ts"]
+    Require --> Utils
 ```
 
 | Layer | Rule |
 | --- | --- |
-| Security boundary | Every admin server function calls `requireAdmin()` first. It throws 401 without a session and 403 for a signed-in user whose `role` is not `admin`. The role is read from the database on each call. |
-| Route guard | `_dashboard`'s `beforeLoad` redirects signed-out users to `/admin/sign-in` and shows a 403 page to non-admins. It is a UX layer and never replaces `requireAdmin()`. |
-| Sign-in route | Lives outside `_dashboard`, so the redirect cannot loop. It follows a `redirect` search param only for paths that start with `/admin`. |
+| Security boundary | Every admin server function calls `requireAdmin()` first. It verifies the `admin_session` cookie's signature and expiry with `ADMIN_SESSION_SECRET` and answers 401 when the cookie is missing, tampered, expired, or signed with another secret. A missing secret locks the dashboard. |
+| Route guard | `_dashboard`'s `beforeLoad` redirects signed-out visitors to `/admin/sign-in`. It is a UX layer and never replaces `requireAdmin()`: server functions are served from `/_serverFn/...`, outside any route guard. |
+| Sign-in route | Lives outside `_dashboard`, so the redirect cannot loop. It follows a `redirect` search param only for `/admin` paths. |
+| Config | `ADMIN_PASSWORD_HASH` (a scrypt hash) and `ADMIN_SESSION_SECRET` are server-only environment variables. |
 | Code | `src/features/auth/` per [0009](decisions/0009-feature-folder-structure.md); admin content features import `requireAdmin` from its `.server.ts`. |
 
 ```ts
 // <feature>.functions.ts (intended shape)
 export const deleteProject = createServerFn({ method: "POST" })
-  .validator(deleteProjectSchema)
+  .inputValidator(deleteProjectSchema)
   .handler(async ({ data }) => {
     await requireAdmin(); // always the first line
     return deleteProjectById(data.id);
