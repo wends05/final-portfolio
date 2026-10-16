@@ -111,7 +111,13 @@ export function getMockSkillPage(slug: string): SkillPageData | null {
 		const tools = skill.tools.filter((s) => used.has(s.name.toLowerCase()));
 		if (tools.length === 0) return [];
 		return [
-			{ id: project.id, slug: project.slug, title: project.title, tools },
+			{
+				id: project.id,
+				slug: project.slug,
+				title: project.title,
+				coverImageUrl: project.coverImageUrl ?? null,
+				tools,
+			},
 		];
 	});
 

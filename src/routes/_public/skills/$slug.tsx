@@ -1,16 +1,18 @@
 import { createFileRoute, notFound } from "@tanstack/react-router";
 import SkillPage from "#/features/skills/components/SkillPage";
+import { getSkillPageFn } from "#/features/skills/skills.functions";
 
 export const Route = createFileRoute("/_public/skills/$slug")({
 	loader: async ({ params }) => {
-		// TODO: load the skill from the database once its query exists. Until
-		// then development shows the mocks, and production has no such page. The
-		// dynamic import keeps the mocks out of the production bundle.
-		if (!import.meta.env.DEV) throw notFound();
-		const { getMockSkillPage } = await import(
-			"#/features/skills/utils/skills-mocks"
-		);
-		const page = getMockSkillPage(params.slug);
+		let page = await getSkillPageFn({ data: { slug: params.slug } });
+		// In development, show the mocks until real skills are published. The
+		// dynamic import keeps them out of the production bundle.
+		if (!page && import.meta.env.DEV) {
+			const { getMockSkillPage } = await import(
+				"#/features/skills/utils/skills-mocks"
+			);
+			page = getMockSkillPage(params.slug);
+		}
 		if (!page) throw notFound();
 		return { page };
 	},
