@@ -29,11 +29,14 @@ Major updates get their own pull request so each changelog can be read and each 
 
 `@types/node` is ignored from version 25: its major must match the Node.js runtime (24, [0005](0005-vercel-deployment.md)), not the newest release. Raise the bound when the runtime changes.
 
+`prisma`, `@prisma/orm-postgres` and `@prisma/cli-engine` are ignored entirely. The CLI pins the `@prisma/orm-toolchain` and `@prisma/cli-engine` versions it works with, and `@prisma/orm-postgres` must resolve the same toolchain version. Dependabot bumps one package at a time (and `orm-postgres` ships releases behind the CLI), so a single bump produced a mismatched set and a failing `contract:emit`. Bump the three by hand in one pull request ([../development.md](../development.md#prisma-version-set)).
+
 [../../.github/workflows/ci.yml](../../.github/workflows/ci.yml) runs `bun audit` before `verify` on every pull request and every push to `main`, with `continue-on-error: true`. Advisories show in the job log but do not fail the job.
 
 ## Alternatives
 
 - **Manual updates only (previous behavior):** nothing prompts an update, and advisories surface only when someone runs `bun audit`.
+- **Group the Prisma packages in one Dependabot PR:** a group moves each package to its newest release, and the newest `prisma` has no matching `@prisma/orm-postgres` yet, so the group would still produce a mismatched set.
 - **Renovate:** more scheduling and grouping options, but it is a separate GitHub App to install and configure. Dependabot is built into GitHub and reads `bun.lock` directly.
 - **Blocking `bun audit`:** an advisory with no published fix, or one deep in a transitive dependency, would fail every pull request until it is fixed upstream.
 - **One PR per package:** easier to bisect, but many more pull requests to review and merge for a single-owner repository.
