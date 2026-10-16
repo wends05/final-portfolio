@@ -22,11 +22,11 @@ const mockProject = (project: MockInput, index: number): FeaturedProject => ({
 	status: "COMPLETED",
 	teamName: null,
 	updatedAt: "2026-01-01T00:00:00.000Z",
-	skills: [],
+	tools: [],
 	...project,
 });
 
-const skills = (...names: string[]) => names.map((name) => ({ name }));
+const tools = (...names: string[]) => names.map((name) => ({ name }));
 
 // Stand-ins while the database has no published projects. The /projects
 // routes fall back to them in development only, when the real list is empty.
@@ -51,7 +51,7 @@ const projects: MockInput[] = [
 			{ label: "platforms", value: ["Windows", "Web"] },
 			{ label: "category", value: "game development" },
 		],
-		skills: skills("Godot"),
+		tools: tools("Godot"),
 	},
 	{
 		slug: "capycopy",
@@ -68,7 +68,7 @@ const projects: MockInput[] = [
 			category: "web development",
 			"based on": "a classmate's project for a subject",
 		},
-		skills: skills("React", "TypeScript", "Vite", "React Router"),
+		tools: tools("React", "TypeScript", "Vite", "React Router"),
 	},
 	{
 		slug: "jankenfun",
@@ -80,7 +80,7 @@ const projects: MockInput[] = [
 		endedAt: "2023-11-20",
 		createdAt: "2023-11-01T00:00:00.000Z",
 		githubUrl: "https://github.com/wends05/jankenfun",
-		skills: skills("JavaScript", "HTML", "CSS"),
+		tools: tools("JavaScript", "HTML", "CSS"),
 	},
 	{
 		slug: "wends-dev",
@@ -89,7 +89,7 @@ const projects: MockInput[] = [
 		status: "ONGOING",
 		startedAt: "2026-10-01",
 		createdAt: "2026-10-01T00:00:00.000Z",
-		skills: skills("TanStack Start", "React", "Prisma", "Neon"),
+		tools: tools("TanStack Start", "React", "Prisma", "Neon"),
 	},
 	{
 		slug: "taskflow",
@@ -99,7 +99,7 @@ const projects: MockInput[] = [
 		startedAt: "2025-06-01",
 		endedAt: "2025-08-30",
 		createdAt: "2025-08-01T00:00:00.000Z",
-		skills: skills("React", "TypeScript", "Convex"),
+		tools: tools("React", "TypeScript", "Convex"),
 	},
 	{
 		slug: "pixel-garden",
@@ -109,7 +109,7 @@ const projects: MockInput[] = [
 		startedAt: "2025-05-01",
 		endedAt: "2025-05-03",
 		createdAt: "2025-05-01T00:00:00.000Z",
-		skills: skills("Godot"),
+		tools: tools("Godot"),
 	},
 	{
 		slug: "ledger-cli",
@@ -119,7 +119,7 @@ const projects: MockInput[] = [
 		startedAt: "2025-01-10",
 		endedAt: "2025-02-20",
 		createdAt: "2025-02-01T00:00:00.000Z",
-		skills: skills("Go"),
+		tools: tools("Go"),
 	},
 	{
 		slug: "robotopia-scoreboard",
@@ -128,7 +128,7 @@ const projects: MockInput[] = [
 		startedAt: "2024-11-01",
 		endedAt: "2024-11-10",
 		createdAt: "2024-11-01T00:00:00.000Z",
-		skills: skills("Svelte", "TypeScript"),
+		tools: tools("Svelte", "TypeScript"),
 	},
 	{
 		slug: "notes-sync",
@@ -137,7 +137,7 @@ const projects: MockInput[] = [
 		startedAt: "2024-06-01",
 		endedAt: "2024-07-15",
 		createdAt: "2024-07-01T00:00:00.000Z",
-		skills: skills("Next.js", "Supabase"),
+		tools: tools("Next.js", "Supabase"),
 	},
 	{
 		slug: "se-web-app",
@@ -147,7 +147,7 @@ const projects: MockInput[] = [
 		startedAt: "2024-01-15",
 		endedAt: "2024-05-30",
 		createdAt: "2024-01-15T00:00:00.000Z",
-		skills: skills("Next.js", "Tailwind CSS", "Firebase", "React Query"),
+		tools: tools("Next.js", "Tailwind CSS", "Firebase", "React Query"),
 	},
 	{
 		slug: "clicker-game",
@@ -158,7 +158,7 @@ const projects: MockInput[] = [
 		endedAt: "2024-01-25",
 		createdAt: "2024-01-05T00:00:00.000Z",
 		githubUrl: "https://github.com/wends05/clicker-game",
-		skills: skills("Godot"),
+		tools: tools("Godot"),
 	},
 	{
 		slug: "recipe-box",
@@ -167,7 +167,7 @@ const projects: MockInput[] = [
 		startedAt: "2023-10-01",
 		endedAt: "2023-10-20",
 		createdAt: "2023-10-01T00:00:00.000Z",
-		skills: skills("Vue", "Firebase"),
+		tools: tools("Vue", "Firebase"),
 	},
 ];
 

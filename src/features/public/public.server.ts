@@ -1,13 +1,13 @@
 import { getFeaturedProjects } from "#/features/projects/projects.server";
-import { getTopSkillCategories } from "#/features/skills/skills.server";
+import { getTopSkills } from "#/features/skills/skills.server";
 
 export const HOMEPAGE_FEATURED_LIMIT = 3;
 
-/** Featured projects and top skill categories for the homepage, loaded in parallel. */
+/** Featured projects and top skills for the homepage, loaded in parallel. */
 export async function getHomepageData() {
 	const [projects, skills] = await Promise.all([
 		getFeaturedProjects({ limit: HOMEPAGE_FEATURED_LIMIT }),
-		getTopSkillCategories({ limit: HOMEPAGE_FEATURED_LIMIT }),
+		getTopSkills({ limit: HOMEPAGE_FEATURED_LIMIT }),
 	]);
 	return { projects, skills };
 }

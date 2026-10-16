@@ -1,5 +1,5 @@
 import type { FeaturedProject } from "#/features/projects/projects.types";
-import type { LandingSkillCategory } from "#/features/skills/skills.types";
+import type { LandingSkill } from "#/features/skills/skills.types";
 
 const mockProject = (
 	project: Pick<FeaturedProject, "id" | "slug" | "title" | "description"> &
@@ -18,7 +18,7 @@ const mockProject = (
 	status: "COMPLETED",
 	teamName: null,
 	updatedAt: "2026-01-01T00:00:00.000Z",
-	skills: [],
+	tools: [],
 	...project,
 });
 
@@ -35,7 +35,7 @@ export const MOCK_PROJECTS: FeaturedProject[] = [
 		startedAt: "2026-03-01",
 		githubUrl: "https://github.com/example/taskflow",
 		liveUrl: "https://taskflow.example.com",
-		skills: [{ name: "React" }, { name: "TypeScript" }, { name: "PostgreSQL" }],
+		tools: [{ name: "React" }, { name: "TypeScript" }, { name: "PostgreSQL" }],
 	}),
 	mockProject({
 		id: "00000000-0000-4000-8000-000000000002",
@@ -47,7 +47,7 @@ export const MOCK_PROJECTS: FeaturedProject[] = [
 		startedAt: "2025-06-01",
 		endedAt: "2025-11-15",
 		githubUrl: "https://github.com/example/trailnotes",
-		skills: [{ name: "Flutter" }, { name: "Firebase" }],
+		tools: [{ name: "Flutter" }, { name: "Firebase" }],
 	}),
 	mockProject({
 		id: "00000000-0000-4000-8000-000000000003",
@@ -60,17 +60,17 @@ export const MOCK_PROJECTS: FeaturedProject[] = [
 		startedAt: "2024-09-01",
 		endedAt: "2025-01-20",
 		githubUrl: "https://github.com/example/scaffold-cli",
-		skills: [{ name: "Go" }],
+		tools: [{ name: "Go" }],
 	}),
 ];
 
 const mockSkill = (
 	skill: Pick<
-		LandingSkillCategory,
-		"id" | "slug" | "name" | "overview" | "topRank" | "skills"
+		LandingSkill,
+		"id" | "slug" | "name" | "overview" | "topRank" | "tools"
 	> &
-		Partial<LandingSkillCategory>,
-): LandingSkillCategory => ({
+		Partial<LandingSkill>,
+): LandingSkill => ({
 	confidence: null,
 	createdAt: "2026-01-01T00:00:00.000Z",
 	updatedAt: "2026-01-01T00:00:00.000Z",
@@ -78,7 +78,7 @@ const mockSkill = (
 });
 
 // Hardcoded while the skill rows are built; read the `skills` prop after.
-export const MOCK_SKILLS: LandingSkillCategory[] = [
+export const MOCK_SKILLS: LandingSkill[] = [
 	mockSkill({
 		id: "00000000-0000-4000-8000-0000000000a1",
 		slug: "web-development",
@@ -87,7 +87,7 @@ export const MOCK_SKILLS: LandingSkillCategory[] = [
 			"Web applications and sites is a common way to create software used for multiple purposes. It is a common topic in software engineering.",
 		topRank: 1,
 		confidence: 80,
-		skills: [
+		tools: [
 			{ id: "00000000-0000-4000-8000-0000000000b1", name: "Next.js" },
 			{ id: "00000000-0000-4000-8000-0000000000b2", name: "React" },
 			{ id: "00000000-0000-4000-8000-0000000000b3", name: "Tailwind CSS" },
@@ -103,7 +103,7 @@ export const MOCK_SKILLS: LandingSkillCategory[] = [
 			"Some of our projects required us to create software for a certain problem in society. Mobile applications were one of the options.",
 		topRank: 2,
 		confidence: 55,
-		skills: [
+		tools: [
 			{ id: "00000000-0000-4000-8000-0000000000b6", name: "Flutter" },
 			{ id: "00000000-0000-4000-8000-0000000000b7", name: "React Native" },
 			{ id: "00000000-0000-4000-8000-0000000000b8", name: "Expo" },
@@ -117,6 +117,6 @@ export const MOCK_SKILLS: LandingSkillCategory[] = [
 			"Some of the hackathons we joined allowed us to experience making games. These have helped us understand the basics, proper workflow, and requirements in creating games.",
 		topRank: 3,
 		confidence: 60,
-		skills: [{ id: "00000000-0000-4000-8000-0000000000b9", name: "Godot" }],
+		tools: [{ id: "00000000-0000-4000-8000-0000000000b9", name: "Godot" }],
 	}),
 ];

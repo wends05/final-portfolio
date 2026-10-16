@@ -1,44 +1,44 @@
 import { ArrowRightIcon } from "@phosphor-icons/react/ssr";
 import { Link } from "@tanstack/react-router";
 import { isPlainClick } from "#/features/public/utils/pick";
-import type { LandingSkillCategory } from "#/features/skills/skills.types";
+import type { LandingSkill } from "#/features/skills/skills.types";
 import WashText from "./WashText";
 
 interface LandingSkillCardProps {
-	skillCategory: LandingSkillCategory;
+	skill: LandingSkill;
 	/** Starts the pick animation; the section navigates when it ends. */
 	onPick: (slug: string) => void;
 }
 
-const VISIBLE_SKILLS_COUNT = 3;
+const VISIBLE_TOOLS_COUNT = 3;
 
 export default function LandingSkillCard({
-	skillCategory,
+	skill,
 	onPick,
 }: LandingSkillCardProps) {
-	const visibleSkills = skillCategory.skills.slice(0, VISIBLE_SKILLS_COUNT);
-	const otherSkillsLength = skillCategory.skills.length - VISIBLE_SKILLS_COUNT;
+	const visibleTools = skill.tools.slice(0, VISIBLE_TOOLS_COUNT);
+	const otherToolsLength = skill.tools.length - VISIBLE_TOOLS_COUNT;
 	return (
 		<Link
-			data-slug={skillCategory.slug}
+			data-slug={skill.slug}
 			to="/skills/$slug"
-			params={{ slug: skillCategory.slug }}
-			className="flex flex-row justify-between gap-6 border-t last:border-b focus-ring"
+			params={{ slug: skill.slug }}
+			className="focus-ring flex flex-row justify-between gap-6 border-t last:border-b"
 			onClick={(e) => {
 				if (!isPlainClick(e)) return;
 				e.preventDefault();
-				onPick(skillCategory.slug);
+				onPick(skill.slug);
 			}}
 		>
 			<div className="flex flex-col gap-3 pt-6 pb-3">
 				<h3>
-					<WashText className="text-display-m">{skillCategory.name}</WashText>
+					<WashText className="text-display-m">{skill.name}</WashText>
 				</h3>
 
 				<span data-pick-fade className="type-meta">
-					{visibleSkills.map(({ name }) => name).join(" · ")}
-					{otherSkillsLength > 0 && (
-						<span className="font-label"> +{otherSkillsLength} more</span>
+					{visibleTools.map(({ name }) => name).join(" · ")}
+					{otherToolsLength > 0 && (
+						<span className="font-label"> +{otherToolsLength} more</span>
 					)}
 				</span>
 			</div>

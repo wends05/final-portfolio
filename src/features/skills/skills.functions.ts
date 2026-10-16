@@ -1,4 +1,4 @@
 import { createServerFn } from "@tanstack/react-start";
-import { getAllSkillCategories } from "./skills.server";
+import { getAllSkills } from "./skills.server";
 
-export const getSkillsPageFn = createServerFn().handler(getAllSkillCategories);
+export const getSkillsPageFn = createServerFn().handler(getAllSkills);

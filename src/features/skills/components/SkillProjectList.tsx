@@ -1,32 +1,32 @@
 import { ArrowCounterClockwiseIcon } from "@phosphor-icons/react/ssr";
 import { Button } from "#/components/ui/button";
-import type { SkillCategoryProject, SkillPreview } from "../skills.types";
-import SkillCategoryProjectItem from "./SkillCategoryProjectItem";
+import type { SkillProject, ToolPreview } from "../skills.types";
+import SkillProjectItem from "./SkillProjectItem";
 
-interface SkillCategoryProjectListProps {
+interface SkillProjectListProps {
 	/** The projects left after the filter. */
-	projects: SkillCategoryProject[];
-	/** The selected skill, or undefined when the filter shows all tools. */
-	selected: SkillPreview | undefined;
-	categoryName: string;
-	/** Clears the skill filter. */
+	projects: SkillProject[];
+	/** The selected tool, or undefined when the filter shows all tools. */
+	selected: ToolPreview | undefined;
+	skillName: string;
+	/** Clears the tool filter. */
 	onReset: () => void;
 	/** Starts the pick transition; the page navigates when it ends. */
 	onPick: (slug: string) => void;
 }
 
 /**
- * The skill category page's projects: a header naming the filter, then the
- * cards, or a line saying none use the selected skill (or the category) yet, with a
+ * A skill page's projects: a header naming the filter, then the
+ * cards, or a line saying none use the selected tool (or the skill) yet, with a
  * button to reset the filter.
  */
-export default function SkillCategoryProjectList({
+export default function SkillProjectList({
 	projects,
 	selected,
-	categoryName,
+	skillName,
 	onReset,
 	onPick,
-}: SkillCategoryProjectListProps) {
+}: SkillProjectListProps) {
 	return (
 		<section
 			aria-labelledby="skill-projects"
@@ -51,7 +51,7 @@ export default function SkillCategoryProjectList({
 					className="flex starting:translate-y-4 flex-col items-start gap-5 py-12 starting:opacity-0 transition-[opacity,translate] duration-300 ease-swiss motion-reduce:starting:translate-y-0"
 				>
 					<p className="text-muted-foreground">
-						No published projects use {selected?.name ?? categoryName} yet.
+						No published projects use {selected?.name ?? skillName} yet.
 					</p>
 					{selected && (
 						<Button
@@ -70,7 +70,7 @@ export default function SkillCategoryProjectList({
 				// cards are keyed by filter too, so every press replays their fade-up.
 				<ul data-entrance className="grid grid-cols-1 gap-3 md:grid-cols-2">
 					{projects.map((project, index) => (
-						<SkillCategoryProjectItem
+						<SkillProjectItem
 							key={`${selected?.id ?? "all"}:${project.id}`}
 							index={index}
 							project={project}

@@ -23,7 +23,7 @@ export default function LandingProjectCard({
 	onPick,
 }: LandingProjectCardProps) {
 	const meta = getProjectMetaLine(project);
-	const stack = project.skills.map((skill) => skill.name).join(" · ");
+	const stack = project.tools.map((tool) => tool.name).join(" · ");
 	const links = [
 		{ label: "github", href: project.githubUrl },
 		{ label: "live", href: project.liveUrl },

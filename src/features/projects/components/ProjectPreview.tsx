@@ -31,7 +31,7 @@ export default function ProjectPreview({
 	onPick,
 }: ProjectPreviewProps) {
 	const meta = getProjectMetaLine(project);
-	const stack = project.skills.map((skill) => skill.name).join(" · ");
+	const stack = project.tools.map((tool) => tool.name).join(" · ");
 
 	return (
 		<article

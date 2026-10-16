@@ -48,7 +48,7 @@ Sections live in `src/features/public/components/landing/`. The navbar, footer a
 | Hero | Name, role, and a short lead. The owner writes the copy. Revealed after the intro curtain. |
 | Description | Who the owner is, in a few sentences |
 | Featured projects | 3 projects in `featuredRank` order, each linking to its case study |
-| Top skills | 3 skill categories in `topRank` order, linking to `/skills` |
+| Top skills | 3 skills in `topRank` order, linking to `/skills` |
 | Contact | "More of me" heading beside three tiles (LinkedIn, GitHub, résumé download from `public/resume.pdf`) and an email panel: Main/School choice with Main picked by default, a mailto link and a copy button. Links and addresses live in `features/public/utils/contact.ts` |
 | Navbar | Fixed top bar: `wends.dev` wordmark linking to `/`, and a Menu button that opens the full-screen menu ([WD-53](https://linear.app/wends/issue/WD-53)). Menu state lives in `menuStore` ([0015](decisions/0015-zustand-for-client-ui-state.md)) |
 | Footer | Sits behind the page: the page scrolls up to reveal it. `footer-reveal` (in [../src/styles/footer.css](../src/styles/footer.css)) clips a `footer-reveal-content` child that is fixed to the viewport bottom. Keyboard focus inside it scrolls it into view. |

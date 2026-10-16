@@ -1,24 +1,24 @@
 import { describe, expect, it } from "vitest";
-import { getMockSkillCategoryPage } from "#/features/skills/utils/skills-mocks";
+import { getMockSkillPage } from "#/features/skills/utils/skills-mocks";
 
-describe("getMockSkillCategoryPage", () => {
+describe("getMockSkillPage", () => {
 	it("returns null for an unknown slug", () => {
-		expect(getMockSkillCategoryPage("knitting")).toBeNull();
+		expect(getMockSkillPage("knitting")).toBeNull();
 	});
 
-	it("lists only projects that used one of the category's skills", () => {
-		const page = getMockSkillCategoryPage("game-development");
+	it("lists only projects that used one of the skill's tools", () => {
+		const page = getMockSkillPage("game-development");
 		expect(page?.projects.length).toBeGreaterThan(0);
 		for (const project of page?.projects ?? []) {
-			expect(project.skills.map((s) => s.name)).toEqual(["Godot"]);
+			expect(project.tools.map((s) => s.name)).toEqual(["Godot"]);
 		}
 	});
 
-	it("keeps only the category's skills on each project", () => {
-		const page = getMockSkillCategoryPage("web-development");
-		const ids = new Set(page?.skills.map((s) => s.id));
+	it("keeps only the skill's tools on each project", () => {
+		const page = getMockSkillPage("web-development");
+		const ids = new Set(page?.tools.map((s) => s.id));
 		for (const project of page?.projects ?? []) {
-			expect(project.skills.every((s) => ids.has(s.id))).toBe(true);
+			expect(project.tools.every((s) => ids.has(s.id))).toBe(true);
 		}
 	});
 });

@@ -31,7 +31,7 @@ flowchart TD
 | --- | --- |
 | Homepage | Hero and description that establish who the owner is, three featured projects, three top skills, contact links, and a resume download |
 | Projects | `/projects` lists all projects. Each project has a case-study page covering the problem, approach, and result |
-| Skills | Reusable skills, each linked to the projects that used it |
+| Skills | Skills such as Web development, each with its tools and the projects that used them |
 | Contact | Links only: LinkedIn, GitHub, and email (main and school addresses, main picked by default). No form and no contact backend |
 | Resume | A downloadable PDF |
 | Content editing | A protected admin dashboard with full create, edit, and delete for all content; see [Admin dashboard](#admin-dashboard) |
@@ -39,7 +39,7 @@ flowchart TD
 ## Content rules
 
 - **Featured order is manual.** The three featured projects and three top skills are chosen and ordered explicitly through an order field, not by date or computed ranking.
-- **Projects and skills are many-to-many.** A project lists the skills it used; a skill shows the projects that used it.
+- **Projects and tools are many-to-many.** A project lists the tools it used; a skill page shows the projects that used any of its tools, filtered by tool. A tool can sit under several skills.
 
 ## Admin dashboard
 
@@ -47,16 +47,16 @@ Direction from the owner on 2026-10-05: a standard dashboard layout where the ow
 
 | Content type | Operations |
 | --- | --- |
-| Projects | Create, edit, delete, publish/unpublish, set featured rank, attach skills, collaborators, and images |
-| Skill categories | Create, edit, delete, set top rank and confidence |
-| Skills | Create, edit, delete, move between categories |
+| Projects | Create, edit, delete, publish/unpublish, set featured rank, attach tools, collaborators, and images |
+| Skills | Create, edit, delete, set top rank and confidence |
+| Tools | Create, edit, delete, add to or remove from skills |
 | Collaborators | Create, edit, delete, link to projects with a role |
 | Project images | Upload, reorder, edit alt text, delete |
 
 Edge cases the dashboard must handle include:
 
 - Duplicate slugs and duplicate ranks (both unique): show a clear error, or offer to swap ranks.
-- Deleting a skill category that still has skills: blocked by the database; explain why and offer to move or delete the skills first.
+- Deleting a skill that still has tools: the tools stay and lose that skill (the database removes the `SkillTool` rows); say so before confirming.
 - Deleting a project: confirm, and remove its images from storage as well as its rows.
 - Unpublished projects: never shown publicly, even if ranked.
 - Confidence outside 0–100, missing required fields (such as image `alt`), invalid URLs and dates (`endedAt` before `startedAt`).
@@ -81,7 +81,7 @@ Answered with the owner on 2026-10-04:
 - **Case-study URLs:** a unique `slug` field, so URLs are `/projects/<slug>`.
 - **Case-study content:** a `description` field for now; problem, approach, and result fields may come later.
 - **Resume:** a static file at `public/resume.pdf`, replaced by commit.
-- **Skills:** two levels. Categories (for example Web Development, with a 0–100 confidence) group individual skills (for example React). Projects link to individual skills, and the homepage's top skills are categories.
+- **Skills and tools:** two levels ([0018](decisions/0018-skills-group-tools.md)). A skill (for example Web development, with a 0–100 confidence) groups tools (for example React), and a tool can sit under several skills. Projects link to tools, and the homepage's top skills are skills.
 - **Collaborators:** projects can credit a team name and collaborators with optional roles.
 
 Answered with the owner on 2026-10-05:

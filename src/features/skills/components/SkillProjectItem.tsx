@@ -1,10 +1,10 @@
 import { Link } from "@tanstack/react-router";
 import WashText from "#/features/public/components/landing/WashText";
 import { isPlainClick } from "#/features/public/utils/pick";
-import type { SkillCategoryProject } from "../skills.types";
+import type { SkillProject } from "../skills.types";
 
-interface SkillCategoryProjectItemProps {
-	project: SkillCategoryProject;
+interface SkillProjectItemProps {
+	project: SkillProject;
 	/** Starts the pick transition; the page navigates when it ends. */
 	onPick: (slug: string) => void;
 	/** Position in the grid, for the stagger when the filter changes. */
@@ -12,15 +12,15 @@ interface SkillCategoryProjectItemProps {
 }
 
 /**
- * A project on the skill category page: its title on a card, linking to the
+ * A project on a skill page: its title on a card, linking to the
  * case study. Cards remount when the filter changes, so they fade up
  * 16px one after another, like the /projects panel swap.
  */
-export default function SkillCategoryProjectItem({
+export default function SkillProjectItem({
 	project,
 	onPick,
 	index,
-}: SkillCategoryProjectItemProps) {
+}: SkillProjectItemProps) {
 	return (
 		<li
 			data-project

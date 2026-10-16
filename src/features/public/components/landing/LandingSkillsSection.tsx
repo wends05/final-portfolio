@@ -2,12 +2,12 @@ import { useRouter } from "@tanstack/react-router";
 import { useRef, useState } from "react";
 import { usePickTransition } from "#/features/public/hooks/usePickTransition";
 import { MOCK_SKILLS } from "#/features/public/utils/landing-mocks";
-import type { LandingSkillCategory } from "#/features/skills/skills.types";
+import type { LandingSkill } from "#/features/skills/skills.types";
 import LandingSkillCard from "./LandingSkillCard";
 import SeeMoreLink from "./SeeMoreLink";
 
 interface LandingSkillsSectionProps {
-	skills: LandingSkillCategory[];
+	skills: LandingSkill[];
 }
 
 export default function LandingSkillsSection(
@@ -57,11 +57,7 @@ export default function LandingSkillsSection(
 			</h2>
 			<div className="col-span-full space-y-3 md:-col-start-7 md:row-span-3 md:row-start-2">
 				{items.map((skill) => (
-					<LandingSkillCard
-						key={skill.id}
-						skillCategory={skill}
-						onPick={setPicking}
-					/>
+					<LandingSkillCard key={skill.id} skill={skill} onPick={setPicking} />
 				))}
 			</div>
 			{/* Same link as the projects section's "see more". On phones it follows

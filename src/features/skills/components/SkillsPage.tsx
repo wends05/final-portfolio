@@ -7,18 +7,18 @@ import {
 	matchFullMotion,
 	REDUCED_MOTION,
 } from "#/integrations/animations/motion";
-import type { SkillsPageSkillCategory } from "../skills.types";
+import type { SkillsPageSkill } from "../skills.types";
 import { splitPicked } from "../skills.utils";
-import SkillCategoryItem from "./SkillCategoryItem";
+import SkillItem from "./SkillItem";
 
-// Matches the title's `duration-500` color transition in SkillCategoryItem.
+// Matches the title's `duration-500` color transition in SkillItem.
 const ACTIVATE_BEFORE_PICK_MS = 500;
 
 interface SkillsPageProps {
-	skillCategories: SkillsPageSkillCategory[];
+	skills: SkillsPageSkill[];
 }
 
-export default function SkillsPage({ skillCategories }: SkillsPageProps) {
+export default function SkillsPage({ skills }: SkillsPageProps) {
 	const [active, setActive] = useState(0);
 	const [picking, setPicking] = useState<string | null>(null);
 	// Set in the click itself, before React renders: stopping Lenis for the
@@ -70,7 +70,7 @@ export default function SkillsPage({ skillCategories }: SkillsPageProps) {
 		},
 		{
 			scope: root,
-			dependencies: [skillCategories.length],
+			dependencies: [skills.length],
 		},
 	);
 
@@ -113,23 +113,23 @@ export default function SkillsPage({ skillCategories }: SkillsPageProps) {
 				<h1 className="text-display-xl">skills</h1>
 				<div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
 					<p className="max-w-xl py-3">
-						skills, knowledge, stacks, and tools that I have learned, are using,
+						tools, knowledge, stacks, and tools that I have learned, are using,
 						or are familiar to.
 					</p>
-					<p className="type-index shrink-0">{skillCategories.length} skills</p>
+					<p className="type-index shrink-0">{skills.length} skills</p>
 				</div>
 			</header>
-			{skillCategories.length === 0 ? (
+			{skills.length === 0 ? (
 				<p className="col-span-full text-muted-foreground">
-					No skills published.
+					No tools published.
 				</p>
 			) : (
 				<ul className="col-span-full grid auto-rows-fr grid-cols-subgrid gap-y-5">
-					{skillCategories.map((skillCategory, idx) => (
-						<SkillCategoryItem
+					{skills.map((skill, idx) => (
+						<SkillItem
 							onPick={(slug) => pick(slug, idx)}
-							key={skillCategory.id}
-							skillCategory={skillCategory}
+							key={skill.id}
+							skill={skill}
 							active={idx === active}
 							onActivate={() => setActive(idx)}
 						/>

@@ -5,9 +5,9 @@ export type ProjectWithCoverImageUrl = Scalars<Models.public_Project> & {
 	coverImageUrl?: string | null;
 };
 
-/** A project as lists show it: its scalars, cover image URL, and the names of the skills it used. */
+/** A project as lists show it: its scalars, cover image URL, and the names of the tools it used. */
 export type ProjectSummary = ProjectWithCoverImageUrl & {
-	skills: { name: string }[];
+	tools: { name: string }[];
 };
 
 /** A homepage project. */
