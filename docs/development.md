@@ -43,7 +43,7 @@ Two linters run side by side and do not overlap ([decision 0008](decisions/0008-
 
 `@shadcn/lint` reads [../components.json](../components.json) to discover components and theme tokens. See [UI conventions](ui.md#design-system-linting).
 
-Do not use the `db:*` scripts in `package.json`; they are traditional Prisma commands. Use the Prisma Next commands in [data](data.md#schema-changes).
+Database and contract commands are Prisma Next; see [data](data.md#schema-changes).
 
 ### Class sorting on save in Zed
 

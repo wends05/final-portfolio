@@ -6,7 +6,7 @@ How data is stored and accessed. The database choice and schema rationale are in
 
 **Neon Postgres**: project `portfolio`, branch `production`, database `neondb`, reached through `DATABASE_URL`. App tables live in `public`; Neon Auth (Better Auth) lives in `neon_auth`.
 
-The data layer is **Prisma Next** (`@prisma/orm-postgres`), not traditional Prisma Client. Use the `prisma-8` skill. Do not use `@prisma/client`, `@prisma/adapter-pg`, a `schema.prisma`, or the `db:*` scripts in `package.json`; they belong to traditional Prisma.
+The data layer is **Prisma Next** (`@prisma/orm-postgres`), not traditional Prisma Client. Use the `prisma-8` skill. Do not add `@prisma/client`, `@prisma/adapter-pg`, or a `schema.prisma`; they belong to traditional Prisma. Run Prisma Next through `bun --bun prisma ...` and `contract:emit` ([schema changes](#schema-changes)).
 
 | File | Role |
 | --- | --- |
