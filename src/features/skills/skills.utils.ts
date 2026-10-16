@@ -22,6 +22,20 @@ export function filterProjectsByTool<T extends { tools: { id: string }[] }>(
 }
 
 /**
+ * The projects that used any of the skill's tools, each keeping only those
+ * tools. Projects that used none of them are dropped.
+ */
+export function getProjectsUsingTools<T extends { tools: { id: string }[] }>(
+	projects: T[],
+	skillToolIds: ReadonlySet<string>,
+): T[] {
+	return projects.flatMap((project) => {
+		const tools = project.tools.filter((tool) => skillToolIds.has(tool.id));
+		return tools.length === 0 ? [] : [{ ...project, tools }];
+	});
+}
+
+/**
  * The item a pick landed on, found by its `data-slug`, and the rest of the
  * list, which fades while the picked title washes.
  */

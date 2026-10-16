@@ -1,25 +1,32 @@
 import { describe, expect, it, vi } from "vitest";
-import { getAllSkills, getTopSkills } from "#/features/skills/skills.server";
+import {
+	getAllSkills,
+	getSkillPage,
+	getTopSkills,
+} from "#/features/skills/skills.server";
 import { db } from "#/integrations/prisma/db";
 
 vi.mock("#/integrations/prisma/db", () => ({
-	db: { orm: { public: { Skill: {} } } },
+	db: { orm: { public: { Skill: {}, Project: {} } } },
 }));
 
 type Call = { method: string; args: unknown[] };
 
 // Stands in for a Prisma Next collection: each builder method records its
 // arguments and returns the builder, and `all()` resolves to `rows`.
-function mockCollection(rows: unknown[]) {
+function mockCollection(rows: unknown[], table: "Skill" | "Project" = "Skill") {
 	const calls: Call[] = [];
-	const builder: Record<string, unknown> = { all: vi.fn(async () => rows) };
+	const builder: Record<string, unknown> = {
+		all: vi.fn(async () => rows),
+		first: vi.fn(async () => rows[0] ?? null),
+	};
 	for (const method of ["where", "include", "orderBy", "limit"]) {
 		builder[method] = (...args: unknown[]) => {
 			calls.push({ method, args });
 			return builder;
 		};
 	}
-	Object.assign(db.orm.public.Skill, builder);
+	Object.assign(db.orm.public[table], builder);
 	return calls;
 }
 
@@ -102,5 +109,95 @@ describe("getAllSkills", () => {
 		const rows = [{ id: "c1", name: "UI design", tools: [] }];
 		mockCollection(rows);
 		await expect(getAllSkills()).resolves.toBe(rows);
+	});
+});
+
+describe("getSkillPage", () => {
+	const react = { id: "react", name: "React" };
+	const go = { id: "go", name: "Go" };
+	const skill = {
+		id: "s1",
+		slug: "web-development",
+		name: "Web development",
+		overview: "About the web.",
+		confidence: 80,
+		topRank: 1,
+		createdAt: "2026-01-01T00:00:00.000Z",
+		updatedAt: "2026-01-01T00:00:00.000Z",
+		tools: [react],
+	};
+	const project = (slug: string, tools: unknown[], createdAt: string) => ({
+		id: `p-${slug}`,
+		slug,
+		title: slug,
+		featuredRank: null,
+		createdAt,
+		tools,
+	});
+
+	it("looks the skill up by slug and loads its tools by name", async () => {
+		const calls = mockCollection([skill]);
+		mockCollection([], "Project");
+		await getSkillPage("web-development");
+		expect(run(calls, "where")).toEqual([{ slug: "web-development" }]);
+		const include = calls.find((call) => call.method === "include");
+		expect(include?.args[0]).toBe("tools");
+	});
+
+	it("returns null when no skill has the slug", async () => {
+		mockCollection([]);
+		const projects = mockCollection([], "Project");
+		await expect(getSkillPage("knitting")).resolves.toBeNull();
+		expect(projects).toEqual([]);
+	});
+
+	it("reads only published projects", async () => {
+		mockCollection([skill]);
+		const calls = mockCollection([], "Project");
+		await getSkillPage("web-development");
+		expect(run(calls, "where")).toEqual([{ published: true }]);
+	});
+
+	it("keeps the projects that used the skill's tools, each with only those tools", async () => {
+		mockCollection([skill]);
+		mockCollection(
+			[
+				project("api", [go], "2026-03-01T00:00:00.000Z"),
+				project("site", [react, go], "2026-02-01T00:00:00.000Z"),
+			],
+			"Project",
+		);
+		const page = await getSkillPage("web-development");
+		expect(page?.projects).toEqual([
+			{ id: "p-site", slug: "site", title: "site", tools: [react] },
+		]);
+	});
+
+	it("orders the projects like /projects, newest first", async () => {
+		mockCollection([skill]);
+		mockCollection(
+			[
+				project("old", [react], "2026-01-01T00:00:00.000Z"),
+				project("new", [react], "2026-03-01T00:00:00.000Z"),
+			],
+			"Project",
+		);
+		const page = await getSkillPage("web-development");
+		expect(page?.projects.map((p) => p.slug)).toEqual(["new", "old"]);
+	});
+
+	it("returns the skill's fields and tools without the timestamps", async () => {
+		mockCollection([skill]);
+		mockCollection([], "Project");
+		await expect(getSkillPage("web-development")).resolves.toEqual({
+			id: "s1",
+			slug: "web-development",
+			name: "Web development",
+			overview: "About the web.",
+			confidence: 80,
+			topRank: 1,
+			tools: [react],
+			projects: [],
+		});
 	});
 });
