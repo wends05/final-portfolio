@@ -19,6 +19,7 @@
 			"!**/src/styles.css",
 			"!**/src/styles/*",
 			"!!**/.delta",
+			"!!**/.claude/worktrees",
 			"!**/src/integrations/prisma/contract.json",
 			"!**/src/integrations/prisma/contract.d.ts"
 		]

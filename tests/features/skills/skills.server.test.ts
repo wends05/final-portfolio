@@ -1,5 +1,8 @@
 import { describe, expect, it, vi } from "vitest";
-import { getTopSkillCategories } from "#/features/skills/skills.server";
+import {
+	getAllSkillCategories,
+	getTopSkillCategories,
+} from "#/features/skills/skills.server";
 import { db } from "#/integrations/prisma/db";
 
 vi.mock("#/integrations/prisma/db", () => ({
@@ -75,5 +78,32 @@ describe("getTopSkillCategories", () => {
 		const rows = [{ id: "c1", name: "Web development", skills: [] }];
 		mockCollection(rows);
 		await expect(getTopSkillCategories({})).resolves.toBe(rows);
+	});
+});
+
+describe("getAllSkillCategories", () => {
+	it("loads every category, ranked ones first in rank order", async () => {
+		const calls = mockCollection([]);
+		await getAllSkillCategories();
+		// Postgres sorts nulls last in ascending order, so unranked categories
+		// follow the top ones.
+		expect(run(calls, "where")).toEqual([]);
+		expect(run(calls, "orderBy")).toEqual(["topRank asc"]);
+		expect(run(calls, "limit")).toEqual([]);
+	});
+
+	it("loads the id and name of each category's skills", async () => {
+		const calls = mockCollection([]);
+		await getAllSkillCategories();
+		const include = calls.find((call) => call.method === "include");
+		expect(include?.args[0]).toBe("skills");
+		const select = include?.args[1] as (r: typeof relation) => unknown;
+		expect(select(relation)).toEqual(["name", "id"]);
+	});
+
+	it("returns the rows the query resolves", async () => {
+		const rows = [{ id: "c1", name: "UI design", skills: [] }];
+		mockCollection(rows);
+		await expect(getAllSkillCategories()).resolves.toBe(rows);
 	});
 });

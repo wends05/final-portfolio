@@ -187,7 +187,7 @@ Every page enters the same way, title first ([WD-51](https://linear.app/wends/is
 
 ## List pick
 
-A list pick is a plain left click on a row that starts a transition: the rest of the stage fades, an ink wash sweeps across the picked title, the title fades, then the router navigates. It covers the landing skill rows, a project's "Read more", and the `/projects` tiles ([WD-51](https://linear.app/wends/issue/WD-51)).
+A list pick is a plain left click on a row that starts a transition: the rest of the stage fades, an ink wash sweeps across the picked title, the title fades, then the router navigates. It covers the landing skill rows, the `/skills` items, a project's "Read more", and the `/projects` tiles ([WD-51](https://linear.app/wends/issue/WD-51)).
 
 - [usePickTransition](../src/features/public/hooks/usePickTransition.ts) owns the timeline. Each section passes the elements to animate and the navigation.
 - [WashText](../src/features/public/components/landing/WashText.tsx) draws the wash: an ink box holding a paper copy of the text, hidden by its clip-path. The copy wraps with the text, so titles over several lines wash too.
