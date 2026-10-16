@@ -20,16 +20,20 @@
       "model": "ProjectImage",
       "namespace": "public"
     },
-    "ProjectSkill": {
-      "model": "ProjectSkill",
+    "ProjectTool": {
+      "model": "ProjectTool",
       "namespace": "public"
     },
     "Skill": {
       "model": "Skill",
       "namespace": "public"
     },
-    "SkillCategory": {
-      "model": "SkillCategory",
+    "SkillTool": {
+      "model": "SkillTool",
+      "namespace": "public"
+    },
+    "Tool": {
+      "model": "Tool",
       "namespace": "public"
     }
   },
@@ -261,7 +265,7 @@
                   "namespace": "public"
                 }
               },
-              "skills": {
+              "tools": {
                 "cardinality": "N:M",
                 "on": {
                   "localFields": [
@@ -273,19 +277,19 @@
                 },
                 "through": {
                   "childColumns": [
-                    "skillId"
+                    "toolId"
                   ],
                   "namespaceId": "public",
                   "parentColumns": [
                     "projectId"
                   ],
-                  "table": "ProjectSkill",
+                  "table": "ProjectTool",
                   "targetColumns": [
                     "id"
                   ]
                 },
                 "to": {
-                  "model": "Skill",
+                  "model": "Tool",
                   "namespace": "public"
                 }
               }
@@ -497,7 +501,7 @@
               "table": "ProjectImage"
             }
           },
-          "ProjectSkill": {
+          "ProjectTool": {
             "fields": {
               "projectId": {
                 "nullable": false,
@@ -506,7 +510,7 @@
                   "kind": "scalar"
                 }
               },
-              "skillId": {
+              "toolId": {
                 "nullable": false,
                 "type": {
                   "codecId": "pg/uuid@1",
@@ -531,19 +535,19 @@
                   "namespace": "public"
                 }
               },
-              "skill": {
+              "tool": {
                 "cardinality": "N:1",
                 "nullable": false,
                 "on": {
                   "localFields": [
-                    "skillId"
+                    "toolId"
                   ],
                   "targetFields": [
                     "id"
                   ]
                 },
                 "to": {
-                  "model": "Skill",
+                  "model": "Tool",
                   "namespace": "public"
                 }
               }
@@ -553,111 +557,15 @@
                 "projectId": {
                   "column": "projectId"
                 },
-                "skillId": {
-                  "column": "skillId"
+                "toolId": {
+                  "column": "toolId"
                 }
               },
               "namespaceId": "public",
-              "table": "ProjectSkill"
+              "table": "ProjectTool"
             }
           },
           "Skill": {
-            "fields": {
-              "categoryId": {
-                "nullable": false,
-                "type": {
-                  "codecId": "pg/uuid@1",
-                  "kind": "scalar"
-                }
-              },
-              "createdAt": {
-                "nullable": false,
-                "type": {
-                  "codecId": "pg/timestamptz-string@1",
-                  "kind": "scalar"
-                }
-              },
-              "id": {
-                "nullable": false,
-                "type": {
-                  "codecId": "pg/uuid@1",
-                  "kind": "scalar"
-                }
-              },
-              "name": {
-                "nullable": false,
-                "type": {
-                  "codecId": "pg/text@1",
-                  "kind": "scalar"
-                }
-              }
-            },
-            "relations": {
-              "category": {
-                "cardinality": "N:1",
-                "nullable": false,
-                "on": {
-                  "localFields": [
-                    "categoryId"
-                  ],
-                  "targetFields": [
-                    "id"
-                  ]
-                },
-                "to": {
-                  "model": "SkillCategory",
-                  "namespace": "public"
-                }
-              },
-              "projects": {
-                "cardinality": "N:M",
-                "on": {
-                  "localFields": [
-                    "id"
-                  ],
-                  "targetFields": [
-                    "skillId"
-                  ]
-                },
-                "through": {
-                  "childColumns": [
-                    "projectId"
-                  ],
-                  "namespaceId": "public",
-                  "parentColumns": [
-                    "skillId"
-                  ],
-                  "table": "ProjectSkill",
-                  "targetColumns": [
-                    "id"
-                  ]
-                },
-                "to": {
-                  "model": "Project",
-                  "namespace": "public"
-                }
-              }
-            },
-            "storage": {
-              "fields": {
-                "categoryId": {
-                  "column": "categoryId"
-                },
-                "createdAt": {
-                  "column": "createdAt"
-                },
-                "id": {
-                  "column": "id"
-                },
-                "name": {
-                  "column": "name"
-                }
-              },
-              "namespaceId": "public",
-              "table": "Skill"
-            }
-          },
-          "SkillCategory": {
             "fields": {
               "confidence": {
                 "nullable": true,
@@ -717,18 +625,31 @@
               }
             },
             "relations": {
-              "skills": {
-                "cardinality": "1:N",
+              "tools": {
+                "cardinality": "N:M",
                 "on": {
                   "localFields": [
                     "id"
                   ],
                   "targetFields": [
-                    "categoryId"
+                    "skillId"
+                  ]
+                },
+                "through": {
+                  "childColumns": [
+                    "toolId"
+                  ],
+                  "namespaceId": "public",
+                  "parentColumns": [
+                    "skillId"
+                  ],
+                  "table": "SkillTool",
+                  "targetColumns": [
+                    "id"
                   ]
                 },
                 "to": {
-                  "model": "Skill",
+                  "model": "Tool",
                   "namespace": "public"
                 }
               }
@@ -761,7 +682,169 @@
                 }
               },
               "namespaceId": "public",
-              "table": "SkillCategory"
+              "table": "Skill"
+            }
+          },
+          "SkillTool": {
+            "fields": {
+              "skillId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "toolId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "skill": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "skillId"
+                  ],
+                  "targetFields": [
+                    "id"
+                  ]
+                },
+                "to": {
+                  "model": "Skill",
+                  "namespace": "public"
+                }
+              },
+              "tool": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "toolId"
+                  ],
+                  "targetFields": [
+                    "id"
+                  ]
+                },
+                "to": {
+                  "model": "Tool",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "skillId": {
+                  "column": "skillId"
+                },
+                "toolId": {
+                  "column": "toolId"
+                }
+              },
+              "namespaceId": "public",
+              "table": "SkillTool"
+            }
+          },
+          "Tool": {
+            "fields": {
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-string@1",
+                  "kind": "scalar"
+                }
+              },
+              "id": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "name": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "projects": {
+                "cardinality": "N:M",
+                "on": {
+                  "localFields": [
+                    "id"
+                  ],
+                  "targetFields": [
+                    "toolId"
+                  ]
+                },
+                "through": {
+                  "childColumns": [
+                    "projectId"
+                  ],
+                  "namespaceId": "public",
+                  "parentColumns": [
+                    "toolId"
+                  ],
+                  "table": "ProjectTool",
+                  "targetColumns": [
+                    "id"
+                  ]
+                },
+                "to": {
+                  "model": "Project",
+                  "namespace": "public"
+                }
+              },
+              "skills": {
+                "cardinality": "N:M",
+                "on": {
+                  "localFields": [
+                    "id"
+                  ],
+                  "targetFields": [
+                    "toolId"
+                  ]
+                },
+                "through": {
+                  "childColumns": [
+                    "skillId"
+                  ],
+                  "namespaceId": "public",
+                  "parentColumns": [
+                    "toolId"
+                  ],
+                  "table": "SkillTool",
+                  "targetColumns": [
+                    "id"
+                  ]
+                },
+                "to": {
+                  "model": "Skill",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "createdAt": {
+                  "column": "createdAt"
+                },
+                "id": {
+                  "column": "id"
+                },
+                "name": {
+                  "column": "name"
+                }
+              },
+              "namespaceId": "public",
+              "table": "Tool"
             }
           }
         }
@@ -1080,14 +1163,14 @@
               },
               "uniques": []
             },
-            "ProjectSkill": {
+            "ProjectTool": {
               "columns": {
                 "projectId": {
                   "codecId": "pg/uuid@1",
                   "nativeType": "uuid",
                   "nullable": false
                 },
-                "skillId": {
+                "toolId": {
                   "codecId": "pg/uuid@1",
                   "nativeType": "uuid",
                   "nullable": false
@@ -1101,7 +1184,7 @@
                       "projectId"
                     ],
                     "namespaceId": "public",
-                    "tableName": "ProjectSkill"
+                    "tableName": "ProjectTool"
                   },
                   "target": {
                     "columns": [
@@ -1115,17 +1198,17 @@
                   "onDelete": "cascade",
                   "source": {
                     "columns": [
-                      "skillId"
+                      "toolId"
                     ],
                     "namespaceId": "public",
-                    "tableName": "ProjectSkill"
+                    "tableName": "ProjectTool"
                   },
                   "target": {
                     "columns": [
                       "id"
                     ],
                     "namespaceId": "public",
-                    "tableName": "Skill"
+                    "tableName": "Tool"
                   }
                 }
               ],
@@ -1134,97 +1217,28 @@
                   "columns": [
                     "projectId"
                   ],
-                  "name": "ProjectSkill_projectId_idx_a96e4d92",
-                  "prefix": "ProjectSkill_projectId_idx",
+                  "name": "ProjectTool_projectId_idx_a96e4d92",
+                  "prefix": "ProjectTool_projectId_idx",
                   "unique": false
                 },
                 {
                   "columns": [
-                    "skillId"
+                    "toolId"
                   ],
-                  "name": "ProjectSkill_skillId_idx_6e19993d",
-                  "prefix": "ProjectSkill_skillId_idx",
+                  "name": "ProjectTool_toolId_idx_f1fb6638",
+                  "prefix": "ProjectTool_toolId_idx",
                   "unique": false
                 }
               ],
               "primaryKey": {
                 "columns": [
                   "projectId",
-                  "skillId"
+                  "toolId"
                 ]
               },
               "uniques": []
             },
             "Skill": {
-              "columns": {
-                "categoryId": {
-                  "codecId": "pg/uuid@1",
-                  "nativeType": "uuid",
-                  "nullable": false
-                },
-                "createdAt": {
-                  "codecId": "pg/timestamptz-string@1",
-                  "default": {
-                    "expression": "now()",
-                    "kind": "function"
-                  },
-                  "nativeType": "timestamptz",
-                  "nullable": false
-                },
-                "id": {
-                  "codecId": "pg/uuid@1",
-                  "nativeType": "uuid",
-                  "nullable": false
-                },
-                "name": {
-                  "codecId": "pg/text@1",
-                  "nativeType": "text",
-                  "nullable": false
-                }
-              },
-              "foreignKeys": [
-                {
-                  "onDelete": "restrict",
-                  "source": {
-                    "columns": [
-                      "categoryId"
-                    ],
-                    "namespaceId": "public",
-                    "tableName": "Skill"
-                  },
-                  "target": {
-                    "columns": [
-                      "id"
-                    ],
-                    "namespaceId": "public",
-                    "tableName": "SkillCategory"
-                  }
-                }
-              ],
-              "indexes": [
-                {
-                  "columns": [
-                    "categoryId"
-                  ],
-                  "name": "Skill_categoryId_idx_15c304f2",
-                  "prefix": "Skill_categoryId_idx",
-                  "unique": false
-                },
-                {
-                  "expression": "lower(\"name\")",
-                  "name": "skill_name_lower_79c07e41",
-                  "prefix": "skill_name_lower",
-                  "unique": true
-                }
-              ],
-              "primaryKey": {
-                "columns": [
-                  "id"
-                ]
-              },
-              "uniques": []
-            },
-            "SkillCategory": {
               "columns": {
                 "confidence": {
                   "codecId": "pg/int4@1",
@@ -1290,6 +1304,119 @@
                   ]
                 }
               ]
+            },
+            "SkillTool": {
+              "columns": {
+                "skillId": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "toolId": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [
+                {
+                  "onDelete": "cascade",
+                  "source": {
+                    "columns": [
+                      "skillId"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "SkillTool"
+                  },
+                  "target": {
+                    "columns": [
+                      "id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "Skill"
+                  }
+                },
+                {
+                  "onDelete": "cascade",
+                  "source": {
+                    "columns": [
+                      "toolId"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "SkillTool"
+                  },
+                  "target": {
+                    "columns": [
+                      "id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "Tool"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "skillId"
+                  ],
+                  "name": "SkillTool_skillId_idx_6e19993d",
+                  "prefix": "SkillTool_skillId_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "toolId"
+                  ],
+                  "name": "SkillTool_toolId_idx_f1fb6638",
+                  "prefix": "SkillTool_toolId_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "skillId",
+                  "toolId"
+                ]
+              },
+              "uniques": []
+            },
+            "Tool": {
+              "columns": {
+                "createdAt": {
+                  "codecId": "pg/timestamptz-string@1",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "id": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "name": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [],
+              "indexes": [
+                {
+                  "expression": "lower(\"name\")",
+                  "name": "tool_name_lower_79c07e41",
+                  "prefix": "tool_name_lower",
+                  "unique": true
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id"
+                ]
+              },
+              "uniques": []
             }
           },
           "valueSet": {
@@ -1306,10 +1433,10 @@
         "kind": "postgres-schema"
       }
     },
-    "storageHash": "e7f60d2935fcdad0ee76a8e73fd0a613817bd610cdab40dcc80178815511c04b"
+    "storageHash": "7540d8dd263ef54a97cfbdaa107ec57040e003ff0f248b3c0548f039e5a9e9fb"
   },
   "execution": {
-    "executionHash": "602fd42b6ba0b6e852de5122e96fdd20503712ff381e4bec081223ef7fd50919",
+    "executionHash": "22405ec351f52ceb72b75b2cb1bbc534710c3cd95b862d836e1cf9fe780c4dc9",
     "mutations": {
       "defaults": [
         {
@@ -1373,17 +1500,6 @@
         },
         {
           "onCreate": {
-            "id": "uuidv7",
-            "kind": "generator"
-          },
-          "ref": {
-            "entry": "SkillCategory",
-            "field": "id",
-            "namespace": "public"
-          }
-        },
-        {
-          "onCreate": {
             "id": "timestampNow",
             "kind": "generator"
           },
@@ -1392,8 +1508,19 @@
             "kind": "generator"
           },
           "ref": {
-            "entry": "SkillCategory",
+            "entry": "Skill",
             "field": "updatedAt",
+            "namespace": "public"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "uuidv7",
+            "kind": "generator"
+          },
+          "ref": {
+            "entry": "Tool",
+            "field": "id",
             "namespace": "public"
           }
         }

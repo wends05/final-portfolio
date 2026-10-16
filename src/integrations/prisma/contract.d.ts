@@ -34,9 +34,9 @@ import type {
 } from '@prisma/orm-postgres/contract/types';
 
 export type StorageHash =
-  StorageHashBase<'e7f60d2935fcdad0ee76a8e73fd0a613817bd610cdab40dcc80178815511c04b'>;
+  StorageHashBase<'7540d8dd263ef54a97cfbdaa107ec57040e003ff0f248b3c0548f039e5a9e9fb'>;
 export type ExecutionHash =
-  ExecutionHashBase<'602fd42b6ba0b6e852de5122e96fdd20503712ff381e4bec081223ef7fd50919'>;
+  ExecutionHashBase<'22405ec351f52ceb72b75b2cb1bbc534710c3cd95b862d836e1cf9fe780c4dc9'>;
 export type ProfileHash =
   ProfileHashBase<'3916f444a8a17ad749191acf9e08dad97d1a327b88c2f1d45d12f240296aa8b2'>;
 
@@ -285,17 +285,11 @@ export type FieldOutputTypes = {
       readonly order: CodecTypes['pg/int4@1']['output'];
       readonly projectId: CodecTypes['pg/uuid@1']['output'];
     };
-    readonly ProjectSkill: {
+    readonly ProjectTool: {
       readonly projectId: CodecTypes['pg/uuid@1']['output'];
-      readonly skillId: CodecTypes['pg/uuid@1']['output'];
+      readonly toolId: CodecTypes['pg/uuid@1']['output'];
     };
     readonly Skill: {
-      readonly categoryId: CodecTypes['pg/uuid@1']['output'];
-      readonly createdAt: CodecTypes['pg/timestamptz-string@1']['output'];
-      readonly id: CodecTypes['pg/uuid@1']['output'];
-      readonly name: CodecTypes['pg/text@1']['output'];
-    };
-    readonly SkillCategory: {
       readonly confidence: CodecTypes['pg/int4@1']['output'] | null;
       readonly createdAt: CodecTypes['pg/timestamptz-string@1']['output'];
       readonly id: CodecTypes['pg/uuid@1']['output'];
@@ -304,6 +298,15 @@ export type FieldOutputTypes = {
       readonly slug: CodecTypes['pg/text@1']['output'];
       readonly topRank: CodecTypes['pg/int4@1']['output'] | null;
       readonly updatedAt: CodecTypes['pg/timestamptz-string@1']['output'];
+    };
+    readonly SkillTool: {
+      readonly skillId: CodecTypes['pg/uuid@1']['output'];
+      readonly toolId: CodecTypes['pg/uuid@1']['output'];
+    };
+    readonly Tool: {
+      readonly createdAt: CodecTypes['pg/timestamptz-string@1']['output'];
+      readonly id: CodecTypes['pg/uuid@1']['output'];
+      readonly name: CodecTypes['pg/text@1']['output'];
     };
   };
 };
@@ -344,17 +347,11 @@ export type FieldInputTypes = {
       readonly order: CodecTypes['pg/int4@1']['input'];
       readonly projectId: CodecTypes['pg/uuid@1']['input'];
     };
-    readonly ProjectSkill: {
+    readonly ProjectTool: {
       readonly projectId: CodecTypes['pg/uuid@1']['input'];
-      readonly skillId: CodecTypes['pg/uuid@1']['input'];
+      readonly toolId: CodecTypes['pg/uuid@1']['input'];
     };
     readonly Skill: {
-      readonly categoryId: CodecTypes['pg/uuid@1']['input'];
-      readonly createdAt: CodecTypes['pg/timestamptz-string@1']['input'];
-      readonly id: CodecTypes['pg/uuid@1']['input'];
-      readonly name: CodecTypes['pg/text@1']['input'];
-    };
-    readonly SkillCategory: {
       readonly confidence: CodecTypes['pg/int4@1']['input'] | null;
       readonly createdAt: CodecTypes['pg/timestamptz-string@1']['input'];
       readonly id: CodecTypes['pg/uuid@1']['input'];
@@ -363,6 +360,15 @@ export type FieldInputTypes = {
       readonly slug: CodecTypes['pg/text@1']['input'];
       readonly topRank: CodecTypes['pg/int4@1']['input'] | null;
       readonly updatedAt: CodecTypes['pg/timestamptz-string@1']['input'];
+    };
+    readonly SkillTool: {
+      readonly skillId: CodecTypes['pg/uuid@1']['input'];
+      readonly toolId: CodecTypes['pg/uuid@1']['input'];
+    };
+    readonly Tool: {
+      readonly createdAt: CodecTypes['pg/timestamptz-string@1']['input'];
+      readonly id: CodecTypes['pg/uuid@1']['input'];
+      readonly name: CodecTypes['pg/text@1']['input'];
     };
   };
 };
@@ -403,17 +409,11 @@ export type StorageColumnTypes = {
       readonly order: CodecTypes['pg/int4@1']['output'];
       readonly projectId: CodecTypes['pg/uuid@1']['output'];
     };
-    readonly ProjectSkill: {
+    readonly ProjectTool: {
       readonly projectId: CodecTypes['pg/uuid@1']['output'];
-      readonly skillId: CodecTypes['pg/uuid@1']['output'];
+      readonly toolId: CodecTypes['pg/uuid@1']['output'];
     };
     readonly Skill: {
-      readonly categoryId: CodecTypes['pg/uuid@1']['output'];
-      readonly createdAt: CodecTypes['pg/timestamptz-string@1']['output'];
-      readonly id: CodecTypes['pg/uuid@1']['output'];
-      readonly name: CodecTypes['pg/text@1']['output'];
-    };
-    readonly SkillCategory: {
       readonly confidence: CodecTypes['pg/int4@1']['output'] | null;
       readonly createdAt: CodecTypes['pg/timestamptz-string@1']['output'];
       readonly id: CodecTypes['pg/uuid@1']['output'];
@@ -422,6 +422,15 @@ export type StorageColumnTypes = {
       readonly slug: CodecTypes['pg/text@1']['output'];
       readonly topRank: CodecTypes['pg/int4@1']['output'] | null;
       readonly updatedAt: CodecTypes['pg/timestamptz-string@1']['output'];
+    };
+    readonly SkillTool: {
+      readonly skillId: CodecTypes['pg/uuid@1']['output'];
+      readonly toolId: CodecTypes['pg/uuid@1']['output'];
+    };
+    readonly Tool: {
+      readonly createdAt: CodecTypes['pg/timestamptz-string@1']['output'];
+      readonly id: CodecTypes['pg/uuid@1']['output'];
+      readonly name: CodecTypes['pg/text@1']['output'];
     };
   };
 };
@@ -462,17 +471,11 @@ export type StorageColumnInputTypes = {
       readonly order: CodecTypes['pg/int4@1']['input'];
       readonly projectId: CodecTypes['pg/uuid@1']['input'];
     };
-    readonly ProjectSkill: {
+    readonly ProjectTool: {
       readonly projectId: CodecTypes['pg/uuid@1']['input'];
-      readonly skillId: CodecTypes['pg/uuid@1']['input'];
+      readonly toolId: CodecTypes['pg/uuid@1']['input'];
     };
     readonly Skill: {
-      readonly categoryId: CodecTypes['pg/uuid@1']['input'];
-      readonly createdAt: CodecTypes['pg/timestamptz-string@1']['input'];
-      readonly id: CodecTypes['pg/uuid@1']['input'];
-      readonly name: CodecTypes['pg/text@1']['input'];
-    };
-    readonly SkillCategory: {
       readonly confidence: CodecTypes['pg/int4@1']['input'] | null;
       readonly createdAt: CodecTypes['pg/timestamptz-string@1']['input'];
       readonly id: CodecTypes['pg/uuid@1']['input'];
@@ -481,6 +484,15 @@ export type StorageColumnInputTypes = {
       readonly slug: CodecTypes['pg/text@1']['input'];
       readonly topRank: CodecTypes['pg/int4@1']['input'] | null;
       readonly updatedAt: CodecTypes['pg/timestamptz-string@1']['input'];
+    };
+    readonly SkillTool: {
+      readonly skillId: CodecTypes['pg/uuid@1']['input'];
+      readonly toolId: CodecTypes['pg/uuid@1']['input'];
+    };
+    readonly Tool: {
+      readonly createdAt: CodecTypes['pg/timestamptz-string@1']['input'];
+      readonly id: CodecTypes['pg/uuid@1']['input'];
+      readonly name: CodecTypes['pg/text@1']['input'];
     };
   };
 };
@@ -512,8 +524,8 @@ export namespace Models {
     updatedAt: CodecTypes['pg/timestamptz-string@1']['output'];
     collaborators: public_ProjectCollaborator[];
     images: public_ProjectImage[];
-    skills: public_Skill[];
-    readonly [RelationKeys]?: 'collaborators' | 'images' | 'skills';
+    tools: public_Tool[];
+    readonly [RelationKeys]?: 'collaborators' | 'images' | 'tools';
   };
   export type public_ProjectCollaborator = {
     collaboratorId: CodecTypes['pg/uuid@1']['output'];
@@ -532,23 +544,14 @@ export namespace Models {
     project: public_Project;
     readonly [RelationKeys]?: 'project';
   };
-  export type public_ProjectSkill = {
+  export type public_ProjectTool = {
     projectId: CodecTypes['pg/uuid@1']['output'];
-    skillId: CodecTypes['pg/uuid@1']['output'];
+    toolId: CodecTypes['pg/uuid@1']['output'];
     project: public_Project;
-    skill: public_Skill;
-    readonly [RelationKeys]?: 'project' | 'skill';
+    tool: public_Tool;
+    readonly [RelationKeys]?: 'project' | 'tool';
   };
   export type public_Skill = {
-    categoryId: CodecTypes['pg/uuid@1']['output'];
-    createdAt: CodecTypes['pg/timestamptz-string@1']['output'];
-    id: CodecTypes['pg/uuid@1']['output'];
-    name: CodecTypes['pg/text@1']['output'];
-    category: public_SkillCategory;
-    projects: public_Project[];
-    readonly [RelationKeys]?: 'category' | 'projects';
-  };
-  export type public_SkillCategory = {
     confidence: CodecTypes['pg/int4@1']['output'] | null;
     createdAt: CodecTypes['pg/timestamptz-string@1']['output'];
     id: CodecTypes['pg/uuid@1']['output'];
@@ -557,8 +560,23 @@ export namespace Models {
     slug: CodecTypes['pg/text@1']['output'];
     topRank: CodecTypes['pg/int4@1']['output'] | null;
     updatedAt: CodecTypes['pg/timestamptz-string@1']['output'];
+    tools: public_Tool[];
+    readonly [RelationKeys]?: 'tools';
+  };
+  export type public_SkillTool = {
+    skillId: CodecTypes['pg/uuid@1']['output'];
+    toolId: CodecTypes['pg/uuid@1']['output'];
+    skill: public_Skill;
+    tool: public_Tool;
+    readonly [RelationKeys]?: 'skill' | 'tool';
+  };
+  export type public_Tool = {
+    createdAt: CodecTypes['pg/timestamptz-string@1']['output'];
+    id: CodecTypes['pg/uuid@1']['output'];
+    name: CodecTypes['pg/text@1']['output'];
+    projects: public_Project[];
     skills: public_Skill[];
-    readonly [RelationKeys]?: 'skills';
+    readonly [RelationKeys]?: 'projects' | 'skills';
   };
 }
 
@@ -568,9 +586,10 @@ export declare const models: {
     Project: Models.public_Project;
     ProjectCollaborator: Models.public_ProjectCollaborator;
     ProjectImage: Models.public_ProjectImage;
-    ProjectSkill: Models.public_ProjectSkill;
+    ProjectTool: Models.public_ProjectTool;
     Skill: Models.public_Skill;
-    SkillCategory: Models.public_SkillCategory;
+    SkillTool: Models.public_SkillTool;
+    Tool: Models.public_Tool;
   };
 };
 
@@ -837,32 +856,32 @@ type ContractBase = Omit<
                 },
               ];
             };
-            readonly ProjectSkill: {
+            readonly ProjectTool: {
               columns: {
                 readonly projectId: {
                   readonly nativeType: 'uuid';
                   readonly codecId: 'pg/uuid@1';
                   readonly nullable: false;
                 };
-                readonly skillId: {
+                readonly toolId: {
                   readonly nativeType: 'uuid';
                   readonly codecId: 'pg/uuid@1';
                   readonly nullable: false;
                 };
               };
-              primaryKey: { readonly columns: readonly ['projectId', 'skillId'] };
+              primaryKey: { readonly columns: readonly ['projectId', 'toolId'] };
               uniques: readonly [];
               indexes: readonly [
                 {
-                  readonly name: 'ProjectSkill_projectId_idx_a96e4d92';
-                  readonly prefix: 'ProjectSkill_projectId_idx';
+                  readonly name: 'ProjectTool_projectId_idx_a96e4d92';
+                  readonly prefix: 'ProjectTool_projectId_idx';
                   readonly columns: readonly ['projectId'];
                   readonly unique: false;
                 },
                 {
-                  readonly name: 'ProjectSkill_skillId_idx_6e19993d';
-                  readonly prefix: 'ProjectSkill_skillId_idx';
-                  readonly columns: readonly ['skillId'];
+                  readonly name: 'ProjectTool_toolId_idx_f1fb6638';
+                  readonly prefix: 'ProjectTool_toolId_idx';
+                  readonly columns: readonly ['toolId'];
                   readonly unique: false;
                 },
               ];
@@ -870,7 +889,7 @@ type ContractBase = Omit<
                 {
                   readonly source: {
                     readonly namespaceId: 'public' & NamespaceId;
-                    readonly tableName: 'ProjectSkill';
+                    readonly tableName: 'ProjectTool';
                     readonly columns: readonly ['projectId'];
                   };
                   readonly target: {
@@ -882,73 +901,18 @@ type ContractBase = Omit<
                 {
                   readonly source: {
                     readonly namespaceId: 'public' & NamespaceId;
-                    readonly tableName: 'ProjectSkill';
-                    readonly columns: readonly ['skillId'];
+                    readonly tableName: 'ProjectTool';
+                    readonly columns: readonly ['toolId'];
                   };
                   readonly target: {
                     readonly namespaceId: 'public' & NamespaceId;
-                    readonly tableName: 'Skill';
+                    readonly tableName: 'Tool';
                     readonly columns: readonly ['id'];
                   };
                 },
               ];
             };
             readonly Skill: {
-              columns: {
-                readonly categoryId: {
-                  readonly nativeType: 'uuid';
-                  readonly codecId: 'pg/uuid@1';
-                  readonly nullable: false;
-                };
-                readonly createdAt: {
-                  readonly nativeType: 'timestamptz';
-                  readonly codecId: 'pg/timestamptz-string@1';
-                  readonly nullable: false;
-                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
-                };
-                readonly id: {
-                  readonly nativeType: 'uuid';
-                  readonly codecId: 'pg/uuid@1';
-                  readonly nullable: false;
-                };
-                readonly name: {
-                  readonly nativeType: 'text';
-                  readonly codecId: 'pg/text@1';
-                  readonly nullable: false;
-                };
-              };
-              primaryKey: { readonly columns: readonly ['id'] };
-              uniques: readonly [];
-              indexes: readonly [
-                {
-                  readonly name: 'Skill_categoryId_idx_15c304f2';
-                  readonly prefix: 'Skill_categoryId_idx';
-                  readonly columns: readonly ['categoryId'];
-                  readonly unique: false;
-                },
-                {
-                  readonly name: 'skill_name_lower_79c07e41';
-                  readonly prefix: 'skill_name_lower';
-                  readonly expression: 'lower("name")';
-                  readonly unique: true;
-                },
-              ];
-              foreignKeys: readonly [
-                {
-                  readonly source: {
-                    readonly namespaceId: 'public' & NamespaceId;
-                    readonly tableName: 'Skill';
-                    readonly columns: readonly ['categoryId'];
-                  };
-                  readonly target: {
-                    readonly namespaceId: 'public' & NamespaceId;
-                    readonly tableName: 'SkillCategory';
-                    readonly columns: readonly ['id'];
-                  };
-                },
-              ];
-            };
-            readonly SkillCategory: {
               columns: {
                 readonly confidence: {
                   readonly nativeType: 'int4';
@@ -1000,6 +964,93 @@ type ContractBase = Omit<
               indexes: readonly [];
               foreignKeys: readonly [];
             };
+            readonly SkillTool: {
+              columns: {
+                readonly skillId: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                };
+                readonly toolId: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                };
+              };
+              primaryKey: { readonly columns: readonly ['skillId', 'toolId'] };
+              uniques: readonly [];
+              indexes: readonly [
+                {
+                  readonly name: 'SkillTool_skillId_idx_6e19993d';
+                  readonly prefix: 'SkillTool_skillId_idx';
+                  readonly columns: readonly ['skillId'];
+                  readonly unique: false;
+                },
+                {
+                  readonly name: 'SkillTool_toolId_idx_f1fb6638';
+                  readonly prefix: 'SkillTool_toolId_idx';
+                  readonly columns: readonly ['toolId'];
+                  readonly unique: false;
+                },
+              ];
+              foreignKeys: readonly [
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'SkillTool';
+                    readonly columns: readonly ['skillId'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'Skill';
+                    readonly columns: readonly ['id'];
+                  };
+                },
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'SkillTool';
+                    readonly columns: readonly ['toolId'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'Tool';
+                    readonly columns: readonly ['id'];
+                  };
+                },
+              ];
+            };
+            readonly Tool: {
+              columns: {
+                readonly createdAt: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-string@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                };
+                readonly id: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                };
+                readonly name: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                };
+              };
+              primaryKey: { readonly columns: readonly ['id'] };
+              uniques: readonly [];
+              indexes: readonly [
+                {
+                  readonly name: 'tool_name_lower_79c07e41';
+                  readonly prefix: 'tool_name_lower';
+                  readonly expression: 'lower("name")';
+                  readonly unique: true;
+                },
+              ];
+              foreignKeys: readonly [];
+            };
           };
           readonly valueSet: {
             readonly ProjectStatus: {
@@ -1030,15 +1081,13 @@ type ContractBase = Omit<
       readonly namespace: 'public' & NamespaceId;
       readonly model: 'ProjectImage';
     };
-    readonly ProjectSkill: {
+    readonly ProjectTool: {
       readonly namespace: 'public' & NamespaceId;
-      readonly model: 'ProjectSkill';
+      readonly model: 'ProjectTool';
     };
     readonly Skill: { readonly namespace: 'public' & NamespaceId; readonly model: 'Skill' };
-    readonly SkillCategory: {
-      readonly namespace: 'public' & NamespaceId;
-      readonly model: 'SkillCategory';
-    };
+    readonly SkillTool: { readonly namespace: 'public' & NamespaceId; readonly model: 'SkillTool' };
+    readonly Tool: { readonly namespace: 'public' & NamespaceId; readonly model: 'Tool' };
   };
   readonly domain: {
     readonly namespaces: {
@@ -1178,21 +1227,18 @@ type ContractBase = Omit<
                   readonly targetFields: readonly ['projectId'];
                 };
               };
-              readonly skills: {
-                readonly to: {
-                  readonly namespace: 'public' & NamespaceId;
-                  readonly model: 'Skill';
-                };
+              readonly tools: {
+                readonly to: { readonly namespace: 'public' & NamespaceId; readonly model: 'Tool' };
                 readonly cardinality: 'N:M';
                 readonly on: {
                   readonly localFields: readonly ['id'];
                   readonly targetFields: readonly ['projectId'];
                 };
                 readonly through: {
-                  readonly table: 'ProjectSkill';
+                  readonly table: 'ProjectTool';
                   readonly namespaceId: 'public';
                   readonly parentColumns: readonly ['projectId'];
-                  readonly childColumns: readonly ['skillId'];
+                  readonly childColumns: readonly ['toolId'];
                   readonly targetColumns: readonly ['id'];
                 };
               };
@@ -1320,13 +1366,13 @@ type ContractBase = Omit<
               };
             };
           };
-          readonly ProjectSkill: {
+          readonly ProjectTool: {
             readonly fields: {
               readonly projectId: {
                 readonly nullable: false;
                 readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
               };
-              readonly skillId: {
+              readonly toolId: {
                 readonly nullable: false;
                 readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
               };
@@ -1344,94 +1390,26 @@ type ContractBase = Omit<
                   readonly targetFields: readonly ['id'];
                 };
               };
-              readonly skill: {
-                readonly to: {
-                  readonly namespace: 'public' & NamespaceId;
-                  readonly model: 'Skill';
-                };
+              readonly tool: {
+                readonly to: { readonly namespace: 'public' & NamespaceId; readonly model: 'Tool' };
                 readonly cardinality: 'N:1';
                 readonly nullable: false;
                 readonly on: {
-                  readonly localFields: readonly ['skillId'];
+                  readonly localFields: readonly ['toolId'];
                   readonly targetFields: readonly ['id'];
                 };
               };
             };
             readonly storage: {
-              readonly table: 'ProjectSkill';
+              readonly table: 'ProjectTool';
               readonly namespaceId: 'public';
               readonly fields: {
                 readonly projectId: { readonly column: 'projectId' };
-                readonly skillId: { readonly column: 'skillId' };
+                readonly toolId: { readonly column: 'toolId' };
               };
             };
           };
           readonly Skill: {
-            readonly fields: {
-              readonly categoryId: {
-                readonly nullable: false;
-                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
-              };
-              readonly createdAt: {
-                readonly nullable: false;
-                readonly type: {
-                  readonly kind: 'scalar';
-                  readonly codecId: 'pg/timestamptz-string@1';
-                };
-              };
-              readonly id: {
-                readonly nullable: false;
-                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
-              };
-              readonly name: {
-                readonly nullable: false;
-                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
-              };
-            };
-            readonly relations: {
-              readonly category: {
-                readonly to: {
-                  readonly namespace: 'public' & NamespaceId;
-                  readonly model: 'SkillCategory';
-                };
-                readonly cardinality: 'N:1';
-                readonly nullable: false;
-                readonly on: {
-                  readonly localFields: readonly ['categoryId'];
-                  readonly targetFields: readonly ['id'];
-                };
-              };
-              readonly projects: {
-                readonly to: {
-                  readonly namespace: 'public' & NamespaceId;
-                  readonly model: 'Project';
-                };
-                readonly cardinality: 'N:M';
-                readonly on: {
-                  readonly localFields: readonly ['id'];
-                  readonly targetFields: readonly ['skillId'];
-                };
-                readonly through: {
-                  readonly table: 'ProjectSkill';
-                  readonly namespaceId: 'public';
-                  readonly parentColumns: readonly ['skillId'];
-                  readonly childColumns: readonly ['projectId'];
-                  readonly targetColumns: readonly ['id'];
-                };
-              };
-            };
-            readonly storage: {
-              readonly table: 'Skill';
-              readonly namespaceId: 'public';
-              readonly fields: {
-                readonly categoryId: { readonly column: 'categoryId' };
-                readonly createdAt: { readonly column: 'createdAt' };
-                readonly id: { readonly column: 'id' };
-                readonly name: { readonly column: 'name' };
-              };
-            };
-          };
-          readonly SkillCategory: {
             readonly fields: {
               readonly confidence: {
                 readonly nullable: true;
@@ -1473,20 +1451,24 @@ type ContractBase = Omit<
               };
             };
             readonly relations: {
-              readonly skills: {
-                readonly to: {
-                  readonly namespace: 'public' & NamespaceId;
-                  readonly model: 'Skill';
-                };
-                readonly cardinality: '1:N';
+              readonly tools: {
+                readonly to: { readonly namespace: 'public' & NamespaceId; readonly model: 'Tool' };
+                readonly cardinality: 'N:M';
                 readonly on: {
                   readonly localFields: readonly ['id'];
-                  readonly targetFields: readonly ['categoryId'];
+                  readonly targetFields: readonly ['skillId'];
+                };
+                readonly through: {
+                  readonly table: 'SkillTool';
+                  readonly namespaceId: 'public';
+                  readonly parentColumns: readonly ['skillId'];
+                  readonly childColumns: readonly ['toolId'];
+                  readonly targetColumns: readonly ['id'];
                 };
               };
             };
             readonly storage: {
-              readonly table: 'SkillCategory';
+              readonly table: 'Skill';
               readonly namespaceId: 'public';
               readonly fields: {
                 readonly confidence: { readonly column: 'confidence' };
@@ -1497,6 +1479,115 @@ type ContractBase = Omit<
                 readonly slug: { readonly column: 'slug' };
                 readonly topRank: { readonly column: 'topRank' };
                 readonly updatedAt: { readonly column: 'updatedAt' };
+              };
+            };
+          };
+          readonly SkillTool: {
+            readonly fields: {
+              readonly skillId: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly toolId: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+            };
+            readonly relations: {
+              readonly skill: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Skill';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: false;
+                readonly on: {
+                  readonly localFields: readonly ['skillId'];
+                  readonly targetFields: readonly ['id'];
+                };
+              };
+              readonly tool: {
+                readonly to: { readonly namespace: 'public' & NamespaceId; readonly model: 'Tool' };
+                readonly cardinality: 'N:1';
+                readonly nullable: false;
+                readonly on: {
+                  readonly localFields: readonly ['toolId'];
+                  readonly targetFields: readonly ['id'];
+                };
+              };
+            };
+            readonly storage: {
+              readonly table: 'SkillTool';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly skillId: { readonly column: 'skillId' };
+                readonly toolId: { readonly column: 'toolId' };
+              };
+            };
+          };
+          readonly Tool: {
+            readonly fields: {
+              readonly createdAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-string@1';
+                };
+              };
+              readonly id: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly name: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+            };
+            readonly relations: {
+              readonly projects: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Project';
+                };
+                readonly cardinality: 'N:M';
+                readonly on: {
+                  readonly localFields: readonly ['id'];
+                  readonly targetFields: readonly ['toolId'];
+                };
+                readonly through: {
+                  readonly table: 'ProjectTool';
+                  readonly namespaceId: 'public';
+                  readonly parentColumns: readonly ['toolId'];
+                  readonly childColumns: readonly ['projectId'];
+                  readonly targetColumns: readonly ['id'];
+                };
+              };
+              readonly skills: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Skill';
+                };
+                readonly cardinality: 'N:M';
+                readonly on: {
+                  readonly localFields: readonly ['id'];
+                  readonly targetFields: readonly ['toolId'];
+                };
+                readonly through: {
+                  readonly table: 'SkillTool';
+                  readonly namespaceId: 'public';
+                  readonly parentColumns: readonly ['toolId'];
+                  readonly childColumns: readonly ['skillId'];
+                  readonly targetColumns: readonly ['id'];
+                };
+              };
+            };
+            readonly storage: {
+              readonly table: 'Tool';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly createdAt: { readonly column: 'createdAt' };
+                readonly id: { readonly column: 'id' };
+                readonly name: { readonly column: 'name' };
               };
             };
           };
@@ -1580,19 +1671,19 @@ type ContractBase = Omit<
           };
         },
         {
-          readonly onCreate: { readonly id: 'uuidv7'; readonly kind: 'generator' };
+          readonly onCreate: { readonly id: 'timestampNow'; readonly kind: 'generator' };
+          readonly onUpdate: { readonly id: 'timestampNow'; readonly kind: 'generator' };
           readonly ref: {
-            readonly entry: 'SkillCategory';
-            readonly field: 'id';
+            readonly entry: 'Skill';
+            readonly field: 'updatedAt';
             readonly namespace: 'public';
           };
         },
         {
-          readonly onCreate: { readonly id: 'timestampNow'; readonly kind: 'generator' };
-          readonly onUpdate: { readonly id: 'timestampNow'; readonly kind: 'generator' };
+          readonly onCreate: { readonly id: 'uuidv7'; readonly kind: 'generator' };
           readonly ref: {
-            readonly entry: 'SkillCategory';
-            readonly field: 'updatedAt';
+            readonly entry: 'Tool';
+            readonly field: 'id';
             readonly namespace: 'public';
           };
         },

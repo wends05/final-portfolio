@@ -34,7 +34,7 @@ async function getProjectsCoverImageUrls<
 export async function getFeaturedProjects({ limit = 3 }: { limit?: number }) {
 	const projects = await db.orm.public.Project.where({ published: true })
 		.where((p) => p.featuredRank.isNotNull())
-		.include("skills", (skill) => skill.select("name"))
+		.include("tools", (tool) => tool.select("name"))
 		.orderBy((p) => p.featuredRank.asc())
 		.limit(limit)
 		.all();
@@ -54,17 +54,17 @@ export async function getProjects({ take, skip }: GetProjectsOptions) {
 	return projectsWithImages;
 }
 
-/** Every published project with its skills, in the /projects order. */
+/** Every published project with its tools, in the /projects order. */
 export async function getAllProjects(): Promise<ProjectSummary[]> {
 	const projects = await db.orm.public.Project.where({ published: true })
-		.include("skills", (skill) => skill.select("name"))
+		.include("tools", (tool) => tool.select("name"))
 		.all();
 	const projectsWithImages = await getProjectsCoverImageUrls(projects);
 	return orderProjectsForIndex(projectsWithImages);
 }
 
 /**
- * A published project's case study: the project with its skills and cover,
+ * A published project's case study: the project with its tools and cover,
  * its gallery, its credits, and its place in the /projects order.
  * Null when no published project has the slug.
  */
@@ -73,7 +73,7 @@ export async function getProjectPage(
 ): Promise<ProjectPageData | null> {
 	const [project, listed] = await Promise.all([
 		db.orm.public.Project.where({ slug, published: true })
-			.include("skills", (skill) => skill.select("name"))
+			.include("tools", (tool) => tool.select("name"))
 			.include("images", (image) =>
 				image.select("key", "alt").orderBy((i) => i.order.asc()),
 			)
@@ -94,7 +94,7 @@ export async function getProjectPage(
 	const place = getProjectPosition(orderProjectsForIndex(listed), slug);
 	if (!place) return null;
 
-	const { skills, images, collaborators, ...scalars } = project;
+	const { tools, images, collaborators, ...scalars } = project;
 	const [coverImageUrl, galleryUrls] = await Promise.all([
 		fetchImageWithKey(scalars.coverImageKey ?? undefined),
 		Promise.all(images.map((image) => fetchImageWithKey(image.key))),
@@ -109,7 +109,7 @@ export async function getProjectPage(
 		project: {
 			...scalars,
 			coverImageUrl,
-			skills,
+			tools,
 		},
 		gallery,
 		credits: collaborators.flatMap(({ role, collaborator }) =>

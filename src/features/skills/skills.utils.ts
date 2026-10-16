@@ -1,23 +1,23 @@
 /**
- * The first `count` skills to list by name, and how many are left over for
+ * The first `count` tools to list by name, and how many are left over for
  * the "+N" after them.
  */
-export function splitVisibleSkills<T>(skills: T[], count: number) {
-	const visible = skills.slice(0, Math.max(count, 0));
-	return { visible, hidden: skills.length - visible.length };
+export function splitVisibleTools<T>(tools: T[], count: number) {
+	const visible = tools.slice(0, Math.max(count, 0));
+	return { visible, hidden: tools.length - visible.length };
 }
 
 /**
- * The projects that used the skill with `skillId`, or all of them when no
- * skill is selected.
+ * The projects that used the tool with `toolId`, or all of them when no
+ * tool is selected.
  */
-export function filterProjectsBySkill<T extends { skills: { id: string }[] }>(
+export function filterProjectsByTool<T extends { tools: { id: string }[] }>(
 	projects: T[],
-	skillId: string | null,
+	toolId: string | null,
 ) {
-	if (skillId === null) return projects;
+	if (toolId === null) return projects;
 	return projects.filter((project) =>
-		project.skills.some((skill) => skill.id === skillId),
+		project.tools.some((tool) => tool.id === toolId),
 	);
 }
 

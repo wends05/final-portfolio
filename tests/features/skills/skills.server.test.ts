@@ -1,12 +1,9 @@
 import { describe, expect, it, vi } from "vitest";
-import {
-	getAllSkillCategories,
-	getTopSkillCategories,
-} from "#/features/skills/skills.server";
+import { getAllSkills, getTopSkills } from "#/features/skills/skills.server";
 import { db } from "#/integrations/prisma/db";
 
 vi.mock("#/integrations/prisma/db", () => ({
-	db: { orm: { public: { SkillCategory: {} } } },
+	db: { orm: { public: { Skill: {} } } },
 }));
 
 type Call = { method: string; args: unknown[] };
@@ -22,7 +19,7 @@ function mockCollection(rows: unknown[]) {
 			return builder;
 		};
 	}
-	Object.assign(db.orm.public.SkillCategory, builder);
+	Object.assign(db.orm.public.Skill, builder);
 	return calls;
 }
 
@@ -47,63 +44,63 @@ function run(calls: Call[], method: string) {
 		);
 }
 
-describe("getTopSkillCategories", () => {
-	it("keeps only categories with a top rank, in rank order", async () => {
+describe("getTopSkills", () => {
+	it("keeps only skills with a top rank, in rank order", async () => {
 		const calls = mockCollection([]);
-		await getTopSkillCategories({});
+		await getTopSkills({});
 		expect(run(calls, "where")).toEqual(["topRank is not null"]);
 		expect(run(calls, "orderBy")).toEqual(["topRank asc"]);
 	});
 
 	it("limits to three by default and passes a custom limit through", async () => {
 		let calls = mockCollection([]);
-		await getTopSkillCategories({});
+		await getTopSkills({});
 		expect(run(calls, "limit")).toEqual([3]);
 
 		calls = mockCollection([]);
-		await getTopSkillCategories({ limit: 5 });
+		await getTopSkills({ limit: 5 });
 		expect(run(calls, "limit")).toEqual([5]);
 	});
 
-	it("loads the id and name of each category's skills", async () => {
+	it("loads the id and name of each skill's tools", async () => {
 		const calls = mockCollection([]);
-		await getTopSkillCategories({});
+		await getTopSkills({});
 		const include = calls.find((call) => call.method === "include");
-		expect(include?.args[0]).toBe("skills");
+		expect(include?.args[0]).toBe("tools");
 		const select = include?.args[1] as (r: typeof relation) => unknown;
 		expect(select(relation)).toEqual(["name", "id"]);
 	});
 
 	it("returns the rows the query resolves", async () => {
-		const rows = [{ id: "c1", name: "Web development", skills: [] }];
+		const rows = [{ id: "c1", name: "Web development", tools: [] }];
 		mockCollection(rows);
-		await expect(getTopSkillCategories({})).resolves.toBe(rows);
+		await expect(getTopSkills({})).resolves.toBe(rows);
 	});
 });
 
-describe("getAllSkillCategories", () => {
-	it("loads every category, ranked ones first in rank order", async () => {
+describe("getAllSkills", () => {
+	it("loads every skill, ranked ones first in rank order", async () => {
 		const calls = mockCollection([]);
-		await getAllSkillCategories();
-		// Postgres sorts nulls last in ascending order, so unranked categories
+		await getAllSkills();
+		// Postgres sorts nulls last in ascending order, so unranked skills
 		// follow the top ones.
 		expect(run(calls, "where")).toEqual([]);
 		expect(run(calls, "orderBy")).toEqual(["topRank asc"]);
 		expect(run(calls, "limit")).toEqual([]);
 	});
 
-	it("loads the id and name of each category's skills", async () => {
+	it("loads the id and name of each skill's tools", async () => {
 		const calls = mockCollection([]);
-		await getAllSkillCategories();
+		await getAllSkills();
 		const include = calls.find((call) => call.method === "include");
-		expect(include?.args[0]).toBe("skills");
+		expect(include?.args[0]).toBe("tools");
 		const select = include?.args[1] as (r: typeof relation) => unknown;
 		expect(select(relation)).toEqual(["name", "id"]);
 	});
 
 	it("returns the rows the query resolves", async () => {
-		const rows = [{ id: "c1", name: "UI design", skills: [] }];
+		const rows = [{ id: "c1", name: "UI design", tools: [] }];
 		mockCollection(rows);
-		await expect(getAllSkillCategories()).resolves.toBe(rows);
+		await expect(getAllSkills()).resolves.toBe(rows);
 	});
 });

@@ -9,26 +9,26 @@ import {
 } from "#/components/ui/progress";
 import { usePageEntrance } from "#/features/public/hooks/usePageEntrance";
 import { usePickTransition } from "#/features/public/hooks/usePickTransition";
-import type { SkillCategoryPageData } from "../skills.types";
-import { filterProjectsBySkill, splitPicked } from "../skills.utils";
-import SkillCategoryProjectList from "./SkillCategoryProjectList";
-import SkillFilter from "./SkillFilter";
+import type { SkillPageData } from "../skills.types";
+import { filterProjectsByTool, splitPicked } from "../skills.utils";
+import SkillProjectList from "./SkillProjectList";
+import ToolFilter from "./ToolFilter";
 
-interface SkillCategoryPageProps {
-	page: SkillCategoryPageData;
+interface SkillPageProps {
+	page: SkillPageData;
 }
 
 /**
- * /skills/<slug>: the category name in caps with its confidence beside it,
- * the skills on the left as a single-select filter, and the description with
+ * /skills/<slug>: the skill name in caps with its confidence beside it,
+ * the tools on the left as a single-select filter, and the description with
  * the matching projects on the right.
  */
-export default function SkillCategoryPage({ page }: SkillCategoryPageProps) {
+export default function SkillPage({ page }: SkillPageProps) {
 	// null shows every project. The route keys this component by slug, so the
-	// selection starts over on another category.
+	// selection starts over on another skill.
 	const [selectedId, setSelectedId] = useState<string | null>(null);
-	const projects = filterProjectsBySkill(page.projects, selectedId);
-	const selected = page.skills.find((skill) => skill.id === selectedId);
+	const projects = filterProjectsByTool(page.projects, selectedId);
+	const selected = page.tools.find((tool) => tool.id === selectedId);
 
 	const root = useRef<HTMLElement>(null);
 	const router = useRouter();
@@ -69,13 +69,13 @@ export default function SkillCategoryPage({ page }: SkillCategoryPageProps) {
 					render={
 						<Link to="/skills">
 							<ArrowLeftIcon aria-hidden />
-							All skills
+							All tools
 						</Link>
 					}
 				/>
 				{page.topRank !== null && (
 					<p className="type-label bg-primary px-1.5 py-1 text-primary-foreground">
-						top skill
+						top tool
 					</p>
 				)}
 			</div>
@@ -103,8 +103,8 @@ export default function SkillCategoryPage({ page }: SkillCategoryPageProps) {
 				)}
 			</div>
 
-			<SkillFilter
-				skills={page.skills}
+			<ToolFilter
+				tools={page.tools}
 				selectedId={selectedId}
 				onSelect={setSelectedId}
 			/>
@@ -116,10 +116,10 @@ export default function SkillCategoryPage({ page }: SkillCategoryPageProps) {
 					</p>
 				)}
 
-				<SkillCategoryProjectList
+				<SkillProjectList
 					projects={projects}
 					selected={selected}
-					categoryName={page.name}
+					skillName={page.name}
 					onReset={() => setSelectedId(null)}
 					onPick={setPicking}
 				/>

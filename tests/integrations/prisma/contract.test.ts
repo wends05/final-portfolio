@@ -3,16 +3,20 @@ import contract from "#/integrations/prisma/contract.json";
 
 const tables = contract.storage.namespaces.public.entries.table;
 
-describe("Skill storage", () => {
+describe("Tool storage", () => {
 	it("has no slug column", () => {
-		expect(Object.keys(tables.Skill.columns)).not.toContain("slug");
+		expect(Object.keys(tables.Tool.columns)).not.toContain("slug");
+	});
+
+	it("has no skill of its own: a tool joins skills through SkillTool", () => {
+		expect(Object.keys(tables.Tool.columns)).not.toContain("skillId");
 	});
 
 	it("keeps names unique ignoring case", () => {
-		expect(tables.Skill.indexes).toContainEqual(
+		expect(tables.Tool.indexes).toContainEqual(
 			expect.objectContaining({
 				expression: 'lower("name")',
-				prefix: "skill_name_lower",
+				prefix: "tool_name_lower",
 				unique: true,
 			}),
 		);
@@ -20,7 +24,7 @@ describe("Skill storage", () => {
 });
 
 describe("createdAt", () => {
-	it.each(["Project", "Skill", "SkillCategory"] as const)(
+	it.each(["Project", "Tool", "Skill"] as const)(
 		"%s.createdAt defaults to now() in the database",
 		(table) => {
 			expect(tables[table].columns.createdAt).toMatchObject({
@@ -30,8 +34,26 @@ describe("createdAt", () => {
 	);
 });
 
-describe("SkillCategory storage", () => {
-	it("keeps its slug for the category page URL", () => {
-		expect(Object.keys(tables.SkillCategory.columns)).toContain("slug");
+describe("Skill storage", () => {
+	it("keeps its slug for the skill page URL", () => {
+		expect(Object.keys(tables.Skill.columns)).toContain("slug");
 	});
+});
+
+describe("join tables", () => {
+	it.each([
+		["SkillTool", ["skillId", "toolId"]],
+		["ProjectTool", ["projectId", "toolId"]],
+	] as const)("%s has a composite key", (table, columns) => {
+		expect(tables[table].primaryKey.columns).toEqual(columns);
+	});
+
+	it.each(["SkillTool", "ProjectTool"] as const)(
+		"%s rows cascade from both sides",
+		(table) => {
+			const { foreignKeys } = tables[table];
+			expect(foreignKeys).toHaveLength(2);
+			for (const fk of foreignKeys) expect(fk.onDelete).toBe("cascade");
+		},
+	);
 });

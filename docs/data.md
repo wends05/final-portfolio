@@ -21,9 +21,10 @@ The data layer is **Prisma Next** (`@prisma/orm-postgres`), not traditional Pris
 ```mermaid
 erDiagram
     Project ||--o{ ProjectImage : has
-    Project ||--o{ ProjectSkill : uses
-    Skill ||--o{ ProjectSkill : "applied in"
-    SkillCategory ||--o{ Skill : groups
+    Project ||--o{ ProjectTool : uses
+    Tool ||--o{ ProjectTool : "applied in"
+    Skill ||--o{ SkillTool : groups
+    Tool ||--o{ SkillTool : "belongs to"
     Project ||--o{ ProjectCollaborator : "built with"
     Collaborator ||--o{ ProjectCollaborator : "worked on"
 ```
@@ -32,15 +33,16 @@ erDiagram
 | --- | --- | --- |
 | `Project` | `id`, `slug`, `title`, `description`, `coverImageKey?`, `githubUrl?`, `liveUrl?`, `status`, `featuredRank?`, `published`, `teamName?`, `metadata`, `startedAt?`, `endedAt?`, `createdAt`, `updatedAt` | `slug` and `featuredRank` unique. `status` is `ONGOING` or `COMPLETED`. `published` defaults to `false`. `metadata` is `jsonb` for keys that have not earned a column. Dates are `YYYY-MM-DD` strings. |
 | `ProjectImage` | `id`, `projectId`, `key`, `alt`, `order` | Cascades with its project. `alt` is required. |
-| `SkillCategory` | `id`, `slug`, `name`, `overview`, `confidence?`, `topRank?`, `createdAt`, `updatedAt` | `slug` and `topRank` unique. `confidence` is 0–100, enforced by the admin form. |
-| `Skill` | `id`, `categoryId`, `name`, `createdAt` | `name` unique ignoring case (unique index on `lower(name)`), so "React" and "react" cannot both exist. Skills have no slug or page of their own; they are listed by name under their category. A category with skills cannot be deleted. |
-| `ProjectSkill` | `projectId`, `skillId` | Composite key; cascades from both sides |
+| `Skill` | `id`, `slug`, `name`, `overview`, `confidence?`, `topRank?`, `createdAt`, `updatedAt` | An area such as Web development; it has its own page at `/skills/<slug>`. `slug` and `topRank` unique. `confidence` is 0–100, enforced by the admin form. |
+| `Tool` | `id`, `name`, `createdAt` | A technology such as React. `name` unique ignoring case (unique index on `lower(name)`), so "React" and "react" cannot both exist. Tools have no slug or page of their own; they are listed by name under their skills. A tool may belong to no skill. |
+| `SkillTool` | `skillId`, `toolId` | Composite key; cascades from both sides. A tool can sit under several skills. |
+| `ProjectTool` | `projectId`, `toolId` | Composite key; cascades from both sides |
 | `Collaborator` | `id`, `name`, `profileUrl?` | People credited on projects; they do not sign in |
 | `ProjectCollaborator` | `projectId`, `collaboratorId`, `role?` | Composite key; cascades from both sides |
 
 - IDs are native `uuid`. Prisma Next generates UUIDv7 on insert; the database has no default, so raw SQL inserts must supply `id`.
 - Image fields store storage bucket keys, not URLs. Resolve keys on the server before returning image URLs to the UI; see [image storage](#image-storage).
-- Rank fields set manual order: `null` means not shown, and the integer is the position. The homepage uses `Project.featuredRank` and `SkillCategory.topRank`.
+- Rank fields set manual order: `null` means not shown, and the integer is the position. The homepage uses `Project.featuredRank` and `Skill.topRank`.
 
 ## Image storage
 
@@ -60,7 +62,7 @@ See the [Neon adapter reference](https://files-sdk.dev/docs/adapters/neon) for c
 - Public queries filter on `published = true`.
 - Project pages look up by `slug`.
 - The app reads `neon_auth.user` only to check `role` in `requireAdmin()` ([0013](decisions/0013-admin-authentication-and-authorization.md)), and never writes to the `neon_auth` schema.
-- Many-to-many relations (`Project.skills`, `Skill.projects`) load through their junction with `.include()`, for example `.include("skills", (skill) => skill.select("name"))`; the junction table needs no explicit join.
+- Many-to-many relations (`Project.tools`, `Tool.projects`, `Skill.tools`, `Tool.skills`) load through their junction with `.include()`, for example `.include("tools", (tool) => tool.select("name"))`; the junction table needs no explicit join.
 
 ## Content
 

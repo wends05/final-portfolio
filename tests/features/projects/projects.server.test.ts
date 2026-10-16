@@ -103,11 +103,11 @@ describe("getFeaturedProjects", () => {
 		expect(run(calls, "limit")).toEqual([5]);
 	});
 
-	it("loads the names of each project's skills", async () => {
+	it("loads the names of each project's tools", async () => {
 		const calls = mockCollection([]);
 		await getFeaturedProjects({});
 		const include = calls.find((call) => call.method === "include");
-		expect(include?.args[0]).toBe("skills");
+		expect(include?.args[0]).toBe("tools");
 		const select = include?.args[1] as (r: typeof relation) => unknown;
 		expect(select(relation)).toEqual(["name"]);
 	});
@@ -150,12 +150,12 @@ describe("getAllProjects", () => {
 		);
 	});
 
-	it("loads published projects with their skill names", async () => {
+	it("loads published projects with their tool names", async () => {
 		const calls = mockCollection([]);
 		await getAllProjects();
 		expect(run(calls, "where")).toEqual([{ published: true }]);
 		const include = calls.find((call) => call.method === "include");
-		expect(include?.args[0]).toBe("skills");
+		expect(include?.args[0]).toBe("tools");
 		const select = include?.args[1] as (r: typeof relation) => unknown;
 		expect(select(relation)).toEqual(["name"]);
 	});
@@ -181,7 +181,7 @@ describe("getProjectPage", () => {
 	];
 	const row = (overrides: Record<string, unknown> = {}) => ({
 		...project({ title: "Taskflow", status: "COMPLETED" }),
-		skills: [{ name: "React" }, { name: "Vite" }],
+		tools: [{ name: "React" }, { name: "Vite" }],
 		images: [
 			{ key: "shots/1.png", alt: "The board" },
 			{ key: "shots/missing.png", alt: "Gone" },
@@ -251,10 +251,10 @@ describe("getProjectPage", () => {
 		]);
 	});
 
-	it("keeps the skill names on the project", async () => {
+	it("keeps the tool names on the project", async () => {
 		mockCollection(listedRows, row());
 		const page = await getProjectPage("taskflow");
-		expect(page?.project.skills).toEqual([{ name: "React" }, { name: "Vite" }]);
+		expect(page?.project.tools).toEqual([{ name: "React" }, { name: "Vite" }]);
 	});
 
 	it("places the project in the /projects order", async () => {

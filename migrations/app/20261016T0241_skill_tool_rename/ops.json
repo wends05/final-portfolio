@@ -1,0 +1,716 @@
+[
+  {
+    "id": "dropTable.ProjectSkill",
+    "label": "Drop table \"ProjectSkill\"",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "ProjectSkill"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"ProjectSkill\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"ProjectSkill\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "drop table \"ProjectSkill\"",
+        "sql": "DROP TABLE \"public\".\"ProjectSkill\""
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"ProjectSkill\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"ProjectSkill\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "dropTable.Skill",
+    "label": "Drop table \"Skill\"",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "Skill"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"Skill\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Skill\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "drop table \"Skill\"",
+        "sql": "DROP TABLE \"public\".\"Skill\""
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"Skill\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Skill\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "dropTable.SkillCategory",
+    "label": "Drop table \"SkillCategory\"",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "SkillCategory"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"SkillCategory\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"SkillCategory\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "drop table \"SkillCategory\"",
+        "sql": "DROP TABLE \"public\".\"SkillCategory\""
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"SkillCategory\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"SkillCategory\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.ProjectTool",
+    "label": "Create table \"ProjectTool\"",
+    "summary": "Creates table \"ProjectTool\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "ProjectTool"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"ProjectTool\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"ProjectTool\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"ProjectTool\"",
+        "sql": "CREATE TABLE \"public\".\"ProjectTool\" (\n  \"projectId\" uuid NOT NULL,\n  \"toolId\" uuid NOT NULL,\n  PRIMARY KEY (\"projectId\", \"toolId\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"ProjectTool\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"ProjectTool\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.SkillTool",
+    "label": "Create table \"SkillTool\"",
+    "summary": "Creates table \"SkillTool\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "SkillTool"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"SkillTool\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"SkillTool\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"SkillTool\"",
+        "sql": "CREATE TABLE \"public\".\"SkillTool\" (\n  \"skillId\" uuid NOT NULL,\n  \"toolId\" uuid NOT NULL,\n  PRIMARY KEY (\"skillId\", \"toolId\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"SkillTool\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"SkillTool\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.Tool",
+    "label": "Create table \"Tool\"",
+    "summary": "Creates table \"Tool\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "Tool"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"Tool\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Tool\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"Tool\"",
+        "sql": "CREATE TABLE \"public\".\"Tool\" (\n  \"createdAt\" timestamptz DEFAULT (now()) NOT NULL,\n  \"id\" uuid NOT NULL,\n  \"name\" text NOT NULL,\n  PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"Tool\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Tool\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.Skill",
+    "label": "Create table \"Skill\"",
+    "summary": "Creates table \"Skill\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "Skill"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"Skill\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Skill\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"Skill\"",
+        "sql": "CREATE TABLE \"public\".\"Skill\" (\n  \"confidence\" int4,\n  \"createdAt\" timestamptz DEFAULT (now()) NOT NULL,\n  \"id\" uuid NOT NULL,\n  \"name\" text NOT NULL,\n  \"overview\" text NOT NULL,\n  \"slug\" text NOT NULL,\n  \"topRank\" int4,\n  \"updatedAt\" timestamptz NOT NULL,\n  PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"Skill\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Skill\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unique.Skill.Skill_slug_key",
+    "label": "Add unique constraint on \"Skill\" (slug)",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "unique",
+        "name": "Skill_slug_key",
+        "table": "Skill"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"Skill_slug_key\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "Skill_slug_key",
+          "public",
+          "\"public\".\"Skill\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add unique constraint \"Skill_slug_key\"",
+        "sql": "ALTER TABLE \"public\".\"Skill\" ADD CONSTRAINT \"Skill_slug_key\" UNIQUE (\"slug\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"Skill_slug_key\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "Skill_slug_key",
+          "public",
+          "\"public\".\"Skill\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unique.Skill.Skill_topRank_key",
+    "label": "Add unique constraint on \"Skill\" (topRank)",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "unique",
+        "name": "Skill_topRank_key",
+        "table": "Skill"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"Skill_topRank_key\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "Skill_topRank_key",
+          "public",
+          "\"public\".\"Skill\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add unique constraint \"Skill_topRank_key\"",
+        "sql": "ALTER TABLE \"public\".\"Skill\" ADD CONSTRAINT \"Skill_topRank_key\" UNIQUE (\"topRank\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"Skill_topRank_key\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "Skill_topRank_key",
+          "public",
+          "\"public\".\"Skill\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.ProjectTool.ProjectTool_projectId_idx_a96e4d92",
+    "label": "Create index \"ProjectTool_projectId_idx_a96e4d92\" on \"ProjectTool\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "ProjectTool_projectId_idx_a96e4d92",
+        "table": "ProjectTool"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"ProjectTool_projectId_idx_a96e4d92\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"ProjectTool_projectId_idx_a96e4d92\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"ProjectTool_projectId_idx_a96e4d92\"",
+        "sql": "CREATE INDEX \"ProjectTool_projectId_idx_a96e4d92\" ON \"public\".\"ProjectTool\" (\"projectId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"ProjectTool_projectId_idx_a96e4d92\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"ProjectTool_projectId_idx_a96e4d92\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.ProjectTool.ProjectTool_toolId_idx_f1fb6638",
+    "label": "Create index \"ProjectTool_toolId_idx_f1fb6638\" on \"ProjectTool\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "ProjectTool_toolId_idx_f1fb6638",
+        "table": "ProjectTool"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"ProjectTool_toolId_idx_f1fb6638\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"ProjectTool_toolId_idx_f1fb6638\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"ProjectTool_toolId_idx_f1fb6638\"",
+        "sql": "CREATE INDEX \"ProjectTool_toolId_idx_f1fb6638\" ON \"public\".\"ProjectTool\" (\"toolId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"ProjectTool_toolId_idx_f1fb6638\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"ProjectTool_toolId_idx_f1fb6638\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.SkillTool.SkillTool_skillId_idx_6e19993d",
+    "label": "Create index \"SkillTool_skillId_idx_6e19993d\" on \"SkillTool\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "SkillTool_skillId_idx_6e19993d",
+        "table": "SkillTool"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"SkillTool_skillId_idx_6e19993d\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"SkillTool_skillId_idx_6e19993d\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"SkillTool_skillId_idx_6e19993d\"",
+        "sql": "CREATE INDEX \"SkillTool_skillId_idx_6e19993d\" ON \"public\".\"SkillTool\" (\"skillId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"SkillTool_skillId_idx_6e19993d\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"SkillTool_skillId_idx_6e19993d\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.SkillTool.SkillTool_toolId_idx_f1fb6638",
+    "label": "Create index \"SkillTool_toolId_idx_f1fb6638\" on \"SkillTool\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "SkillTool_toolId_idx_f1fb6638",
+        "table": "SkillTool"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"SkillTool_toolId_idx_f1fb6638\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"SkillTool_toolId_idx_f1fb6638\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"SkillTool_toolId_idx_f1fb6638\"",
+        "sql": "CREATE INDEX \"SkillTool_toolId_idx_f1fb6638\" ON \"public\".\"SkillTool\" (\"toolId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"SkillTool_toolId_idx_f1fb6638\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"SkillTool_toolId_idx_f1fb6638\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.Tool.tool_name_lower_79c07e41",
+    "label": "Create index \"tool_name_lower_79c07e41\" on \"Tool\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "tool_name_lower_79c07e41",
+        "table": "Tool"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"tool_name_lower_79c07e41\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"tool_name_lower_79c07e41\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"tool_name_lower_79c07e41\"",
+        "sql": "CREATE UNIQUE INDEX \"tool_name_lower_79c07e41\" ON \"public\".\"Tool\" (lower(\"name\"))",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"tool_name_lower_79c07e41\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"tool_name_lower_79c07e41\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.ProjectTool.ProjectTool_projectId_fkey",
+    "label": "Add foreign key \"ProjectTool_projectId_fkey\" on \"ProjectTool\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "ProjectTool_projectId_fkey",
+        "table": "ProjectTool"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"ProjectTool_projectId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "ProjectTool_projectId_fkey",
+          "public",
+          "\"public\".\"ProjectTool\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"ProjectTool_projectId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"ProjectTool\"\nADD CONSTRAINT \"ProjectTool_projectId_fkey\"\nFOREIGN KEY (\"projectId\")\nREFERENCES \"public\".\"Project\" (\"id\")\nON DELETE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"ProjectTool_projectId_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "ProjectTool_projectId_fkey",
+          "public",
+          "\"public\".\"ProjectTool\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.ProjectTool.ProjectTool_toolId_fkey",
+    "label": "Add foreign key \"ProjectTool_toolId_fkey\" on \"ProjectTool\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "ProjectTool_toolId_fkey",
+        "table": "ProjectTool"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"ProjectTool_toolId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "ProjectTool_toolId_fkey",
+          "public",
+          "\"public\".\"ProjectTool\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"ProjectTool_toolId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"ProjectTool\"\nADD CONSTRAINT \"ProjectTool_toolId_fkey\"\nFOREIGN KEY (\"toolId\")\nREFERENCES \"public\".\"Tool\" (\"id\")\nON DELETE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"ProjectTool_toolId_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "ProjectTool_toolId_fkey",
+          "public",
+          "\"public\".\"ProjectTool\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.SkillTool.SkillTool_skillId_fkey",
+    "label": "Add foreign key \"SkillTool_skillId_fkey\" on \"SkillTool\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "SkillTool_skillId_fkey",
+        "table": "SkillTool"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"SkillTool_skillId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "SkillTool_skillId_fkey",
+          "public",
+          "\"public\".\"SkillTool\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"SkillTool_skillId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"SkillTool\"\nADD CONSTRAINT \"SkillTool_skillId_fkey\"\nFOREIGN KEY (\"skillId\")\nREFERENCES \"public\".\"Skill\" (\"id\")\nON DELETE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"SkillTool_skillId_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "SkillTool_skillId_fkey",
+          "public",
+          "\"public\".\"SkillTool\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.SkillTool.SkillTool_toolId_fkey",
+    "label": "Add foreign key \"SkillTool_toolId_fkey\" on \"SkillTool\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "SkillTool_toolId_fkey",
+        "table": "SkillTool"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"SkillTool_toolId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "SkillTool_toolId_fkey",
+          "public",
+          "\"public\".\"SkillTool\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"SkillTool_toolId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"SkillTool\"\nADD CONSTRAINT \"SkillTool_toolId_fkey\"\nFOREIGN KEY (\"toolId\")\nREFERENCES \"public\".\"Tool\" (\"id\")\nON DELETE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"SkillTool_toolId_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "SkillTool_toolId_fkey",
+          "public",
+          "\"public\".\"SkillTool\""
+        ]
+      }
+    ]
+  }
+]

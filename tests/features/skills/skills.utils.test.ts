@@ -1,16 +1,16 @@
 import { describe, expect, it } from "vitest";
 import {
-	filterProjectsBySkill,
+	filterProjectsByTool,
 	splitPicked,
-	splitVisibleSkills,
+	splitVisibleTools,
 } from "#/features/skills/skills.utils";
 
-const skills = (...names: string[]) => names.map((name) => ({ name }));
+const tools = (...names: string[]) => names.map((name) => ({ name }));
 
-describe("splitVisibleSkills", () => {
-	it("shows the first skills and counts the rest", () => {
-		const { visible, hidden } = splitVisibleSkills(
-			skills("React", "TypeScript", "Prisma", "Tailwind CSS", "Go"),
+describe("splitVisibleTools", () => {
+	it("shows the first tools and counts the rest", () => {
+		const { visible, hidden } = splitVisibleTools(
+			tools("React", "TypeScript", "Prisma", "Tailwind CSS", "Go"),
 			3,
 		);
 		expect(visible.map((s) => s.name)).toEqual([
@@ -22,19 +22,19 @@ describe("splitVisibleSkills", () => {
 	});
 
 	it("hides nothing when the list fits", () => {
-		expect(splitVisibleSkills(skills("Flutter", "Expo"), 3)).toEqual({
-			visible: skills("Flutter", "Expo"),
+		expect(splitVisibleTools(tools("Flutter", "Expo"), 3)).toEqual({
+			visible: tools("Flutter", "Expo"),
 			hidden: 0,
 		});
-		expect(splitVisibleSkills(skills("A", "B", "C"), 3).hidden).toBe(0);
+		expect(splitVisibleTools(tools("A", "B", "C"), 3).hidden).toBe(0);
 	});
 
-	it("handles a category with no skills", () => {
-		expect(splitVisibleSkills([], 3)).toEqual({ visible: [], hidden: 0 });
+	it("handles a skill with no tools", () => {
+		expect(splitVisibleTools([], 3)).toEqual({ visible: [], hidden: 0 });
 	});
 
 	it("treats a negative count as zero", () => {
-		expect(splitVisibleSkills(skills("Go"), -1)).toEqual({
+		expect(splitVisibleTools(tools("Go"), -1)).toEqual({
 			visible: [],
 			hidden: 1,
 		});
@@ -61,27 +61,28 @@ describe("splitPicked", () => {
 	});
 });
 
-describe("filterProjectsBySkill", () => {
+describe("filterProjectsByTool", () => {
 	const projects = [
-		{ slug: "taskflow", skills: [{ id: "react" }, { id: "prisma" }] },
-		{ slug: "wends-dev", skills: [{ id: "react" }] },
-		{ slug: "ledger-cli", skills: [{ id: "go" }] },
+		{ slug: "taskflow", tools: [{ id: "react" }, { id: "prisma" }] },
+		{ slug: "wends-dev", tools: [{ id: "react" }] },
+		{ slug: "ledger-cli", tools: [{ id: "go" }] },
 	];
 
-	it("keeps every project when no skill is selected", () => {
-		expect(filterProjectsBySkill(projects, null)).toBe(projects);
+	it("keeps every project when no tool is selected", () => {
+		expect(filterProjectsByTool(projects, null)).toBe(projects);
 	});
 
-	it("keeps only the projects that used the selected skill", () => {
-		expect(filterProjectsBySkill(projects, "react").map((p) => p.slug)).toEqual(
-			["taskflow", "wends-dev"],
+	it("keeps only the projects that used the selected tool", () => {
+		expect(filterProjectsByTool(projects, "react").map((p) => p.slug)).toEqual([
+			"taskflow",
+			"wends-dev",
+		]);
+		expect(filterProjectsByTool(projects, "prisma").map((p) => p.slug)).toEqual(
+			["taskflow"],
 		);
-		expect(
-			filterProjectsBySkill(projects, "prisma").map((p) => p.slug),
-		).toEqual(["taskflow"]);
 	});
 
-	it("returns nothing for a skill no project used", () => {
-		expect(filterProjectsBySkill(projects, "redis")).toEqual([]);
+	it("returns nothing for a tool no project used", () => {
+		expect(filterProjectsByTool(projects, "redis")).toEqual([]);
 	});
 });

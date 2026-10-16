@@ -3,24 +3,24 @@ import { Link } from "@tanstack/react-router";
 import { Progress, ProgressValue } from "#/components/ui/progress";
 import WashText from "#/features/public/components/landing/WashText";
 import { isPlainClick } from "#/features/public/utils/pick";
-import type { SkillsPageSkillCategory } from "../skills.types";
-import { splitVisibleSkills } from "../skills.utils";
+import type { SkillsPageSkill } from "../skills.types";
+import { splitVisibleTools } from "../skills.utils";
 
-interface SkillCategoryItemProps {
-	skillCategory: SkillsPageSkillCategory;
+interface SkillItemProps {
+	skill: SkillsPageSkill;
 	active: boolean;
 	onActivate: () => void;
 	/** Starts the pick transition; the page navigates when it ends. */
 	onPick: (slug: string) => void;
 }
 
-export default function SkillCategoryItem({
-	skillCategory,
+export default function SkillItem({
+	skill,
 	active,
 	onActivate,
 	onPick,
-}: SkillCategoryItemProps) {
-	const { visible, hidden } = splitVisibleSkills(skillCategory.skills, 3);
+}: SkillItemProps) {
+	const { visible, hidden } = splitVisibleTools(skill.tools, 3);
 
 	const hideClassName =
 		"motion-safe:group-data-[active=false]:opacity-0 transition-opacity ease-swiss duration-300";
@@ -28,12 +28,12 @@ export default function SkillCategoryItem({
 		<li
 			data-skill-item
 			className="group col-span-full md:col-span-8"
-			data-slug={skillCategory.slug}
+			data-slug={skill.slug}
 			data-active={active}
 		>
 			<Link
 				to="/skills/$slug"
-				params={{ slug: skillCategory.slug }}
+				params={{ slug: skill.slug }}
 				className="focus-ring flex h-full w-full items-start justify-between border-b"
 				onFocus={(e) => {
 					if (!e.currentTarget.matches(":focus-visible")) return;
@@ -45,7 +45,7 @@ export default function SkillCategoryItem({
 				onClick={(e) => {
 					if (!isPlainClick(e)) return;
 					e.preventDefault();
-					onPick(skillCategory.slug);
+					onPick(skill.slug);
 				}}
 			>
 				<div className="flex w-full flex-col gap-4 pt-6">
@@ -54,16 +54,16 @@ export default function SkillCategoryItem({
 						data-pick-title
 						className="text-display-l transition-colors duration-500 motion-safe:group-data-[active=false]:text-muted-foreground/50"
 					>
-						<WashText>{skillCategory.name}</WashText>
+						<WashText>{skill.name}</WashText>
 					</h2>
 					<span data-pick-fade className={`type-index ${hideClassName}`}>
 						{visible.map((s) => s.name).join(" · ")}
 						{hidden > 0 && <span> +{hidden}</span>}
 					</span>
-					{skillCategory.confidence !== null && (
+					{skill.confidence !== null && (
 						<Progress
 							data-pick-fade
-							value={skillCategory.confidence}
+							value={skill.confidence}
 							className={hideClassName}
 						>
 							<ProgressValue className="type-meta" />

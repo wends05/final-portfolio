@@ -58,7 +58,7 @@ export const contract = defineContract(
 			},
 		});
 
-		const SkillCategory = model("SkillCategory", {
+		const Skill = model("Skill", {
 			fields: {
 				id: field.id.uuidv7Native(),
 				slug: field.text().unique(),
@@ -74,35 +74,44 @@ export const contract = defineContract(
 			},
 		});
 
-		const Skill = model("Skill", {
+		const Tool = model("Tool", {
 			fields: {
 				id: field.id.uuidv7Native(),
-				categoryId: field.uuidNative(),
 				name: field.text(),
 				// Set by the database (DEFAULT now()), so rows inserted outside the app get it too
 				createdAt: field.column(timestamptzColumn).default(now()),
 			},
 		}).sql(({ cols, constraints }) => ({
 			indexes: [
-				// Names are unique ignoring case: "React" and "react" are one skill
+				// Names are unique ignoring case: "React" and "react" are one tool
 				constraints.index({
 					expression: {
 						fields: [cols.name],
 						render: ([name]) => `lower("${name?.name}")`,
 					},
 					unique: true,
-					name: "skill_name_lower",
+					name: "tool_name_lower",
 				}),
 			],
 		}));
 
-		const ProjectSkill = model("ProjectSkill", {
+		// A tool can belong to several skills (React under Web and Mobile), or none
+		const SkillTool = model("SkillTool", {
 			fields: {
-				projectId: field.uuidNative(),
 				skillId: field.uuidNative(),
+				toolId: field.uuidNative(),
 			},
 		}).attributes(({ fields, constraints }) => ({
-			id: constraints.id([fields.projectId, fields.skillId]),
+			id: constraints.id([fields.skillId, fields.toolId]),
+		}));
+
+		const ProjectTool = model("ProjectTool", {
+			fields: {
+				projectId: field.uuidNative(),
+				toolId: field.uuidNative(),
+			},
+		}).attributes(({ fields, constraints }) => ({
+			id: constraints.id([fields.projectId, fields.toolId]),
 		}));
 
 		const Collaborator = model("Collaborator", {
@@ -127,10 +136,10 @@ export const contract = defineContract(
 			models: {
 				Project: Project.relations({
 					images: rel.hasMany(ProjectImage, { by: "projectId" }),
-					skills: rel.manyToMany(Skill, {
-						through: ProjectSkill,
+					tools: rel.manyToMany(Tool, {
+						through: ProjectTool,
 						from: "projectId",
-						to: "skillId",
+						to: "toolId",
 					}),
 					collaborators: rel.hasMany(ProjectCollaborator, {
 						by: "projectId",
@@ -141,25 +150,39 @@ export const contract = defineContract(
 						.belongsTo(Project, { from: "projectId", to: "id" })
 						.sql({ fk: { onDelete: "cascade" } }),
 				}),
-				SkillCategory: SkillCategory.relations({
-					skills: rel.hasMany(Skill, { by: "categoryId" }),
-				}),
 				Skill: Skill.relations({
-					category: rel
-						.belongsTo(SkillCategory, { from: "categoryId", to: "id" })
-						.sql({ fk: { onDelete: "restrict" } }),
-					projects: rel.manyToMany(Project, {
-						through: ProjectSkill,
+					tools: rel.manyToMany(Tool, {
+						through: SkillTool,
 						from: "skillId",
+						to: "toolId",
+					}),
+				}),
+				Tool: Tool.relations({
+					skills: rel.manyToMany(Skill, {
+						through: SkillTool,
+						from: "toolId",
+						to: "skillId",
+					}),
+					projects: rel.manyToMany(Project, {
+						through: ProjectTool,
+						from: "toolId",
 						to: "projectId",
 					}),
 				}),
-				ProjectSkill: ProjectSkill.relations({
+				SkillTool: SkillTool.relations({
+					skill: rel
+						.belongsTo(Skill, { from: "skillId", to: "id" })
+						.sql({ fk: { onDelete: "cascade" } }),
+					tool: rel
+						.belongsTo(Tool, { from: "toolId", to: "id" })
+						.sql({ fk: { onDelete: "cascade" } }),
+				}),
+				ProjectTool: ProjectTool.relations({
 					project: rel
 						.belongsTo(Project, { from: "projectId", to: "id" })
 						.sql({ fk: { onDelete: "cascade" } }),
-					skill: rel
-						.belongsTo(Skill, { from: "skillId", to: "id" })
+					tool: rel
+						.belongsTo(Tool, { from: "toolId", to: "id" })
 						.sql({ fk: { onDelete: "cascade" } }),
 				}),
 				Collaborator: Collaborator.relations({

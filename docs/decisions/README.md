@@ -21,6 +21,7 @@ Use this folder for implementation choices whose rationale should survive future
 | [0015: Zustand for shared client UI state](0015-zustand-for-client-ui-state.md) | Accepted |
 | [0016: Dependabot for dependency and action updates](0016-dependabot-dependency-updates.md) | Accepted |
 | [0017: The `cn` package for class merging](0017-cn-package-for-class-merging.md) | Accepted |
+| [0018: Skills group tools](0018-skills-group-tools.md) | Accepted |
 
 Some choices made before these records began were recorded on 2026-10-05 (0006–0009) with the owner's stated reasons. Do not invent reasons for other earlier choices; existing architecture is documented in [../architecture.md](../architecture.md). Add each new record to the table above.
 
