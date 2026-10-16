@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
 	filterProjectsByTool,
+	getProjectsUsingTools,
 	splitPicked,
 	splitVisibleTools,
 } from "#/features/skills/skills.utils";
@@ -84,5 +85,32 @@ describe("filterProjectsByTool", () => {
 
 	it("returns nothing for a tool no project used", () => {
 		expect(filterProjectsByTool(projects, "redis")).toEqual([]);
+	});
+});
+
+describe("getProjectsUsingTools", () => {
+	const projects = [
+		{ slug: "taskflow", tools: [{ id: "react" }, { id: "prisma" }] },
+		{ slug: "wends-dev", tools: [{ id: "react" }] },
+		{ slug: "ledger-cli", tools: [{ id: "go" }] },
+		{ slug: "notes", tools: [] },
+	];
+
+	it("keeps the projects that used any of the tools", () => {
+		const used = getProjectsUsingTools(projects, new Set(["react", "go"]));
+		expect(used.map((p) => p.slug)).toEqual([
+			"taskflow",
+			"wends-dev",
+			"ledger-cli",
+		]);
+	});
+
+	it("keeps only the given tools on each project", () => {
+		const [taskflow] = getProjectsUsingTools(projects, new Set(["prisma"]));
+		expect(taskflow?.tools).toEqual([{ id: "prisma" }]);
+	});
+
+	it("returns nothing when the skill has no tools", () => {
+		expect(getProjectsUsingTools(projects, new Set())).toEqual([]);
 	});
 });

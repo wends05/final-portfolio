@@ -1,6 +1,7 @@
 import { useRouter } from "@tanstack/react-router";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useEffect, useRef, useState } from "react";
+import { usePageEntrance } from "#/features/public/hooks/usePageEntrance";
 import { usePickTransition } from "#/features/public/hooks/usePickTransition";
 import { useAppGSAP } from "#/integrations/animations/gsap";
 import {
@@ -74,6 +75,9 @@ export default function SkillsPage({ skills }: SkillsPageProps) {
 		},
 	);
 
+	// The same entrance as /projects: the title rises, then the rest fades up.
+	usePageEntrance(root);
+
 	usePickTransition({
 		scope: root,
 		picking,
@@ -110,18 +114,23 @@ export default function SkillsPage({ skills }: SkillsPageProps) {
 				data-pick-fade
 				className="col-span-full space-y-6 border-rule border-b pb-4"
 			>
-				<h1 className="text-display-xl">skills</h1>
-				<div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+				<h1 data-entrance-title className="text-display-xl">
+					skills
+				</h1>
+				<div
+					data-entrance
+					className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between"
+				>
 					<p className="max-w-xl py-3">
-						tools, knowledge, stacks, and tools that I have learned, are using,
+						skills, knowledge, stacks, and tools that I have learned, are using,
 						or are familiar to.
 					</p>
 					<p className="type-index shrink-0">{skills.length} skills</p>
 				</div>
 			</header>
 			{skills.length === 0 ? (
-				<p className="col-span-full text-muted-foreground">
-					No tools published.
+				<p data-entrance className="col-span-full text-muted-foreground">
+					No skills published.
 				</p>
 			) : (
 				<ul className="col-span-full grid auto-rows-fr grid-cols-subgrid gap-y-5">

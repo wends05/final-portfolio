@@ -27,6 +27,7 @@ export default function SkillItem({
 	return (
 		<li
 			data-skill-item
+			data-entrance
 			className="group col-span-full md:col-span-8"
 			data-slug={skill.slug}
 			data-active={active}

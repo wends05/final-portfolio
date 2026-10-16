@@ -44,41 +44,44 @@ export default function SkillProjectList({
 					{selected ? `using ${selected.name}` : "all tools"}
 				</p>
 			</div>
-			{projects.length === 0 ? (
-				<div
-					key={selected?.id ?? "all"}
-					data-pick-fade
-					className="flex starting:translate-y-4 flex-col items-start gap-5 py-12 starting:opacity-0 transition-[opacity,translate] duration-300 ease-swiss motion-reduce:starting:translate-y-0"
-				>
-					<p className="text-muted-foreground">
-						No published projects use {selected?.name ?? skillName} yet.
-					</p>
-					{selected && (
-						<Button
-							variant="outline"
-							onClick={onReset}
-							className="type-label h-11 gap-2 rounded-none border-rule px-4 hover:bg-primary hover:text-primary-foreground max-md:px-3"
-						>
-							<ArrowCounterClockwiseIcon aria-hidden />
-							Reset filter
-						</Button>
-					)}
-				</div>
-			) : (
-				// The grid enters as one block (a card carrying data-entrance would
-				// stay hidden under entrance.css when a filter remounts it). The
-				// cards are keyed by filter too, so every press replays their fade-up.
-				<ul data-entrance className="grid grid-cols-1 gap-3 md:grid-cols-2">
-					{projects.map((project, index) => (
-						<SkillProjectItem
-							key={`${selected?.id ?? "all"}:${project.id}`}
-							index={index}
-							project={project}
-							onPick={onPick}
-						/>
-					))}
-				</ul>
-			)}
+			{/* A stable wrapper carries the entrance: the content inside remounts
+			    when the filter changes, and a remounted data-entrance element would
+			    stay hidden under entrance.css. */}
+			<div data-entrance>
+				{projects.length === 0 ? (
+					<div
+						key={selected?.id ?? "all"}
+						data-pick-fade
+						className="flex starting:translate-y-4 flex-col items-start gap-5 py-12 starting:opacity-0 transition-[opacity,translate] duration-300 ease-swiss motion-reduce:starting:translate-y-0"
+					>
+						<p className="text-muted-foreground">
+							No published projects use {selected?.name ?? skillName} yet.
+						</p>
+						{selected && (
+							<Button
+								variant="outline"
+								onClick={onReset}
+								className="type-label h-11 gap-2 rounded-none border-rule px-4 hover:bg-primary hover:text-primary-foreground max-md:px-3"
+							>
+								<ArrowCounterClockwiseIcon aria-hidden />
+								Reset filter
+							</Button>
+						)}
+					</div>
+				) : (
+					// The cards are keyed by filter, so every press replays their fade-up.
+					<ul className="grid grid-cols-1 gap-3 md:grid-cols-2">
+						{projects.map((project, index) => (
+							<SkillProjectItem
+								key={`${selected?.id ?? "all"}:${project.id}`}
+								index={index}
+								project={project}
+								onPick={onPick}
+							/>
+						))}
+					</ul>
+				)}
+			</div>
 		</section>
 	);
 }
