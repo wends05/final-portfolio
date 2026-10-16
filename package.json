@@ -19,11 +19,6 @@
     "verify": "bun scripts/verify.mjs",
     "test": "vitest run",
     "test:watch": "vitest",
-    "db:generate": "dotenv -e .env -- prisma generate",
-    "db:push": "dotenv -e .env -- prisma db push",
-    "db:migrate": "dotenv -e .env -- prisma migrate dev",
-    "db:studio": "dotenv -e .env -- prisma studio",
-    "db:seed": "dotenv -e .env -- prisma db seed",
     "contract:emit": "prisma contract emit"
   },
   "dependencies": {
@@ -35,8 +30,6 @@
     "@fontsource-variable/outfit": "^5.3.0",
     "@gsap/react": "^2.1.2",
     "@phosphor-icons/react": "^2.1.10",
-    "@prisma/adapter-pg": "^7.10.0",
-    "@prisma/client": "^7.10.0",
     "@prisma/orm-postgres": "8.0.0-rc.13",
     "@tailwindcss/vite": "^4.3.3",
     "@tanstack/react-devtools": "latest",
@@ -78,7 +71,6 @@
     "@types/react-dom": "^19.3.0",
     "@vitejs/plugin-react": "^6.1.2",
     "babel-plugin-react-compiler": "^1.0.0",
-    "dotenv-cli": "^11.0.0",
     "oxlint": "^1.87.0",
     "tsx": "^4.23.15",
     "typescript": "^7.0.2",
