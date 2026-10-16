@@ -1,4 +1,5 @@
 import { orderProjectsForIndex } from "#/features/projects/projects.utils";
+import { fetchImageWithKey } from "#/integrations/neon/storage/storage.server";
 import { db } from "#/integrations/prisma/db";
 import type {
 	LandingSkill,
@@ -32,7 +33,7 @@ export async function getAllSkills(): Promise<SkillsPageSkill[]> {
 /**
  * /skills/<slug>: the skill with its tools (by name) and the published
  * projects that used any of them, in the /projects order, each with only this
- * skill's tools. Null when no skill has the slug.
+ * skill's tools and their cover image URLs. Null when no skill has the slug.
  */
 export async function getSkillPage(
 	slug: string,
@@ -48,9 +49,16 @@ export async function getSkillPage(
 	const published = await db.orm.public.Project.where({ published: true })
 		.include("tools", (tool) => tool.select("id", "name"))
 		.all();
-	const projects = orderProjectsForIndex(
-		getProjectsUsingTools(published, toolIds),
-	).map(({ id, slug, title, tools }) => ({ id, slug, title, tools }));
+	const used = orderProjectsForIndex(getProjectsUsingTools(published, toolIds));
+	const projects = await Promise.all(
+		used.map(async ({ id, slug, title, tools, coverImageKey }) => ({
+			id,
+			slug,
+			title,
+			coverImageUrl: await fetchImageWithKey(coverImageKey ?? undefined),
+			tools,
+		})),
+	);
 
 	const { id, name, overview, confidence, topRank, tools } = skill;
 	return {

@@ -18,11 +18,15 @@ export type SkillsPageSkill = Pick<
 	tools: ToolPreview[];
 };
 
-/** A project on a skill page, with only that skill's tools. */
+/**
+ * A project on a skill page, with only that skill's tools and the URL of its
+ * cover image (null when it has none).
+ */
 export type SkillProject = Pick<
 	Scalars<Models.public_Project>,
 	"id" | "slug" | "title"
 > & {
+	coverImageUrl: string | null;
 	tools: ToolPreview[];
 };
 

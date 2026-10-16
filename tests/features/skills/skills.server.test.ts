@@ -6,6 +6,12 @@ import {
 } from "#/features/skills/skills.server";
 import { db } from "#/integrations/prisma/db";
 
+vi.mock("#/integrations/neon/storage/storage.server", () => ({
+	fetchImageWithKey: vi.fn(async (key?: string) =>
+		key ? `https://files.example/${key}` : null,
+	),
+}));
+
 vi.mock("#/integrations/prisma/db", () => ({
 	db: { orm: { public: { Skill: {}, Project: {} } } },
 }));
@@ -130,6 +136,7 @@ describe("getSkillPage", () => {
 		id: `p-${slug}`,
 		slug,
 		title: slug,
+		coverImageKey: `${slug}.png`,
 		featuredRank: null,
 		createdAt,
 		tools,
@@ -169,7 +176,13 @@ describe("getSkillPage", () => {
 		);
 		const page = await getSkillPage("web-development");
 		expect(page?.projects).toEqual([
-			{ id: "p-site", slug: "site", title: "site", tools: [react] },
+			{
+				id: "p-site",
+				slug: "site",
+				title: "site",
+				coverImageUrl: "https://files.example/site.png",
+				tools: [react],
+			},
 		]);
 	});
 
@@ -184,6 +197,21 @@ describe("getSkillPage", () => {
 		);
 		const page = await getSkillPage("web-development");
 		expect(page?.projects.map((p) => p.slug)).toEqual(["new", "old"]);
+	});
+
+	it("gives a project without a cover image a null URL", async () => {
+		mockCollection([skill]);
+		mockCollection(
+			[
+				{
+					...project("site", [react], "2026-01-01T00:00:00.000Z"),
+					coverImageKey: null,
+				},
+			],
+			"Project",
+		);
+		const page = await getSkillPage("web-development");
+		expect(page?.projects[0]?.coverImageUrl).toBeNull();
 	});
 
 	it("returns the skill's fields and tools without the timestamps", async () => {
