@@ -115,7 +115,7 @@ CI runs `bun audit` on every pull request without failing the job ([CI](#ci)). F
 
 ### Dependabot
 
-Dependabot opens the update pull requests; nobody bumps versions by hand ([decision 0016](decisions/0016-dependabot-dependency-updates.md)). [../.github/dependabot.yml](../.github/dependabot.yml) configures two update streams:
+Dependabot opens the update pull requests, except for the Prisma packages, which you bump by hand ([Prisma version set](#prisma-version-set); [decision 0016](decisions/0016-dependabot-dependency-updates.md)). [../.github/dependabot.yml](../.github/dependabot.yml) configures two update streams:
 
 | Ecosystem | Schedule | Pull requests |
 | --- | --- | --- |
@@ -125,6 +125,8 @@ Dependabot opens the update pull requests; nobody bumps versions by hand ([decis
 Neither schedule sets a `time`, so GitHub picks the time of day. A run with nothing to update opens no PR.
 
 `@types/node` stays on the Node.js major that production runs (24, [decision 0005](decisions/0005-vercel-deployment.md)): `dependabot.yml` ignores `@types/node` 25 and later. When the runtime moves to a new major, bump `@types/node` to match and raise that bound in the same PR.
+
+`dependabot.yml` also ignores `prisma`, `@prisma/orm-postgres` and `@prisma/cli-engine`: they must move together ([Prisma version set](#prisma-version-set)).
 
 To handle a Dependabot PR:
 
@@ -139,6 +141,16 @@ Dependabot PRs differ from other PRs:
 - They have no Vercel preview, like every branch except `main` and `development`.
 
 `dependabot.yml` configures version updates only; Dependabot security updates are a separate repository setting.
+
+### Prisma version set
+
+`prisma` (the CLI), `@prisma/orm-postgres` and `@prisma/cli-engine` are pinned to exact versions and bumped together in one pull request. The `prisma` CLI depends on an exact `@prisma/orm-toolchain` and `@prisma/cli-engine`; `@prisma/orm-postgres` depends on the same `@prisma/orm-toolchain` version. When the CLI and `orm-postgres` resolve different toolchains, `contract:emit` fails (`CONTRACT.PACK_CONTRIBUTION_INVALID`, `Invalid authoring type constructor "sql.String"`). Dependabot would bump one package at a time, so it ignores all three.
+
+To bump the set:
+
+1. Pick a `prisma` release and read its dependencies: `npm view prisma@<version> dependencies`.
+2. Pick the `@prisma/orm-postgres` release whose `npm view @prisma/orm-postgres@<version> dependencies` lists the same `@prisma/orm-toolchain` version, and use the `@prisma/cli-engine` version `prisma` lists.
+3. Install all three with `bun add --exact`, run `bun --bun run contract:emit`, and commit any change to `contract.json` and `contract.d.ts` with the bump, along with the code those changes need.
 
 ## Build output and deployment
 
