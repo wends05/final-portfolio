@@ -1,7 +1,7 @@
 # 0013: Admin authentication and authorization
 
 Date: 2026-10-08
-Status: Proposed
+Status: Superseded by [0019](0019-static-site-content-in-repo.md) on 2026-10-17: there is no admin dashboard, so there is no sign-in.
 
 ## Context
 

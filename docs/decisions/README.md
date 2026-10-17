@@ -6,9 +6,9 @@ Use this folder for implementation choices whose rationale should survive future
 | --- | --- |
 | [0001: Oxlint for design-system lint alongside Biome](0001-oxlint-for-design-system-lint.md) | Accepted |
 | [0002: Portfolio design tokens under the shadcn variables](0002-portfolio-design-tokens.md) | Accepted |
-| [0003: Neon as the database host and the portfolio schema](0003-neon-database-and-portfolio-schema.md) | Accepted |
+| [0003: Neon as the database host and the portfolio schema](0003-neon-database-and-portfolio-schema.md) | Superseded by 0019 |
 | [0004: Repository-based development workflow](0004-repository-based-sdlc.md) | Accepted |
-| [0005: Vercel deployment on the Node.js runtime](0005-vercel-deployment.md) | Accepted |
+| [0005: Vercel deployment on the Node.js runtime](0005-vercel-deployment.md) | Accepted; partly superseded by 0019 |
 | [0006: TanStack Start as the application stack](0006-tanstack-start-application-stack.md) | Accepted |
 | [0007: shadcn/ui as the component and token base](0007-shadcn-component-and-token-base.md) | Accepted |
 | [0008: Biome as the linter and formatter](0008-biome-linter-and-formatter.md) | Accepted |
@@ -16,12 +16,13 @@ Use this folder for implementation choices whose rationale should survive future
 | [0010: Vitest, with tests in every pull request](0010-vitest-tests-in-every-pr.md) | Accepted |
 | [0011: No React Server Components for now](0011-no-react-server-components.md) | Accepted |
 | [0012: Trunk-based pull request workflow](0012-trunk-based-pr-workflow.md) | Accepted |
-| [0013: Admin authentication and authorization](0013-admin-authentication-and-authorization.md) | Proposed |
+| [0013: Admin authentication and authorization](0013-admin-authentication-and-authorization.md) | Superseded by 0019 |
 | [0014: Vercel deploys only `main` and `development`](0014-vercel-deploys-main-and-development-only.md) | Accepted |
 | [0015: Zustand for shared client UI state](0015-zustand-for-client-ui-state.md) | Accepted |
 | [0016: Dependabot for dependency and action updates](0016-dependabot-dependency-updates.md) | Accepted |
 | [0017: The `cn` package for class merging](0017-cn-package-for-class-merging.md) | Accepted |
 | [0018: Skills group tools](0018-skills-group-tools.md) | Accepted |
+| [0019: Static site, with content in the repository](0019-static-site-content-in-repo.md) | Accepted |
 
 Some choices made before these records began were recorded on 2026-10-05 (0006–0009) with the owner's stated reasons. Do not invent reasons for other earlier choices; existing architecture is documented in [../architecture.md](../architecture.md). Add each new record to the table above.
 

@@ -12,10 +12,11 @@ These docs describe where the portfolio is going and how to build it: product di
 | [User brief](agents/USER-BRIEF.md) | Documented user goals and assumptions that need confirmation before feature design |
 | [Development workflow](sdlc.md) | Planning a substantial change, recording acceptance, selecting verification, or reporting completion |
 | [Homepage plan](ui.md#homepage-plan) | Building homepage sections, the intro curtain, or the hero |
-| [Architecture](architecture.md) | Planned routes, the coming-soon gate, data flow, and where code goes |
+| [Glossary](../CONTEXT.md) | The words the site and its code use: project, case study, draft, skill, tool, collaborator, credit |
+| [Architecture](architecture.md) | Planned routes, the coming-soon gate, content flow, and where code goes |
 | [Development](development.md) | Setup, commands, checks, generated files, dependency overrides, and Dependabot updates |
 | [Deployment](development.md#vercel) | Vercel setup, which branches deploy, environment variables, and what a push to `main` does |
-| [Data](data.md) | Models, query rules, and schema changes |
+| [Content](data.md) | Content files, their fields and rules, drafts, images, and validation |
 | [UI conventions](ui.md) | Building sections, cards, navigation, or styles, or enabling design-system lint rules |
 | [Decisions](decisions/README.md) | Recording a significant implementation choice and its rationale |
 

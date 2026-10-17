@@ -4,7 +4,7 @@ When writing a plan, include code blocks to explain the implementation. Include 
 
 ## Read the portfolio lore first
 
-Start with [docs/README.md](docs/README.md), then read the documents relevant to the task before editing. The index covers product intent, architecture, development, data, UI, and decision records. Check [docs/intent.md](docs/intent.md) before choosing what to build or how it should behave.
+Start with [docs/README.md](docs/README.md), then read the documents relevant to the task before editing. The index covers product intent, architecture, development, data, UI, and decision records. Check [docs/intent.md](docs/intent.md) before choosing what to build or how it should behave. Use the words defined in [CONTEXT.md](CONTEXT.md) in code, docs, and conversation.
 
 The docs describe direction, conventions, and decisions, not what is implemented today. Read the code for current behavior. Update the docs when a convention, plan, or decision changes; do not add implementation status or check results to them.
 

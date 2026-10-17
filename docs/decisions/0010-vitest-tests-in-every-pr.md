@@ -5,7 +5,7 @@ Status: Accepted
 
 ## Context
 
-The project had no test suite. The admin dashboard needs its edge cases checked automatically: unique slugs and ranks, restricted deletes, the owner-only guard, and stale edits ([intent](../intent.md#admin-dashboard)). On 2026-10-05 the owner decided that every pull request must include tests and that the test runner is Vitest, for its speed and its integration with Vite.
+The project had no test suite. The admin dashboard needs its edge cases checked automatically: unique slugs and ranks, restricted deletes, the owner-only guard, and stale edits ([intent](../intent.md), before [0019](0019-static-site-content-in-repo.md) dropped the dashboard). On 2026-10-05 the owner decided that every pull request must include tests and that the test runner is Vitest, for its speed and its integration with Vite.
 
 ## Decision
 

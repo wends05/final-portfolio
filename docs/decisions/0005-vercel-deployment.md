@@ -2,7 +2,7 @@
 
 Date: 2026-10-05
 Updated: 2026-10-06
-Status: Accepted
+Status: Accepted. Partly superseded by [0019](0019-static-site-content-in-repo.md) on 2026-10-17: the site becomes static output, so the runtime choice no longer applies, and the object storage client is removed. The Bun-for-tooling rules still hold.
 
 ## Context
 

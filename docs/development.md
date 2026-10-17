@@ -12,7 +12,7 @@ bun install
 bun --bun run dev
 ```
 
-The dev server runs on port **3000**. `DATABASE_URL` must point at the Neon database before pages that read data can load. See [data](data.md#database).
+The dev server runs on port **3000**. `DATABASE_URL` must point at the Neon database before pages that read data can load. See [decision 0003](decisions/0003-neon-database-and-portfolio-schema.md); the database is removed per [decision 0019](decisions/0019-static-site-content-in-repo.md).
 
 ## Available scripts
 
@@ -43,7 +43,7 @@ Two linters run side by side and do not overlap ([decision 0008](decisions/0008-
 
 `@shadcn/lint` reads [../components.json](../components.json) to discover components and theme tokens. See [UI conventions](ui.md#design-system-linting).
 
-Database and contract commands are Prisma Next; see [data](data.md#schema-changes).
+Database and contract commands are Prisma Next; see [decision 0003](decisions/0003-neon-database-and-portfolio-schema.md).
 
 ### Class sorting on save in Zed
 
