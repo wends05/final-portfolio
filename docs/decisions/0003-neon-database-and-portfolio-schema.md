@@ -1,7 +1,7 @@
 # 0003: Neon as the database host and the portfolio schema
 
 Date: 2026-10-04
-Status: Accepted. The skill terms in this record were renamed by [0018](0018-skills-group-tools.md): `SkillCategory` is now `Skill`, `Skill` is now `Tool`, and `ProjectSkill` is now `ProjectTool`.
+Status: Superseded by [0019](0019-static-site-content-in-repo.md) on 2026-10-17: content moves into the repository and the database is removed. The skill terms in this record were renamed by [0018](0018-skills-group-tools.md): `SkillCategory` is now `Skill`, `Skill` is now `Tool`, and `ProjectSkill` is now `ProjectTool`.
 
 ## Context
 
