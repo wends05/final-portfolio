@@ -89,7 +89,7 @@ draft: false
 - Feature branches do not deploy ([0014](0014-vercel-deploys-main-and-development-only.md)), so new content is previewed locally with drafts on, or on `development` with `VITE_SHOW_DRAFTS=true` scoped to Preview.
 - Prisma Next, the `migrations/` folder, the Neon database and Auth, the storage integration, the `_dashboard` routes, and their dependencies and environment variables are removed. The Neon project can be archived afterwards.
 - The Vercel deployment becomes static output, so the Node.js runtime setting in [0005](0005-vercel-deployment.md) no longer applies.
-- All content ships in the client bundle so loaders can run in the browser on client-side navigation. At this size that is a few kilobytes; revisit if it grows.
+- All content ships in the client bundle so loaders can run in the browser on client-side navigation. At this size that is a few kilobytes; revisit if it grows. The coming-soon gate therefore hides pages but not content: unreleased work stays `draft: true` until launch.
 - Velite has no official Vite plugin, so the plugin is ours to maintain. If Velite stalls, Content Collections is the fallback.
 - Nitro starts the prerender preview server on port 3000 when TanStack Start asks for any free port. Pin the preview host if another local server holds port 3000.
 - `og:image` URLs from Velite are relative (`/static/…`); page metadata must make them absolute.

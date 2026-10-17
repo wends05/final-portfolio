@@ -79,7 +79,7 @@ Feature branches do not deploy ([0014](decisions/0014-vercel-deploys-main-and-de
 | Velite `prepare` hook (across files) | Unique slugs, unknown tools or collaborators, unknown slugs in `site.yaml`, duplicate tool names ignoring case |
 | Vitest | The pure functions that shape the data for pages |
 
-Both Velite checks fail `vite build`, so invalid content fails the Vercel deployment as well as `verify`.
+Both Velite checks fail `vite build`, so invalid content fails the Vercel deployment as well as `verify`. A page that fails to prerender does not fail the build on its own, so a post-build check confirms the expected pages exist ([decision 0019](decisions/0019-static-site-content-in-repo.md#build-and-serving)).
 
 ## Generated output
 

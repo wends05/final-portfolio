@@ -58,6 +58,8 @@ beforeLoad: () => {
 
 The value is read when the site is built, so changing it in Vercel takes a new deployment. The gate is not authentication, and it is removed after launch.
 
+The gate hides pages, not content. Every project that is not a draft ships in the client bundle even while the site is gated, so keep unreleased work as `draft: true` until launch ([content](data.md#drafts)).
+
 ## Content flow
 
 Content is files in `content/`. Velite validates them and generates typed data; route loaders import that data directly. There is no database and there are no server functions for content.
