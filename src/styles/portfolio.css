@@ -1,15 +1,17 @@
 /*
  * Rence Portfolio design system (tokens.json v1).
  * Palette and roles are plain custom properties; src/styles.css points the
- * shadcn variables at the roles. Paint with roles, not palette names.
+ * shadcn variables at the roles, and its .dark block re-points the roles to
+ * the Graphite (dark) palette. Paint with roles, not palette names.
  */
 
 html {
   scrollbar-width: thin;
-  scrollbar-color: var(--steel-grey) transparent;
+  scrollbar-color: var(--rule-soft) transparent;
   scrollbar-gutter: stable; /* no layout jump when a classic scrollbar returns */
   /* In-page jumps (native and Lenis) land clear of the fixed navbar. */
   scroll-padding-top: var(--navbar-height);
+  color-scheme: light;
 }
 
 :root {

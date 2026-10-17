@@ -62,7 +62,7 @@ export default function MenuItem({ item, pathname, ref }: MenuItemProps) {
 						<span
 							aria-hidden
 							data-pick-wash
-							className="absolute inset-y-0 right-[-0.08em] left-[-0.12em] whitespace-nowrap bg-paper pl-[0.12em] text-ink"
+							className="absolute inset-y-0 right-[-0.08em] left-[-0.12em] whitespace-nowrap bg-inverse-foreground pl-[0.12em] text-inverse"
 							style={{ clipPath: "inset(0% 100% 0% 0%)" }}
 						>
 							{item.label}

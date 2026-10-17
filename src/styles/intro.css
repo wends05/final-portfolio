@@ -1,7 +1,7 @@
 /* No data-intro (JS off): no curtain, hero in its final state. */
 .intro-curtain {
   display: none;
-  background: color-mix(in srgb, var(--paper), var(--ink-black) 10%);
+  background: color-mix(in srgb, var(--surface), var(--text) 10%);
 }
 
 /* Scroll lock: no scrolling, no scrollbar. Only while the curtain is in the

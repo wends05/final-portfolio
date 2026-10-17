@@ -44,7 +44,7 @@ export default function PinnedText({
 		() => {
 			const trackEl = track.current;
 			const stageEl = stage.current;
-
+c
 			if (!trackEl || !stageEl) return;
 
 			matchFullMotion(() => {
