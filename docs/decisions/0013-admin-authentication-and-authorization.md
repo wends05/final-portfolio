@@ -5,7 +5,7 @@ Status: Superseded by [0019](0019-static-site-content-in-repo.md) on 2026-10-17:
 
 ## Context
 
-The admin dashboard lets the owner create, edit, and delete all content ([intent](../intent.md#admin-dashboard)), so every admin page and every admin server function needs a security boundary before any of it is built (Linear WD-16 blocks WD-17 sign-in and WD-18 the guard).
+The admin dashboard lets the owner create, edit, and delete all content ([intent](../intent.md) at the time; the dashboard was dropped in [0019](0019-static-site-content-in-repo.md)), so every admin page and every admin server function needs a security boundary before any of it is built (Linear WD-16 blocks WD-17 sign-in and WD-18 the guard).
 
 Already settled: Neon Auth (Better Auth) is provisioned in the `neon_auth` schema, the owner's row has `role = 'admin'` in `neon_auth.user`, and there is no app table for admins ([0003](0003-neon-database-and-portfolio-schema.md)). The coming-soon gate is not authentication ([architecture](../architecture.md#coming-soon-gate)).
 
