@@ -40,7 +40,7 @@ On 2026-10-06, the owner chose **Files SDK with the `files-sdk/neon` adapter** f
 
 Install `files-sdk` with the adapter's peer dependencies: `@aws-sdk/client-s3`, `@aws-sdk/s3-presigned-post`, and `@aws-sdk/s3-request-presigner`. The [adapter documentation](https://files-sdk.dev/docs/adapters/neon) lists additional optional peers for multipart and progress-enabled uploads.
 
-Store object keys in Postgres. For a `public_read` bucket, configure the adapter's `publicBaseUrl` with the bucket's public base URL (including the bucket path) or a CDN base URL. Then `url(key)` returns a stable public URL. Without `publicBaseUrl`, it returns a presigned GET URL that expires; choose its lifetime explicitly and refresh it before expiry. See [data conventions](../data.md#image-storage).
+Store object keys in Postgres. For a `public_read` bucket, configure the adapter's `publicBaseUrl` with the bucket's public base URL (including the bucket path) or a CDN base URL. Then `url(key)` returns a stable public URL. Without `publicBaseUrl`, it returns a presigned GET URL that expires; choose its lifetime explicitly and refresh it before expiry. See [data conventions](../data.md#images).
 
 This selects the client; upload transport, size/type limits, key naming, and cleanup policy remain separate decisions tracked in Linear WD-27.
 

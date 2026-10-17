@@ -82,7 +82,7 @@ Four layers keep a stray or self-created Neon Auth user out of the dashboard: no
 - The `signIn` server function is a public password endpoint. If Neon Auth does not already rate-limit failed sign-ins, WD-17 adds rate limiting before the sign-in page ships.
 - The existing placeholder routes `src/routes/_dashboard/auth` and `src/routes/_dashboard/home` use URLs outside `/admin`; WD-17 and WD-19 replace them.
 - `@neondatabase/auth` must be pinned to an exact version: its `/server` subpath is beta, and minor versions may break it. Prefer the upstream TanStack Start adapter if it ships.
-- The app reads `neon_auth.user` only to look up `role`, and never writes to the `neon_auth` schema. The Prisma contract has no `neon_auth` model today; how to run that query is decided in WD-18, and any contract change needs the owner's approval ([data](../data.md#schema-changes)).
+- The app reads `neon_auth.user` only to look up `role`, and never writes to the `neon_auth` schema. The Prisma contract has no `neon_auth` model today; how to run that query is decided in WD-18, and any contract change needs the owner's approval ([0003](0003-neon-database-and-portfolio-schema.md)).
 - There is no in-app password reset or sign-up. If the password is lost, recovery is an owner action in Neon, which WD-17 should document once verified.
 - Tests for WD-18 cover signed-out (401), non-admin (403), and admin calls ([0010](0010-vitest-tests-in-every-pr.md)).
 
