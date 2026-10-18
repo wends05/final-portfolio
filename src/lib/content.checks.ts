@@ -2,12 +2,19 @@
 // live in the schemas in velite.config.ts. This module must not import
 // `#content`: it runs while that output is being generated.
 
+interface ImageEntry {
+	/** The copy's public URL, such as "/static/cover-a1b2c3.png". */
+	src: string;
+}
+
 interface ProjectEntry {
 	slug: string;
 	path: string;
 	tools: string[];
 	credits: { collaborator: string }[];
 	draft: boolean;
+	cover?: ImageEntry | null;
+	gallery?: { image: ImageEntry }[];
 }
 
 interface SkillEntry {
@@ -95,10 +102,11 @@ export function findContentErrors(data: ContentData): string[] {
  * `site.featured` and `site.topSkills`, so the next one takes a draft's place
  * and no draft slug reaches the bundle.
  */
-export function removeDrafts(data: ContentData): void {
-	const draftProjects = new Set(
-		data.projects.filter((p) => p.draft).map((p) => p.slug),
-	);
+export function removeDrafts(data: ContentData): {
+	projects: ProjectEntry[];
+} {
+	const removedProjects = data.projects.filter((p) => p.draft);
+	const draftProjects = new Set(removedProjects.map((p) => p.slug));
 	const draftSkills = new Set(
 		data.skills.filter((s) => s.draft).map((s) => s.slug),
 	);
@@ -110,6 +118,33 @@ export function removeDrafts(data: ContentData): void {
 	);
 	data.site.topSkills = data.site.topSkills.filter(
 		(slug) => !draftSkills.has(slug),
+	);
+	return { projects: removedProjects };
+}
+
+/**
+ * The file names of image copies that only removed drafts use. Velite copies
+ * every image it parsed after `prepare`, so these are dropped from its asset
+ * list there; an image a published project also uses stays.
+ */
+export function draftOnlyImages(
+	removed: ProjectEntry[],
+	kept: ProjectEntry[],
+): string[] {
+	const used = new Set(kept.flatMap(imageNames));
+	return [...new Set(removed.flatMap(imageNames))].filter(
+		(name) => !used.has(name),
+	);
+}
+
+/** The file names of a project's cover and gallery copies. */
+function imageNames(project: ProjectEntry): string[] {
+	const images = [
+		project.cover,
+		...(project.gallery ?? []).map((g) => g.image),
+	];
+	return images.flatMap((image) =>
+		image ? [image.src.slice(image.src.lastIndexOf("/") + 1)] : [],
 	);
 }
 

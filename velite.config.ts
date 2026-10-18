@@ -1,5 +1,9 @@
-import { defineCollection, defineConfig, s } from "velite";
-import { findContentErrors, removeDrafts } from "./src/lib/content.checks";
+import { assets, defineCollection, defineConfig, s } from "velite";
+import {
+	draftOnlyImages,
+	findContentErrors,
+	removeDrafts,
+} from "./src/lib/content.checks";
 
 // Images are exported at web size (docs/data.md#images).
 const MAX_IMAGE_WIDTH = 2400;
@@ -140,7 +144,14 @@ export default defineConfig({
 		if (errors.length > 0) {
 			throw new Error(`Invalid content:\n- ${errors.join("\n- ")}`);
 		}
+		if (process.env.VITE_SHOW_DRAFTS === "true") return;
 		// Drafts never reach the generated data, so not the bundle either.
-		if (process.env.VITE_SHOW_DRAFTS !== "true") removeDrafts(data);
+		const removed = removeDrafts(data);
+		// Velite copies images to public/static after this hook, from its asset
+		// list keyed by file name. Dropping a draft's images there keeps them
+		// off the deployed site too.
+		for (const name of draftOnlyImages(removed.projects, data.projects)) {
+			assets.delete(name);
+		}
 	},
 });

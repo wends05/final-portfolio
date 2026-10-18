@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
 	type ContentData,
+	draftOnlyImages,
 	findContentErrors,
 	removeDrafts,
 } from "#/lib/content.checks";
@@ -136,5 +137,50 @@ describe("removeDrafts", () => {
 		expect(data.skills).toBe(skills);
 		expect(data.skills.map((s) => s.slug)).toEqual(["games"]);
 		expect(data.site.topSkills).toEqual(["games"]);
+	});
+});
+
+describe("removeDrafts result", () => {
+	it("returns the removed draft projects", () => {
+		const data = content({
+			projects: [project("portfolio", { draft: true }), project("taskflow")],
+			site: { featured: [], topSkills: [] },
+		});
+		expect(removeDrafts(data).projects.map((p) => p.slug)).toEqual([
+			"portfolio",
+		]);
+	});
+});
+
+describe("draftOnlyImages", () => {
+	const image = (name: string) => ({ src: `/static/${name}` });
+
+	it("lists a removed draft's cover and gallery copies", () => {
+		const removed = [
+			project("secret", {
+				cover: image("secret-cover-a1b2c3.png"),
+				gallery: [{ image: image("secret-shot-d4e5f6.png") }],
+			}),
+		];
+		expect(draftOnlyImages(removed, [])).toEqual([
+			"secret-cover-a1b2c3.png",
+			"secret-shot-d4e5f6.png",
+		]);
+	});
+
+	it("keeps an image a published project also uses", () => {
+		const removed = [project("secret", { cover: image("shared-a1b2c3.png") })];
+		const kept = [
+			project("portfolio", {
+				gallery: [{ image: image("shared-a1b2c3.png") }],
+			}),
+		];
+		expect(draftOnlyImages(removed, kept)).toEqual([]);
+	});
+
+	it("handles projects without images", () => {
+		expect(draftOnlyImages([project("secret", { cover: null })], [])).toEqual(
+			[],
+		);
 	});
 });
