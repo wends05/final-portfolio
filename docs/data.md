@@ -62,7 +62,7 @@ draft: false
 
 `draft: true` marks a project or skill that is not ready. Drafts are removed from the generated data unless `VITE_SHOW_DRAFTS=true`, so they never reach a production bundle, even inside JavaScript. Their cover and gallery images are not copied to `public/static` either, unless a published project uses the same file. A draft listed in `featured` or `topSkills` is skipped, and the next one takes its place.
 
-Feature branches do not deploy ([0014](decisions/0014-vercel-deploys-main-and-development-only.md)). Preview a draft locally with `VITE_SHOW_DRAFTS=true` in `.env.local`, or on `development` with the variable scoped to Vercel's Preview environment.
+Feature branches do not deploy ([0014](decisions/0014-vercel-deploys-main-and-development-only.md)). Preview a draft locally with `VITE_SHOW_DRAFTS=true` in `.env.local`, or on `development` with the variable scoped to Vercel's Preview environment. Never set it for Vercel's Production environment: there it would publish every draft and its images.
 
 ## Images
 
