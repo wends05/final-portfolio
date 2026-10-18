@@ -104,13 +104,16 @@ export default function ThemeToggle({
 		<button
 			type="button"
 			onClick={onClick}
-			aria-label={`Theme: ${LABELS[choice]}. Change theme`}
 			style={{ viewTransitionName: transitionName }}
 			className={cn(
 				"type-label focus-ring inline-flex min-h-11 items-center",
 				className,
 			)}
 		>
+			{/* The accessible name is "Theme: " plus the visible label. Labels CSS
+			    hides are display:none, so screen readers hear only the shown one,
+			    right from the first paint, before the store hydrates. */}
+			<span className="sr-only">Theme: </span>
 			{/* Clips only vertically, so the rolling labels keep their sides. */}
 			<span ref={maskRef} className="relative inline-block overflow-y-clip">
 				{CHOICES.map((c) => (
