@@ -1,7 +1,7 @@
 import { createStore } from "zustand";
 import { REDUCED_MOTION } from "#/integrations/animations/motion";
 
-export const THEME_KEY = "color-schema";
+export const THEME_KEY = "color-scheme";
 
 // Inline in <head>: runs before first paint, so it must stay dependency-free.
 // A stored "light" or "dark" wins; anything else (nothing stored, an unknown
