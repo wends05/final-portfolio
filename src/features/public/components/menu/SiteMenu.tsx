@@ -259,7 +259,10 @@ export default function SiteMenu() {
 					data-menu-label
 					className="type-label col-span-full flex items-center justify-end border-rule-inverse border-t pt-2 text-inverse-muted md:justify-between"
 				>
-					<ThemeToggle className="focus-visible:outline-focus-inverse" />
+					<ThemeToggle
+						transitionName="theme-toggle-menu"
+						className="focus-visible:outline-focus-inverse"
+					/>
 					<p className="hidden md:block">Esc to close</p>
 				</div>
 			</div>

@@ -14,6 +14,12 @@ const LABELS: Record<ThemeChoice, string> = {
 };
 
 interface ThemeToggleProps {
+	/**
+	 * Unique per toggle on the page. The theme crossfade captures the toggle
+	 * apart from the page and shows only its live label, so the old frame's
+	 * label never fades over the roll (src/styles/theme-toggle.css).
+	 */
+	transitionName: "theme-toggle-nav" | "theme-toggle-menu";
 	/** Extra classes, e.g. visibility or the focus ring colour for its ground. */
 	className?: string;
 }
@@ -24,7 +30,10 @@ interface ThemeToggleProps {
  * (src/styles/theme-toggle.css), so the label is right from the first paint.
  * On click the old label rolls up out of its mask while the new one rises in.
  */
-export default function ThemeToggle({ className }: ThemeToggleProps) {
+export default function ThemeToggle({
+	transitionName,
+	className,
+}: ThemeToggleProps) {
 	const choice = useStore(themeStore, (s) => s.choice);
 	const cycle = useStore(themeStore, (s) => s.cycle);
 	const maskRef = useRef<HTMLSpanElement>(null);
@@ -96,6 +105,7 @@ export default function ThemeToggle({ className }: ThemeToggleProps) {
 			type="button"
 			onClick={onClick}
 			aria-label={`Theme: ${LABELS[choice]}. Change theme`}
+			style={{ viewTransitionName: transitionName }}
 			className={cn(
 				"type-label focus-ring inline-flex min-h-11 items-center",
 				className,

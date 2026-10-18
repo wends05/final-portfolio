@@ -41,7 +41,10 @@ export default function Navbar() {
 
 				{/* Desktop only: on phones the theme toggle lives in the menu. */}
 				<div className="flex items-center gap-6">
-					<ThemeToggle className={cn("hidden md:inline-flex", focusRing)} />
+					<ThemeToggle
+						transitionName="theme-toggle-nav"
+						className={cn("hidden md:inline-flex", focusRing)}
+					/>
 
 					<button
 						id={MENU_BUTTON_ID}
