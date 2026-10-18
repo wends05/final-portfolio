@@ -8,7 +8,7 @@ import {
 	matchFullMotion,
 	REDUCED_MOTION,
 } from "#/integrations/animations/motion";
-import type { SkillsPageSkill } from "../skills.types";
+import type { SkillOverview } from "../skills.types";
 import { splitPicked } from "../skills.utils";
 import SkillItem from "./SkillItem";
 
@@ -16,7 +16,7 @@ import SkillItem from "./SkillItem";
 const ACTIVATE_BEFORE_PICK_MS = 500;
 
 interface SkillsPageProps {
-	skills: SkillsPageSkill[];
+	skills: SkillOverview[];
 }
 
 export default function SkillsPage({ skills }: SkillsPageProps) {
@@ -137,7 +137,7 @@ export default function SkillsPage({ skills }: SkillsPageProps) {
 					{skills.map((skill, idx) => (
 						<SkillItem
 							onPick={(slug) => pick(slug, idx)}
-							key={skill.id}
+							key={skill.slug}
 							skill={skill}
 							active={idx === active}
 							onActivate={() => setActive(idx)}

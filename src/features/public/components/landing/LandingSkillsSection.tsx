@@ -1,7 +1,6 @@
 import { useRouter } from "@tanstack/react-router";
 import { useRef, useState } from "react";
 import { usePickTransition } from "#/features/public/hooks/usePickTransition";
-import { MOCK_SKILLS } from "#/features/public/utils/landing-mocks";
 import type { LandingSkill } from "#/features/skills/skills.types";
 import LandingSkillCard from "./LandingSkillCard";
 import SeeMoreLink from "./SeeMoreLink";
@@ -10,12 +9,9 @@ interface LandingSkillsSectionProps {
 	skills: LandingSkill[];
 }
 
-export default function LandingSkillsSection(
-	_props: LandingSkillsSectionProps,
-) {
-	// TODO: read `props.skills` instead of the mocks after the rows are built
-	const items = MOCK_SKILLS;
-
+export default function LandingSkillsSection({
+	skills,
+}: LandingSkillsSectionProps) {
 	const router = useRouter();
 	const container = useRef<HTMLDivElement>(null);
 
@@ -56,8 +52,12 @@ export default function LandingSkillsSection(
 				Top skills I have experience with
 			</h2>
 			<div className="col-span-full space-y-3 md:-col-start-7 md:row-span-3 md:row-start-2">
-				{items.map((skill) => (
-					<LandingSkillCard key={skill.id} skill={skill} onPick={setPicking} />
+				{skills.map((skill) => (
+					<LandingSkillCard
+						key={skill.slug}
+						skill={skill}
+						onPick={setPicking}
+					/>
 				))}
 			</div>
 			{/* Same link as the projects section's "see more". On phones it follows

@@ -29,7 +29,7 @@ interface ProjectCaseStudyProps {
  * project close the page.
  */
 export default function ProjectCaseStudy({ page }: ProjectCaseStudyProps) {
-	const { project, gallery, credits, position, total, next } = page;
+	const { project, credits, position, total, next, isFeatured } = page;
 	const links = getProjectLinks(project);
 	const rows = getMetadataRows(project.metadata);
 	const dateLine = getProjectDateLine(project);
@@ -55,7 +55,7 @@ export default function ProjectCaseStudy({ page }: ProjectCaseStudyProps) {
 						</Link>
 					}
 				/>
-				{project.featuredRank != null && (
+				{isFeatured != null && (
 					<p className="type-label bg-primary px-1.5 py-1 text-primary-foreground">
 						featured
 					</p>
@@ -103,9 +103,9 @@ export default function ProjectCaseStudy({ page }: ProjectCaseStudyProps) {
 				className="col-span-full -mx-4 mt-10 md:col-span-6 md:row-start-4 md:mx-0 md:mt-14"
 			>
 				<div className="relative aspect-4/3 overflow-hidden bg-muted">
-					{project.coverImageUrl && (
+					{project.cover && (
 						<img
-							src={project.coverImageUrl}
+							src={project.cover.src}
 							alt={`Cover of ${project.title}`}
 							className="absolute inset-0 size-full object-cover"
 						/>
@@ -125,6 +125,13 @@ export default function ProjectCaseStudy({ page }: ProjectCaseStudyProps) {
 					{dateLine && <p className="type-label">{dateLine}</p>}
 				</div>
 				<p className="mt-4 text-lead">{project.description}</p>
+				{/* The Markdown body, already HTML from Velite. It comes only from the
+				    repository's content files, so injecting it is safe. */}
+				<div
+					className="mt-8 text-body *:first:mt-0 [&_a]:underline [&_a]:underline-offset-2 [&_h2]:mt-8 [&_h2]:text-heading-s [&_h3]:mt-6 [&_h3]:font-semibold [&_li]:mt-1 [&_ol]:list-decimal [&_ol]:pl-5 [&_p]:mt-3 [&_ul]:list-disc [&_ul]:pl-5"
+					// biome-ignore lint/security/noDangerouslySetInnerHtml: trusted content from the repository, rendered by Velite
+					dangerouslySetInnerHTML={{ __html: project.body }}
+				/>
 			</section>
 
 			{hasDetails && (
@@ -208,7 +215,7 @@ export default function ProjectCaseStudy({ page }: ProjectCaseStudyProps) {
 				entrance
 				key={project.slug}
 				title={project.title}
-				images={gallery}
+				images={project.gallery}
 				className="col-span-full mt-16 md:mt-24"
 			/>
 
@@ -224,8 +231,8 @@ export default function ProjectCaseStudy({ page }: ProjectCaseStudyProps) {
 					<div className="col-span-full md:col-span-5 md:col-start-8">
 						<p className="type-label mb-2.5">next project</p>
 						<Link
-							to="/projects/$"
-							params={{ _splat: next.slug }}
+							to="/projects/$slug"
+							params={{ slug: next.slug }}
 							className="group inline-flex items-center gap-3 outline-none focus-visible:outline-2 focus-visible:outline-ring focus-visible:outline-offset-2"
 						>
 							<span className="text-display-m underline-offset-8 group-hover:underline">

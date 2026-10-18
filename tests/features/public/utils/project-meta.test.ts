@@ -4,9 +4,10 @@ import {
 	getProjectPeriodLabel,
 } from "#/features/public/utils/project-meta";
 
+// startedAt is required in content; endedAt is empty until a project ends.
 const completed = {
 	status: "COMPLETED" as const,
-	startedAt: null,
+	startedAt: "2024-09-01",
 	endedAt: null,
 };
 const ongoing = { ...completed, status: "ONGOING" as const };
@@ -32,17 +33,12 @@ describe("getProjectPeriodLabel", () => {
 		expect(getProjectPeriodLabel({ ...ongoing, startedAt: "2026-03-01" })).toBe(
 			"Mar 2026 – now",
 		);
-		expect(getProjectPeriodLabel(ongoing)).toBe("ongoing");
 	});
 
 	it("keeps the first of the month in its own month", () => {
 		expect(getProjectPeriodLabel({ ...completed, endedAt: "2026-03-01" })).toBe(
 			"Mar 2026",
 		);
-	});
-
-	it("is null without dates", () => {
-		expect(getProjectPeriodLabel(completed)).toBeNull();
 	});
 });
 
@@ -65,7 +61,8 @@ describe("getProjectMetaLine", () => {
 				teamName: null,
 			}),
 		).toBe("Jan 2025");
-		expect(getProjectMetaLine({ ...completed, teamName: "Club" })).toBe("Club");
-		expect(getProjectMetaLine({ ...completed, teamName: null })).toBe("");
+		expect(getProjectMetaLine({ ...completed, teamName: undefined })).toBe(
+			"Sep 2024",
+		);
 	});
 });

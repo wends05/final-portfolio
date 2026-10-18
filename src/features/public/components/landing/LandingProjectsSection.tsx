@@ -2,9 +2,8 @@ import { useRouter } from "@tanstack/react-router";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { type CSSProperties, useRef, useState } from "react";
 import RollingText from "#/components/RollingText";
-import type { FeaturedProject } from "#/features/projects/projects.types";
+import type { LandingProject } from "#/features/projects/projects.types";
 import { usePickTransition } from "#/features/public/hooks/usePickTransition";
-import { MOCK_PROJECTS } from "#/features/public/utils/landing-mocks";
 import { getPresentationState } from "#/features/public/utils/presentation";
 import { appGSAP, useAppGSAP } from "#/integrations/animations/gsap";
 import CoverEdge from "./CoverEdge";
@@ -12,14 +11,12 @@ import LandingProjectCard from "./LandingProjectCard";
 import SeeMoreLink from "./SeeMoreLink";
 
 interface LandingProjectsSectionProps {
-	projects: FeaturedProject[];
+	projects: LandingProject[];
 }
 
-export default function LandingProjectsSection(
-	_props: LandingProjectsSectionProps,
-) {
-	// TODO: read `props.projects` instead of the mocks after the card is built
-	const items = MOCK_PROJECTS;
+export default function LandingProjectsSection({
+	projects: items,
+}: LandingProjectsSectionProps) {
 	const [active, setActive] = useState(0);
 	const lastActive = useRef(0);
 	const track = useRef<HTMLDivElement>(null);
@@ -74,7 +71,7 @@ export default function LandingProjectsSection(
 			return { others: q("[data-pick-fade]"), wash, title };
 		},
 		navigate: (slug) =>
-			router.navigate({ to: "/projects/$", params: { _splat: slug } }),
+			router.navigate({ to: "/projects/$slug", params: { slug } }),
 		onCancel: () => {
 			pickStarted.current = false;
 			setPicking(null);
@@ -122,7 +119,7 @@ export default function LandingProjectsSection(
 						</div>
 						{items.map((project, i) => (
 							<LandingProjectCard
-								key={project.id}
+								key={project.slug}
 								project={project}
 								active={i === active}
 								onPick={pick}

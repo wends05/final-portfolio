@@ -1,10 +1,10 @@
-import type { ToolPreview } from "../skills.types";
+import type { Tool } from "#content";
 
 interface ToolFilterProps {
-	tools: ToolPreview[];
-	/** The selected tool, or null for all of them. */
-	selectedId: string | null;
-	onSelect: (toolId: string | null) => void;
+	tools: Tool[];
+	/** The selected tool's name, or null for all of them. */
+	selected: Tool | null;
+	onSelect: (tool: Tool | null) => void;
 }
 
 /**
@@ -14,7 +14,7 @@ interface ToolFilterProps {
  */
 export default function ToolFilter({
 	tools,
-	selectedId,
+	selected,
 	onSelect,
 }: ToolFilterProps) {
 	return (
@@ -26,15 +26,15 @@ export default function ToolFilter({
 			<legend className="sr-only">Filter projects by tool</legend>
 			<ToolFilterButton
 				label="All tools"
-				pressed={selectedId === null}
+				pressed={selected === null}
 				onPress={() => onSelect(null)}
 			/>
 			{tools.map((tool) => (
 				<ToolFilterButton
-					key={tool.id}
-					label={tool.name}
-					pressed={selectedId === tool.id}
-					onPress={() => onSelect(selectedId === tool.id ? null : tool.id)}
+					key={tool}
+					label={tool}
+					pressed={selected === tool}
+					onPress={() => onSelect(selected === tool ? null : tool)}
 				/>
 			))}
 		</fieldset>

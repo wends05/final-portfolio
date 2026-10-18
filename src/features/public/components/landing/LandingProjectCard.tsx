@@ -1,14 +1,14 @@
 import { ArrowRightIcon, ArrowUpRightIcon } from "@phosphor-icons/react/ssr";
 import { Link } from "@tanstack/react-router";
 import { Button } from "#/components/ui/button";
-import type { FeaturedProject } from "#/features/projects/projects.types";
+import type { LandingProject } from "#/features/projects/projects.types";
 import { isPlainClick } from "#/features/public/utils/pick";
 import { getProjectMetaLine } from "#/features/public/utils/project-meta";
 import { cn } from "#/lib/utils";
 import WashText from "./WashText";
 
 interface LandingProjectCardProps {
-	project: FeaturedProject;
+	project: LandingProject;
 	active: boolean;
 	/** Starts the pick animation; the section navigates when it ends. */
 	onPick: (slug: string) => void;
@@ -23,7 +23,7 @@ export default function LandingProjectCard({
 	onPick,
 }: LandingProjectCardProps) {
 	const meta = getProjectMetaLine(project);
-	const stack = project.tools.map((tool) => tool.name).join(" · ");
+	const stack = project.tools.join(" · ");
 	const links = [
 		{ label: "github", href: project.githubUrl },
 		{ label: "live", href: project.liveUrl },
@@ -61,9 +61,9 @@ export default function LandingProjectCard({
 				data-pick-fade
 				className="relative aspect-16/10 w-full overflow-hidden bg-muted group-data-[active=false]:invisible md:col-span-6 md:col-start-6 md:row-start-2 md:max-h-full md:self-end"
 			>
-				{project.coverImageUrl && (
+				{project.cover && (
 					<img
-						src={project.coverImageUrl}
+						src={project.cover.src}
 						alt={`Screenshot of ${project.title}`}
 						className="absolute inset-0 size-full object-cover"
 					/>
@@ -85,8 +85,8 @@ export default function LandingProjectCard({
 						className="type-label h-11 gap-2 rounded-none px-4"
 						render={
 							<Link
-								to="/projects/$"
-								params={{ _splat: project.slug }}
+								to="/projects/$slug"
+								params={{ slug: project.slug }}
 								onClick={(e) => {
 									if (!isPlainClick(e)) return;
 									e.preventDefault();

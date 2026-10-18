@@ -1,18 +1,10 @@
 import { createFileRoute, notFound } from "@tanstack/react-router";
 import SkillPage from "#/features/skills/components/SkillPage";
-import { getSkillPageFn } from "#/features/skills/skills.functions";
+import { getSkillPage } from "#/features/skills/skills.content";
 
 export const Route = createFileRoute("/_public/skills/$slug")({
-	loader: async ({ params }) => {
-		let page = await getSkillPageFn({ data: { slug: params.slug } });
-		// In development, show the mocks until real skills are published. The
-		// dynamic import keeps them out of the production bundle.
-		if (!page && import.meta.env.DEV) {
-			const { getMockSkillPage } = await import(
-				"#/features/skills/utils/skills-mocks"
-			);
-			page = getMockSkillPage(params.slug);
-		}
+	loader: ({ params }) => {
+		const page = getSkillPage(params.slug);
 		if (!page) throw notFound();
 		return { page };
 	},
@@ -22,7 +14,7 @@ export const Route = createFileRoute("/_public/skills/$slug")({
 		return {
 			meta: [
 				{ title: `${page.name} · wends.dev` },
-				{ name: "description", content: page.overview },
+				{ name: "description", content: page.description },
 			],
 		};
 	},

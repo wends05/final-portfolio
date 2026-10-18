@@ -1,7 +1,7 @@
 # 0009: Feature-based folder structure
 
 Date: 2026-10-05
-Status: Accepted
+Status: Accepted. Amended 2026-10-19 with the `.content.ts` role for content in the repository ([0019](0019-static-site-content-in-repo.md)).
 
 ## Context
 
@@ -15,7 +15,8 @@ Group code by feature under `src/features/<feature>/`. Within a feature, the fil
 | --- | --- |
 | `<feature>.server.ts` | Server-only functions, including all database access. Never imported by client code. |
 | `<feature>.functions.ts` | Server functions (`createServerFn`) that routes and components call. They wrap `.server.ts` functions. Return plain data, not JSX ([0011](0011-no-react-server-components.md)). |
-| `<feature>.utils.ts` or `utils/` | Extra helpers for that feature |
+| `<feature>.content.ts` | Reads site content from `#content` ([0019](0019-static-site-content-in-repo.md)) and shapes it for that feature's routes; route loaders call it. It runs on the server and in the browser, so it never imports `.server.ts` code. The logic it applies is pure functions in `.utils.ts`. |
+| `<feature>.utils.ts` or `utils/` | Extra helpers for that feature. Pure: they take data as arguments and never read data from `#content` (type imports are fine). |
 | `<feature>.types.ts` or `types/` | Types for that feature |
 | `components/` | React components for that feature, optionally grouped in subfolders |
 | `hooks/` | React hooks for that feature, one per file named after the hook (`usePickTransition.ts`). Hooks used across features go in the shared layer instead. |
@@ -26,7 +27,7 @@ Code shared across features goes in the global folders, alongside TanStack Start
 | --- | --- |
 | `src/components/` | Shared components (`RollingText`) |
 | `src/components/ui/` | shadcn primitives ([0007](0007-shadcn-component-and-token-base.md)) |
-| `src/lib/` | Shared utilities (`utils.ts` with `cn()`) |
+| `src/lib/` | Shared utilities (`utils.ts` with `cn()`; `content.checks.ts` with Velite's cross-file checks and `toolKey`) |
 | `src/integrations/` | Third-party wiring (Prisma, TanStack Query, Neon object storage in `neon/storage/`, GSAP and the reduced-motion queries in `animations/`) |
 | `src/styles.css`, `src/styles/` | Global styles and tokens |
 | `src/routes/`, `src/router.tsx`, `src/routeTree.gen.ts` | TanStack Start routing ([0006](0006-tanstack-start-application-stack.md)) |
@@ -43,6 +44,9 @@ src/features/projects/
 
 ```mermaid
 flowchart LR
+    Route["src/routes"] --> Content["*.content.ts"]
+    Content --> Utils["*.utils.ts"]
+    Content --> Gen["#content (.velite)"]
     Route["src/routes"] --> Fns["*.functions.ts"]
     Comp["components/"] --> Fns
     Fns --> Server["*.server.ts"]
@@ -61,7 +65,7 @@ None were recorded.
 ## Consequences
 
 - TanStack Start's import protection blocks `*.server.*` files from the client bundle by default, so the suffix also enforces the server boundary in `AGENTS.md`.
-- Routes stay thin: they compose feature components and call `*.functions.ts`.
+- Routes stay thin: they compose feature components and call `*.content.ts` for content or `*.functions.ts` for server work.
 - One feature may call another feature's `.server.ts` from its own server code; `public.server.ts` does this for projects and skills.
 - The existing source does not fully follow this yet:
   - `projects` and `skills` have no `.functions.ts` yet; add one when a public route first calls their server code.

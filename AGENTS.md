@@ -21,9 +21,24 @@ bun --bun run typecheck  # TypeScript
 bun --bun run build      # production build into .output/
 bun run test             # Vitest (Node.js)
 bun --bun run verify     # check, lint:ds, typecheck, test, build; nonzero if any fail
+bun run content          # Velite: validate content/ and regenerate .velite/
+bun run new:project <slug>  # scaffold content/projects/<slug>/index.md as a draft
 ```
 
 `verify` passes on `main`. Keep it passing: a change is not done while `verify` fails. Every pull request that changes behavior includes Vitest tests ([docs/decisions/0010-vitest-tests-in-every-pr.md](docs/decisions/0010-vitest-tests-in-every-pr.md)).
+
+## Adding content
+
+Content is files in `content/`, validated by Velite ([docs/data.md](docs/data.md), [ADR 0019](docs/decisions/0019-static-site-content-in-repo.md)). A content change is a pull request like any other.
+
+1. **A project:** run `bun run new:project <slug>`. It creates `content/projects/<slug>/index.md` with `draft: true`. Fill in the frontmatter, then write the case study under Problem, Approach, and Result. Put images beside `index.md`, at most 2400px wide; every gallery image needs `alt`.
+2. **A skill:** create `content/skills/<slug>.md` with `slug`, `name`, `confidence` (0 to 100), `tools`, and `draft: true` while it is not ready. The body is the overview.
+3. **Tools and people:** add a new tool name once to `content/tools.yaml` (names match ignoring case), and a new collaborator to `content/collaborators.yaml`; projects credit them by slug.
+4. **Homepage order:** list slugs in `content/site.yaml`: `featured` for projects, `topSkills` for skills. The homepage shows the first three of each.
+5. **Preview:** set `VITE_SHOW_DRAFTS=true` in `.env.local` and run `bun --bun run dev`.
+6. **Publish:** remove `draft: true`. Run `bun run content`, which names each invalid file or broken reference, then `bun --bun run verify`.
+
+Agents: write only what the owner gave you. Placeholder text stays `draft: true` and is marked as a placeholder in the file.
 
 ## Rules
 

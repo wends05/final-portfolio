@@ -17,7 +17,7 @@ The one or two sentence summary of a project, shown in lists and link previews. 
 _Avoid_: Summary, blurb
 
 **Draft**:
-A project marked as not ready to show. It is hidden on the live site and appears only when drafts are switched on.
+A project or skill marked as not ready to show. It is hidden on the live site and appears only when drafts are switched on.
 _Avoid_: Unpublished, hidden
 
 **Featured project**:

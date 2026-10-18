@@ -5,57 +5,16 @@ import {
 	getProjectLinks,
 	getProjectPosition,
 	nearestIndex,
-	orderProjectsForIndex,
+	orderProjects,
 	padIndex,
+	resolveCredits,
 	stepSlide,
 } from "#/features/projects/projects.utils";
 
-const listed = (
-	slug: string,
-	featuredRank: number | null,
-	createdAt: string,
-) => ({ slug, title: slug.toUpperCase(), featuredRank, createdAt });
-
-describe("orderProjectsForIndex", () => {
-	it("puts featured projects first, by rank, then the rest newest first", () => {
-		const shuffled = [
-			listed("old", null, "2023-01-01T00:00:00.000Z"),
-			listed("third", 3, "2026-01-01T00:00:00.000Z"),
-			listed("new", null, "2025-06-01T00:00:00.000Z"),
-			listed("first", 1, "2022-01-01T00:00:00.000Z"),
-			listed("middle", null, "2024-03-01T00:00:00.000Z"),
-			listed("second", 2, "2021-01-01T00:00:00.000Z"),
-		];
-		expect(orderProjectsForIndex(shuffled).map((p) => p.slug)).toEqual([
-			"first",
-			"second",
-			"third",
-			"new",
-			"middle",
-			"old",
-		]);
-	});
-
-	it("leaves the input array as it was", () => {
-		const input = [
-			listed("b", null, "2023-01-01T00:00:00.000Z"),
-			listed("a", 1, "2022-01-01T00:00:00.000Z"),
-		];
-		orderProjectsForIndex(input);
-		expect(input.map((p) => p.slug)).toEqual(["b", "a"]);
-	});
-
-	it("handles no projects", () => {
-		expect(orderProjectsForIndex([])).toEqual([]);
-	});
-});
+const listed = (slug: string) => ({ slug, title: slug.toUpperCase() });
 
 describe("getProjectPosition", () => {
-	const ordered = [
-		listed("a", 1, ""),
-		listed("b", null, ""),
-		listed("c", null, ""),
-	];
+	const ordered = [listed("a"), listed("b"), listed("c")];
 
 	it("counts from 1 and points at the project after", () => {
 		expect(getProjectPosition(ordered, "b")).toEqual({
@@ -163,17 +122,14 @@ describe("getProjectDateLine", () => {
 		).toBe("Mar 2024 · completed");
 	});
 
-	it("shows the status alone without dates, once", () => {
-		expect(
-			getProjectDateLine({ status: "ONGOING", startedAt: null, endedAt: null }),
-		).toBe("ongoing");
+	it("uses the start month for a completed project without an end date", () => {
 		expect(
 			getProjectDateLine({
 				status: "COMPLETED",
-				startedAt: null,
+				startedAt: "2024-01-01",
 				endedAt: null,
 			}),
-		).toBe("completed");
+		).toBe("Jan 2024 · completed");
 	});
 });
 
@@ -228,5 +184,75 @@ describe("getMetadataRows", () => {
 		expect(getMetadataRows({})).toEqual([]);
 		expect(getMetadataRows(null)).toEqual([]);
 		expect(getMetadataRows("text")).toEqual([]);
+	});
+});
+
+const started = (slug: string, startedAt: string) => ({ slug, startedAt });
+
+describe("orderProjects", () => {
+	const projects = [
+		started("a-2023", "2023-01-01T00:00:00.000Z"),
+		started("b-2025", "2025-01-01T00:00:00.000Z"),
+		started("c-2022", "2022-01-01T00:00:00.000Z"),
+		started("d-2024", "2024-01-01T00:00:00.000Z"),
+	];
+	const slugs = (featured: string[]) =>
+		orderProjects(projects, featured).map((p) => p.slug);
+
+	it("puts featured projects first, in featured order, even when older", () => {
+		expect(slugs(["c-2022", "a-2023"]).slice(0, 2)).toEqual([
+			"c-2022",
+			"a-2023",
+		]);
+		expect(slugs(["a-2023", "c-2022"]).slice(0, 2)).toEqual([
+			"a-2023",
+			"c-2022",
+		]);
+	});
+
+	it("lists the rest newest first", () => {
+		expect(slugs(["c-2022"])).toEqual(["c-2022", "b-2025", "d-2024", "a-2023"]);
+	});
+
+	it("is newest first when nothing is featured", () => {
+		expect(slugs([])).toEqual(["b-2025", "d-2024", "a-2023", "c-2022"]);
+	});
+
+	it("does not change the input", () => {
+		const before = projects.map((p) => p.slug);
+		orderProjects(projects, ["c-2022"]);
+		expect(projects.map((p) => p.slug)).toEqual(before);
+	});
+});
+
+describe("resolveCredits", () => {
+	const collaborators = [
+		{ slug: "jane-doe", name: "Jane Doe", profileUrl: "https://jane.dev" },
+		{ slug: "john-roe", name: "John Roe" },
+		{ slug: "ana-lee", name: "Ana Lee", profileUrl: null },
+	];
+
+	it("keeps the project's credit order and adds names and profile URLs", () => {
+		const credits = [
+			{ collaborator: "ana-lee", role: "Artist" },
+			{ collaborator: "jane-doe", role: "Programmer" },
+		];
+		expect(resolveCredits(credits, collaborators)).toEqual([
+			{ name: "Ana Lee", role: "Artist", profileUrl: null },
+			{ name: "Jane Doe", role: "Programmer", profileUrl: "https://jane.dev" },
+		]);
+	});
+
+	it("turns a missing role and profile URL into null", () => {
+		expect(
+			resolveCredits([{ collaborator: "john-roe" }], collaborators),
+		).toEqual([{ name: "John Roe", role: null, profileUrl: null }]);
+	});
+
+	it("skips unknown collaborators and leaves out uncredited ones", () => {
+		expect(resolveCredits([{ collaborator: "ghost" }], collaborators)).toEqual(
+			[],
+		);
+		expect(resolveCredits([], collaborators)).toEqual([]);
 	});
 });

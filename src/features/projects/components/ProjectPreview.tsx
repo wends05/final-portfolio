@@ -4,11 +4,11 @@ import { Button } from "#/components/ui/button";
 import WashText from "#/features/public/components/landing/WashText";
 import { isPlainClick } from "#/features/public/utils/pick";
 import { getProjectMetaLine } from "#/features/public/utils/project-meta";
-import type { ProjectSummary } from "../projects.types";
+import type { Project } from "#content";
 import { padIndex } from "../projects.utils";
 
 interface ProjectPreviewProps {
-	project: ProjectSummary;
+	project: Project;
 	/** Position in the /projects order, from 0. */
 	index: number;
 	total: number;
@@ -16,6 +16,7 @@ interface ProjectPreviewProps {
 	shown: boolean;
 	/** Starts the pick animation; the page navigates when it ends. */
 	onPick: (slug: string) => void;
+	isFeatured: boolean;
 }
 
 /**
@@ -29,9 +30,10 @@ export default function ProjectPreview({
 	total,
 	shown,
 	onPick,
+	isFeatured,
 }: ProjectPreviewProps) {
 	const meta = getProjectMetaLine(project);
-	const stack = project.tools.map((tool) => tool.name).join(" · ");
+	const stack = project.tools.join(" · ");
 
 	return (
 		<article
@@ -45,7 +47,7 @@ export default function ProjectPreview({
 				<span>
 					{padIndex(index + 1)} / {padIndex(total)}
 				</span>
-				{project.featuredRank != null && (
+				{isFeatured && (
 					<span className="bg-primary px-1.5 py-1 text-primary-foreground">
 						featured
 					</span>
@@ -72,8 +74,8 @@ export default function ProjectPreview({
 						className="type-label mt-6 h-11 gap-2 rounded-none px-4"
 						render={
 							<Link
-								to="/projects/$"
-								params={{ _splat: project.slug }}
+								to="/projects/$slug"
+								params={{ slug: project.slug }}
 								onClick={(e) => {
 									if (!isPlainClick(e)) return;
 									e.preventDefault();

@@ -1,40 +1,25 @@
-import type { Scalars } from "@prisma/orm-postgres/family-contract/types";
-import type { Models } from "#/integrations/prisma/contract.d";
+import type { Project, Skill, Tool } from "#content";
 
-export type Tool = Scalars<Models.public_Tool>;
+/** A homepage skill. */
+export type LandingSkill = Pick<Skill, "name" | "slug" | "tools">;
 
-export type ToolPreview = Pick<Tool, "id" | "name">;
-
-export type Skill = Scalars<Models.public_Skill>;
-
-export type LandingSkill = Skill & {
-	tools: ToolPreview[];
-};
-
-export type SkillsPageSkill = Pick<
+/** A /skills item. */
+export type SkillOverview = Pick<
 	Skill,
-	"id" | "name" | "confidence" | "slug"
-> & {
-	tools: ToolPreview[];
-};
+	"name" | "confidence" | "slug" | "tools"
+>;
 
-/**
- * A project on a skill page, with only that skill's tools and the URL of its
- * cover image (null when it has none).
- */
-export type SkillProject = Pick<
-	Scalars<Models.public_Project>,
-	"id" | "slug" | "title"
-> & {
-	coverImageUrl: string | null;
-	tools: ToolPreview[];
+/** A project on a skill page, keeping only that skill's tools. */
+export type SkillProject = Pick<Project, "slug" | "title" | "cover"> & {
+	tools: Tool[];
 };
 
 /** Everything /skills/<slug> shows. */
 export type SkillPageData = Pick<
 	Skill,
-	"id" | "slug" | "name" | "overview" | "confidence" | "topRank"
+	"slug" | "name" | "confidence" | "tools" | "overview" | "description"
 > & {
-	tools: ToolPreview[];
+	/** Listed in site.yaml's topSkills. */
+	isTop: boolean;
 	projects: SkillProject[];
 };

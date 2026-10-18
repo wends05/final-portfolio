@@ -2,18 +2,22 @@ import { useRouter } from "@tanstack/react-router";
 import { type ReactNode, useRef, useState } from "react";
 import { usePageEntrance } from "#/features/public/hooks/usePageEntrance";
 import { usePickTransition } from "#/features/public/hooks/usePickTransition";
+import type { Project } from "#content";
 import { useShownProject } from "../hooks/useShownProject";
-import type { ProjectSummary } from "../projects.types";
 import { padIndex } from "../projects.utils";
 import ProjectCard from "./ProjectCard";
 import ProjectPreview from "./ProjectPreview";
 
 interface ProjectsPageProps {
 	/** Published projects in the /projects order: featured first. */
-	projects: ProjectSummary[];
+	projects: Project[];
+	featured: string[];
 }
 
-export default function ProjectsPage({ projects }: ProjectsPageProps) {
+export default function ProjectsPage({
+	projects,
+	featured,
+}: ProjectsPageProps) {
 	const page = useRef<HTMLElement>(null);
 	const router = useRouter();
 	const {
@@ -29,8 +33,8 @@ export default function ProjectsPage({ projects }: ProjectsPageProps) {
 	// Slug of the project being picked.
 	const [picking, setPicking] = useState<string | null>(null);
 
-	const featured = projects.filter((p) => p.featuredRank != null);
-	const rest = projects.slice(featured.length);
+	const featuredProjects = projects.filter((p) => featured.includes(p.slug));
+	const rest = projects.filter((p) => !featured.includes(p.slug));
 
 	const pick = (slug: string) => {
 		// Freeze in the click itself: stopping Lenis fires one more scroll.
@@ -54,20 +58,16 @@ export default function ProjectsPage({ projects }: ProjectsPageProps) {
 			return { others: q("[data-pick-fade]"), wash, title };
 		},
 		navigate: (slug) =>
-			router.navigate({ to: "/projects/$", params: { _splat: slug } }),
+			router.navigate({ to: "/projects/$slug", params: { slug } }),
 		onCancel: () => {
 			unfreeze();
 			setPicking(null);
 		},
 	});
 
-	const card = (
-		project: ProjectSummary,
-		index: number,
-		layout: "card" | "row",
-	) => (
+	const card = (project: Project, index: number, layout: "card" | "row") => (
 		<ProjectCard
-			key={project.id}
+			key={project.slug}
 			project={project}
 			index={index}
 			shown={index === shown}
@@ -118,12 +118,13 @@ export default function ProjectsPage({ projects }: ProjectsPageProps) {
 						<div className="grid">
 							{projects.map((project, index) => (
 								<ProjectPreview
-									key={project.id}
+									key={project.slug}
 									project={project}
 									index={index}
 									total={projects.length}
 									shown={index === shown}
 									onPick={pick}
+									isFeatured={featured.includes(project.slug)}
 								/>
 							))}
 						</div>
@@ -140,7 +141,9 @@ export default function ProjectsPage({ projects }: ProjectsPageProps) {
 									01 — {padIndex(featured.length)}
 								</ListLabel>
 								<ul className="grid grid-cols-1 gap-x-4 gap-y-6 pt-4 md:grid-cols-2 lg:grid-cols-3">
-									{featured.map((project, i) => card(project, i, "card"))}
+									{featuredProjects.map((project, i) =>
+										card(project, i, "card"),
+									)}
 								</ul>
 							</section>
 						)}

@@ -70,15 +70,15 @@ export default function ProjectGallery({
 
 			{/* Edge to edge on phones. */}
 			<div className="relative mt-4 aspect-4/3 overflow-hidden bg-muted max-md:-mx-4 md:aspect-21/9">
-				{images.map((image, i) => (
+				{images.map((shot, i) => (
 					<div
-						key={image.url}
+						key={shot.image.src}
 						inert={i !== slide}
 						className={cn("absolute inset-0", i !== slide && "invisible")}
 					>
 						<img
-							src={image.url}
-							alt={image.alt}
+							src={shot.image.src}
+							alt={shot.alt}
 							loading={i === 0 ? "eager" : "lazy"}
 							className="size-full object-cover"
 						/>

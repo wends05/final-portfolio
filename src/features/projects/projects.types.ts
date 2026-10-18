@@ -1,27 +1,25 @@
-import type { Scalars } from "@prisma/orm-postgres/family-contract/types";
-import type { Models } from "#/integrations/prisma/contract.d";
+import type { Project } from "#content";
 
-export type ProjectWithCoverImageUrl = Scalars<Models.public_Project> & {
-	coverImageUrl?: string | null;
-};
-
-/** A project as lists show it: its scalars, cover image URL, and the names of the tools it used. */
-export type ProjectSummary = ProjectWithCoverImageUrl & {
-	tools: { name: string }[];
-};
-
-/** A homepage project. */
-export type FeaturedProject = ProjectSummary;
-
+export type LandingProject = Pick<
+	Project,
+	| "slug"
+	| "title"
+	| "description"
+	| "cover"
+	| "tools"
+	| "githubUrl"
+	| "liveUrl"
+	| "status"
+	| "startedAt"
+	| "endedAt"
+	| "teamName"
+>;
 export interface ProjectLinkTarget {
 	slug: string;
 	title: string;
 }
 
-export interface ProjectImageView {
-	url: string;
-	alt: string;
-}
+export type ProjectImageView = Project["gallery"][number];
 
 export interface ProjectCredit {
 	name: string;
@@ -29,15 +27,14 @@ export interface ProjectCredit {
 	profileUrl: string | null;
 }
 
-/** Everything the case-study page shows. The cover is `project.coverImageUrl`. */
+/** Everything the case-study page shows. The cover is `project.cover`. */
 export interface ProjectPageData {
-	project: ProjectSummary;
-	/** The `ProjectImage` rows in their set order; the cover is not one of them. */
-	gallery: ProjectImageView[];
+	project: Project;
 	credits: ProjectCredit[];
 	/** Where the project sits in the /projects order, from 1: the margin number. */
 	position: number;
 	total: number;
 	/** The project after it in the /projects order, or null when it is the only one. */
 	next: ProjectLinkTarget | null;
+	isFeatured: boolean;
 }

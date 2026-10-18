@@ -224,10 +224,10 @@ flowchart LR
 - The links as buttons under the title (`ProjectLinkButtons`, live site solid and first), and again at the end beside the next project, so they are there before and after reading.
 - The cover on the left (6 columns, 4:3) with the label/value list and the credits under it, and the write-up beside the cover under an "about" line that holds the date and status (`getProjectDateLine`). Explicit grid rows from `md` place them; on phones they stack as cover, write-up, details.
 - The stack is not shown: it is not a column of the project.
-- [ProjectGallery](../src/features/projects/components/ProjectGallery.tsx) is the `ProjectImage` rows only, in their `order`, one at a time with the alt text as the caption. The cover is never one of them. Slides change instantly; the counter and ‹ › buttons show only with more than one image, and the section is left out with none.
-- Credits come from `ProjectCollaborator`: one ruled row per person with the role on the right, linked when the person has a profile URL.
+- [ProjectGallery](../src/features/projects/components/ProjectGallery.tsx) is the project's `gallery` only, in file order, one at a time with the alt text as the caption. The cover is never one of them. Slides change instantly; the counter and ‹ › buttons show only with more than one image, and the section is left out with none.
+- Credits come from the project's `credits`, named from `content/collaborators.yaml`: one ruled row per person with the role on the right, linked when the person has a profile URL.
 - "next project" wraps from the last project to the first.
-- The label/value list shows only the `metadata` column (`getMetadataRows`), never fields that have a place of their own. Write it as an object (`{ "event": "Odyssey 2024" }`) or, when order matters, as a list (`[{ "label": "event", "value": "Odyssey 2024" }]`): `jsonb` stores object keys shortest first, not in the order typed. Values can be text, numbers, booleans, or lists of those. With no rows the list is left out.
+- The label/value list shows only the `metadata` list (`getMetadataRows`), in file order, never fields that have a place of their own. Values can be text, numbers, booleans, or lists of those. With no rows the list is left out.
 - The label/value list is a `grid-cols-subgrid`, so labels and values sit on the page columns (1 + 3 on phones, 2 + 4 from `md`).
 
-While the database has no published projects, both routes fall back to the mocks in `features/projects/utils/project-mocks.ts`, in development only (`import.meta.env.DEV`). Production shows the empty state and 404s.
+There are no mocks. Placeholder projects and skills are content files marked `draft: true` ([data.md](data.md#drafts)); preview them with `VITE_SHOW_DRAFTS=true`. Without drafts the routes show their empty state and 404s.

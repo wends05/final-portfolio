@@ -18,7 +18,7 @@ content/
 | File | Fields | Rules |
 | --- | --- | --- |
 | `projects/<slug>/index.md` | `slug`, `title`, `description`, `status`, `startedAt`, `endedAt?`, `cover?`, `gallery?`, `tools`, `credits?`, `teamName?`, `githubUrl?`, `liveUrl?`, `metadata?`, `draft?`; body | `slug` unique and kebab-case, matching the folder name. `status` is `ONGOING` or `COMPLETED`. Dates are `YYYY-MM-DD`; `endedAt` is not before `startedAt`, and is empty while ongoing. `description` is the short summary; the body is the case-study write-up. |
-| `skills/<slug>.md` | `slug`, `name`, `confidence?`, `tools`; body | The body is the overview. `confidence` is an integer from 0 to 100. |
+| `skills/<slug>.md` | `slug`, `name`, `confidence`, `tools`, `draft?`; body | The body is the overview; its first 160 characters as plain text are the page description. `confidence` is required, an integer from 0 to 100. |
 | `tools.yaml` | A list of names | Unique ignoring case, so "React" and "react" cannot both exist. A tool can belong to several skills or to none. |
 | `collaborators.yaml` | `slug`, `name`, `profileUrl?` | `slug` unique. Collaborators do not sign in. |
 | `site.yaml` | `featured`, `topSkills` | Ordered slug lists. Position in the list is the homepage order. |
@@ -35,7 +35,7 @@ startedAt: 2024-09-01
 endedAt:
 cover: ./cover.png
 gallery:
-  - { src: ./shot-1.png, alt: "Title screen with the bacon character" }
+  - { image: ./shot-1.png, alt: "Title screen with the bacon character" }
 tools: [Godot]
 teamName: team nyats
 credits:
@@ -60,7 +60,7 @@ draft: false
 
 ## Drafts
 
-`draft: true` marks a project that is not ready. Drafts are removed from the generated data unless `VITE_SHOW_DRAFTS=true`, so they never reach a production bundle, even inside JavaScript. A draft listed in `featured` is skipped, and the next featured project takes its place.
+`draft: true` marks a project or skill that is not ready. Drafts are removed from the generated data unless `VITE_SHOW_DRAFTS=true`, so they never reach a production bundle, even inside JavaScript. A draft listed in `featured` or `topSkills` is skipped, and the next one takes its place.
 
 Feature branches do not deploy ([0014](decisions/0014-vercel-deploys-main-and-development-only.md)). Preview a draft locally with `VITE_SHOW_DRAFTS=true` in `.env.local`, or on `development` with the variable scoped to Vercel's Preview environment.
 

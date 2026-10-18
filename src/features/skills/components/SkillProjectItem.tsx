@@ -29,8 +29,8 @@ export default function SkillProjectItem({
 			className="starting:translate-y-4 starting:opacity-0 transition-[opacity,translate] duration-300 ease-swiss motion-reduce:starting:translate-y-0"
 		>
 			<Link
-				to="/projects/$"
-				params={{ _splat: project.slug }}
+				to="/projects/$slug"
+				params={{ slug: project.slug }}
 				onClick={(e) => {
 					if (!isPlainClick(e)) return;
 					e.preventDefault();

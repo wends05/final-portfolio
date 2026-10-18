@@ -36,7 +36,7 @@ export default function LandingSkillCard({
 				</h3>
 
 				<span data-pick-fade className="type-meta">
-					{visibleTools.map(({ name }) => name).join(" · ")}
+					{visibleTools.join(" · ")}
 					{otherToolsLength > 0 && (
 						<span className="font-label"> +{otherToolsLength} more</span>
 					)}

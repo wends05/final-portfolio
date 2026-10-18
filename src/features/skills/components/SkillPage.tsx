@@ -26,9 +26,8 @@ interface SkillPageProps {
 export default function SkillPage({ page }: SkillPageProps) {
 	// null shows every project. The route keys this component by slug, so the
 	// selection starts over on another skill.
-	const [selectedId, setSelectedId] = useState<string | null>(null);
-	const projects = filterProjectsByTool(page.projects, selectedId);
-	const selected = page.tools.find((tool) => tool.id === selectedId);
+	const [selected, setSelected] = useState<string | null>(null);
+	const projects = filterProjectsByTool(page.projects, selected);
 
 	const root = useRef<HTMLElement>(null);
 	const router = useRouter();
@@ -51,7 +50,7 @@ export default function SkillPage({ page }: SkillPageProps) {
 			return { others: [...rest, ...q("[data-pick-fade]")], wash, title };
 		},
 		navigate: (slug) =>
-			router.navigate({ to: "/projects/$", params: { _splat: slug } }),
+			router.navigate({ to: "/projects/$slug", params: { slug } }),
 		onCancel: () => setPicking(null),
 	});
 
@@ -73,7 +72,7 @@ export default function SkillPage({ page }: SkillPageProps) {
 						</Link>
 					}
 				/>
-				{page.topRank !== null && (
+				{page.isTop && (
 					<p className="type-label bg-primary px-1.5 py-1 text-primary-foreground">
 						top tool
 					</p>
@@ -87,40 +86,42 @@ export default function SkillPage({ page }: SkillPageProps) {
 				<h1 data-entrance-title className="min-w-0 text-display-l uppercase">
 					{page.name}
 				</h1>
-				{page.confidence !== null && (
-					<Progress
-						data-entrance
-						value={page.confidence}
-						className="w-full shrink-0 md:w-56"
-					>
-						<ProgressLabel className="sr-only">Confidence</ProgressLabel>
-						{/* ProgressValue's own text-xs wins over type-meta's size, so
-						    restate type-meta's 13px from md. */}
-						<ProgressValue className="type-meta text-muted-foreground md:text-[0.8125rem]">
-							{(formattedValue) => `${formattedValue} confidence`}
-						</ProgressValue>
-					</Progress>
-				)}
+				<Progress
+					data-entrance
+					value={page.confidence}
+					className="w-full shrink-0 md:w-56"
+				>
+					<ProgressLabel className="sr-only">Confidence</ProgressLabel>
+					{/* ProgressValue's own text-xs wins over type-meta's size, so
+					    restate type-meta's 13px from md. */}
+					<ProgressValue className="type-meta text-muted-foreground md:text-[0.8125rem]">
+						{(formattedValue) => `${formattedValue} confidence`}
+					</ProgressValue>
+				</Progress>
 			</div>
 
 			<ToolFilter
 				tools={page.tools}
-				selectedId={selectedId}
-				onSelect={setSelectedId}
+				selected={selected}
+				onSelect={setSelected}
 			/>
 
 			<div className="col-span-full mt-10 flex flex-col gap-12 md:col-span-7 md:col-start-6">
-				{page.overview && (
-					<p data-pick-fade data-entrance className="text-lead">
-						{page.overview}
-					</p>
-				)}
+				{/* The Markdown overview, already HTML from Velite. It comes only from
+				    the repository's content files, so injecting it is safe. */}
+				<div
+					data-pick-fade
+					data-entrance
+					className="text-lead [&_a]:underline [&_a]:underline-offset-2 [&_p+p]:mt-3"
+					// biome-ignore lint/security/noDangerouslySetInnerHtml: trusted content from the repository, rendered by Velite
+					dangerouslySetInnerHTML={{ __html: page.overview }}
+				/>
 
 				<SkillProjectList
 					projects={projects}
 					selected={selected}
 					skillName={page.name}
-					onReset={() => setSelectedId(null)}
+					onReset={() => setSelected(null)}
 					onPick={setPicking}
 				/>
 			</div>
