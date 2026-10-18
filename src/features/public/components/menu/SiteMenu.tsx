@@ -2,7 +2,7 @@ import { useRouter, useRouterState } from "@tanstack/react-router";
 import { useEffect, useRef } from "react";
 import { useStore } from "zustand";
 import MenuItem from "#/features/public/components/menu/MenuItem";
-import ThemeToggle from "#/features/public/components/menu/ThemeToggle";
+import ThemeToggle from "#/features/public/components/ThemeToggle";
 import {
 	MENU_BUTTON_ID,
 	MENU_ITEMS,
@@ -259,7 +259,7 @@ export default function SiteMenu() {
 					data-menu-label
 					className="type-label col-span-full flex items-center justify-end border-rule-inverse border-t pt-2 text-inverse-muted md:justify-between"
 				>
-					<ThemeToggle />
+					<ThemeToggle className="focus-visible:outline-focus-inverse" />
 					<p className="hidden md:block">Esc to close</p>
 				</div>
 			</div>

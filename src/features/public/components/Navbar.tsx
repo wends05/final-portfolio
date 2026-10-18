@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { useStore } from "zustand";
+import ThemeToggle from "#/features/public/components/ThemeToggle";
 import {
 	MENU_BUTTON_ID,
 	MENU_PANEL_ID,
@@ -38,26 +39,33 @@ export default function Navbar() {
 					wends.dev
 				</Link>
 
-				<button
-					id={MENU_BUTTON_ID}
-					type="button"
-					aria-controls={MENU_PANEL_ID}
-					aria-expanded={isOpen}
-					aria-label={isOpen ? "Close menu" : "Open menu"}
-					onClick={toggle}
-					className={cn(
-						"group type-label -mr-2.5 flex min-h-11 min-w-11 items-center justify-center gap-3.5 px-2.5 md:mr-0 md:pr-0",
-						focusRing,
-					)}
-				>
-					<span className="hidden md:inline">{isOpen ? "Close" : "Menu"}</span>
-					{/* Two 2px lines 4px either side of the box's centre, so
+				{/* Desktop only: on phones the theme toggle lives in the menu. */}
+				<div className="flex items-center gap-6">
+					<ThemeToggle className={cn("hidden md:inline-flex", focusRing)} />
+
+					<button
+						id={MENU_BUTTON_ID}
+						type="button"
+						aria-controls={MENU_PANEL_ID}
+						aria-expanded={isOpen}
+						aria-label={isOpen ? "Close menu" : "Open menu"}
+						onClick={toggle}
+						className={cn(
+							"group type-label -mr-2.5 flex min-h-11 min-w-11 items-center justify-center gap-3.5 px-2.5 md:mr-0 md:pr-0",
+							focusRing,
+						)}
+					>
+						<span className="hidden md:inline">
+							{isOpen ? "Close" : "Menu"}
+						</span>
+						{/* Two 2px lines 4px either side of the box's centre, so
 					    translate-y-1 plus a 45° turn meets in an ×. */}
-					<span aria-hidden className="relative h-2.5 w-6">
-						<span className="absolute inset-x-0 top-0 h-0.5 bg-current transition-transform duration-400 ease-swiss group-aria-expanded:translate-y-1 group-aria-expanded:rotate-45 motion-reduce:transition-none" />
-						<span className="absolute inset-x-0 bottom-0 h-0.5 bg-current transition-transform duration-400 ease-swiss group-aria-expanded:-translate-y-1 group-aria-expanded:-rotate-45 motion-reduce:transition-none" />
-					</span>
-				</button>
+						<span aria-hidden className="relative h-2.5 w-6">
+							<span className="absolute inset-x-0 top-0 h-0.5 bg-current transition-transform duration-400 ease-swiss group-aria-expanded:translate-y-1 group-aria-expanded:rotate-45 motion-reduce:transition-none" />
+							<span className="absolute inset-x-0 bottom-0 h-0.5 bg-current transition-transform duration-400 ease-swiss group-aria-expanded:-translate-y-1 group-aria-expanded:-rotate-45 motion-reduce:transition-none" />
+						</span>
+					</button>
+				</div>
 			</div>
 		</header>
 	);

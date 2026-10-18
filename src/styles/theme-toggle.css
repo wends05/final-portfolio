@@ -1,0 +1,14 @@
+/*
+ * ThemeToggle renders every label; only the one matching data-theme-choice on
+ * <html> shows (no attribute = auto). The head script sets the attribute
+ * before first paint, so the label is right before React hydrates.
+ */
+[data-theme-label] {
+  display: none;
+}
+
+html:not([data-theme-choice]) [data-theme-label="auto"],
+html[data-theme-choice="light"] [data-theme-label="light"],
+html[data-theme-choice="dark"] [data-theme-label="dark"] {
+  display: inline-block;
+}

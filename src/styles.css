@@ -8,6 +8,7 @@
 @import "./styles/entrance.css";
 @import "./styles/footer.css";
 @import "./styles/lenis.css";
+@import "./styles/theme-toggle.css";
 
 @custom-variant dark (&:is(.dark *));
 

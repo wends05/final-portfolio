@@ -7,14 +7,22 @@ interface Setup {
 	systemDark: boolean;
 	/** Classes already on <html> before the script runs. */
 	classes?: string[];
+	/** <html>'s dataset; pass one in to inspect what the script leaves on it. */
+	dataset?: Record<string, string>;
 }
 
 // Runs the inline head script against stubbed browser globals and returns
 // the classes left on <html>.
-function runHeadScript({ stored, systemDark, classes = [] }: Setup) {
+function runHeadScript({
+	stored,
+	systemDark,
+	classes = [],
+	dataset = {},
+}: Setup) {
 	const classList = new Set(classes);
 	vi.stubGlobal("document", {
 		documentElement: {
+			dataset,
 			classList: {
 				toggle: (name: string, force: boolean) => {
 					if (force) classList.add(name);
@@ -99,5 +107,17 @@ describe("themeHeadScript", () => {
 				classes: ["dark"],
 			}).has("dark"),
 		).toBe(false);
+	});
+
+	it("leaves a stored choice on <html> for the toggle label", () => {
+		const dataset: Record<string, string> = {};
+		runHeadScript({ stored: "dark", systemDark: false, dataset });
+		expect(dataset.themeChoice).toBe("dark");
+	});
+
+	it("leaves no choice on <html> for auto, clearing a stale one", () => {
+		const dataset: Record<string, string> = { themeChoice: "light" };
+		runHeadScript({ stored: "blue", systemDark: true, dataset });
+		expect(dataset.themeChoice).toBeUndefined();
 	});
 });

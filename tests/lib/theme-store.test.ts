@@ -45,12 +45,14 @@ function stubBrowser({
 	});
 
 	const classes = new Set<string>();
+	const dataset: Record<string, string> = {};
 	// Runs the update straight away, as the browser does once it has the
 	// old frame's snapshot.
 	const startViewTransition = vi.fn((update: () => void) => update());
 	vi.stubGlobal("document", {
 		...(viewTransitions && { startViewTransition }),
 		documentElement: {
+			dataset,
 			classList: {
 				toggle: (name: string, force: boolean) => {
 					if (force) classes.add(name);
@@ -76,6 +78,7 @@ function stubBrowser({
 	return {
 		storage,
 		classes,
+		dataset,
 		listeners,
 		startViewTransition,
 		setSystemDark: (value: boolean) => {
@@ -106,6 +109,14 @@ describe("readStoredChoice", () => {
 });
 
 describe("applyChoice", () => {
+	it("keeps data-theme-choice in step for the toggle labels", () => {
+		const browser = stubBrowser();
+		applyChoice("dark");
+		expect(browser.dataset.themeChoice).toBe("dark");
+		applyChoice("auto");
+		expect(browser.dataset.themeChoice).toBeUndefined();
+	});
+
 	it("stores light or dark and sets the class to match", () => {
 		const browser = stubBrowser({ systemDark: true });
 		applyChoice("light");

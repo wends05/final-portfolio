@@ -5,6 +5,8 @@ import { matchMotion } from "#/integrations/animations/motion";
 import { type ThemeChoice, themeStore } from "#/lib/theme";
 import { cn } from "#/lib/utils";
 
+const CHOICES: ThemeChoice[] = ["auto", "light", "dark"];
+
 const LABELS: Record<ThemeChoice, string> = {
 	auto: "Auto",
 	light: "Light",
@@ -12,23 +14,25 @@ const LABELS: Record<ThemeChoice, string> = {
 };
 
 interface ThemeToggleProps {
+	/** Extra classes, e.g. visibility or the focus ring colour for its ground. */
 	className?: string;
 }
 
 /**
- * Text that cycles the theme (auto → light → dark) on click. The old label
- * rolls up out of its mask while the new one rises in from below.
+ * Text that cycles the theme (auto → light → dark) on click. It renders every
+ * label and CSS shows the one matching data-theme-choice on <html>
+ * (src/styles/theme-toggle.css), so the label is right from the first paint.
+ * On click the old label rolls up out of its mask while the new one rises in.
  */
 export default function ThemeToggle({ className }: ThemeToggleProps) {
 	const choice = useStore(themeStore, (s) => s.choice);
 	const cycle = useStore(themeStore, (s) => s.cycle);
 	const maskRef = useRef<HTMLSpanElement>(null);
-	const labelRef = useRef<HTMLSpanElement>(null);
 	// A copy of the old label, made on click. Only a click leaves one, so the
-	// first render and hydrate() change the label without animating.
+	// first render and hydrate() change the store without animating.
 	const leavingRef = useRef<HTMLElement | null>(null);
 
-	// Server and first render say "auto"; read the real choice after hydration.
+	// The store starts on "auto"; read the real choice after hydration.
 	useEffect(() => {
 		themeStore.getState().hydrate();
 	}, []);
@@ -36,9 +40,11 @@ export default function ThemeToggle({ className }: ThemeToggleProps) {
 	useAppGSAP(
 		() => {
 			const leaving = leavingRef.current;
-			const label = labelRef.current;
+			const incoming = maskRef.current?.querySelector<HTMLElement>(
+				`[data-theme-label="${choice}"]`,
+			);
 			leavingRef.current = null;
-			if (!leaving || !label) return;
+			if (!leaving || !incoming) return;
 
 			matchMotion(({ reduce }) => {
 				if (reduce) {
@@ -52,7 +58,7 @@ export default function ThemeToggle({ className }: ThemeToggleProps) {
 						onComplete: () => leaving.remove(),
 					})
 					.fromTo(leaving, { yPercent: 0 }, { yPercent: -100 }, 0)
-					.fromTo(label, { yPercent: 100 }, { yPercent: 0 }, 0);
+					.fromTo(incoming, { yPercent: 100 }, { yPercent: 0 }, 0);
 				// A click before this roll ends reverts it; drop its copy too.
 				return () => leaving.remove();
 			});
@@ -64,11 +70,20 @@ export default function ThemeToggle({ className }: ThemeToggleProps) {
 
 	const onClick = () => {
 		const mask = maskRef.current;
-		const label = labelRef.current;
-		if (mask && label) {
-			// The copy keeps the old text while React writes the new one.
-			const copy = label.cloneNode(true) as HTMLElement;
-			Object.assign(copy.style, { position: "absolute", top: "0", left: "0" });
+		const shown = mask?.querySelector<HTMLElement>(
+			`[data-theme-label="${themeStore.getState().choice}"]`,
+		);
+		if (mask && shown) {
+			// The copy keeps the old text after the labels swap. It loses
+			// data-theme-label so the CSS that hides other labels leaves it alone.
+			const copy = shown.cloneNode(true) as HTMLElement;
+			copy.removeAttribute("data-theme-label");
+			Object.assign(copy.style, {
+				position: "absolute",
+				top: "0",
+				left: "0",
+				display: "inline-block",
+			});
 			copy.setAttribute("aria-hidden", "true");
 			mask.appendChild(copy);
 			leavingRef.current = copy;
@@ -82,15 +97,17 @@ export default function ThemeToggle({ className }: ThemeToggleProps) {
 			onClick={onClick}
 			aria-label={`Theme: ${LABELS[choice]}. Change theme`}
 			className={cn(
-				"type-label focus-ring inline-flex min-h-11 items-center focus-visible:outline-focus-inverse",
+				"type-label focus-ring inline-flex min-h-11 items-center",
 				className,
 			)}
 		>
 			{/* Clips only vertically, so the rolling labels keep their sides. */}
 			<span ref={maskRef} className="relative inline-block overflow-y-clip">
-				<span ref={labelRef} className="inline-block">
-					{LABELS[choice]}
-				</span>
+				{CHOICES.map((c) => (
+					<span key={c} data-theme-label={c}>
+						{LABELS[c]}
+					</span>
+				))}
 			</span>
 		</button>
 	);

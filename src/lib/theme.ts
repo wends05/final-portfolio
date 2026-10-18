@@ -5,9 +5,11 @@ export const THEME_KEY = "color-schema";
 
 // Inline in <head>: runs before first paint, so it must stay dependency-free.
 // A stored "light" or "dark" wins; anything else (nothing stored, an unknown
-// value, or storage that throws) follows the system. Toggles only the `dark`
-// class so other classes on <html> stay.
-export const themeHeadScript = `(function(){var t=null;try{t=localStorage.getItem("${THEME_KEY}")}catch(e){}if(t!=="light"&&t!=="dark")t=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";document.documentElement.classList.toggle("dark",t==="dark")})()`;
+// value, or storage that throws) follows the system. It leaves the choice on
+// <html> as data-theme-choice (absent for auto) so CSS shows the right toggle
+// label from the first paint, and toggles only the `dark` class so other
+// classes on <html> stay.
+export const themeHeadScript = `(function(){var c=null;try{c=localStorage.getItem("${THEME_KEY}")}catch(e){}if(c!=="light"&&c!=="dark")c=null;var h=document.documentElement;if(c)h.dataset.themeChoice=c;else delete h.dataset.themeChoice;h.classList.toggle("dark",c?c==="dark":matchMedia("(prefers-color-scheme: dark)").matches)})()`;
 
 export type ThemeChoice = "auto" | "light" | "dark";
 
@@ -36,12 +38,18 @@ function setDarkClass(choice: ThemeChoice) {
 	document.documentElement.classList.toggle("dark", dark);
 }
 
-/** Remembers a choice (auto forgets it, so the head script follows the system) and shows it. */
+/**
+ * Remembers a choice (auto forgets it, so the head script follows the system)
+ * and shows it: the `dark` class, and data-theme-choice for the toggle labels.
+ */
 export function applyChoice(choice: ThemeChoice) {
 	try {
 		if (choice === "auto") localStorage.removeItem(THEME_KEY);
 		else localStorage.setItem(THEME_KEY, choice);
 	} catch {}
+	const { dataset } = document.documentElement;
+	if (choice === "auto") delete dataset.themeChoice;
+	else dataset.themeChoice = choice;
 	setDarkClass(choice);
 }
 
