@@ -1,3 +1,7 @@
+/** biome-ignore-all lint/security/noDangerouslySetInnerHtml: reasons:
+ * 1. The introHeadScript is set dynamically on the client and cannot be statically analyzed.
+ * 2. Theme head script is set dynamically on the client and cannot be statically analyzed.
+ */
 import { TanStackDevtools } from "@tanstack/react-devtools";
 import type { QueryClient } from "@tanstack/react-query";
 import {
@@ -8,6 +12,7 @@ import {
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 import { introHeadScript } from "#/features/public/utils/intro";
 import TanStackQueryDevtools from "#/integrations/tanstack-query/devtools";
+import { themeHeadScript } from "#/lib/theme";
 import appCss from "#/styles.css?url";
 
 interface MyRouterContext {
@@ -42,8 +47,8 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 	return (
 		<html lang="en" suppressHydrationWarning>
 			<head>
-				{/** biome-ignore lint/security/noDangerouslySetInnerHtml: required for session intro */}
 				<script dangerouslySetInnerHTML={{ __html: introHeadScript }} />
+				<script dangerouslySetInnerHTML={{ __html: themeHeadScript }} />
 				<HeadContent />
 			</head>
 			<body>

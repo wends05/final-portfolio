@@ -2,6 +2,7 @@ import { useRouter, useRouterState } from "@tanstack/react-router";
 import { useEffect, useRef } from "react";
 import { useStore } from "zustand";
 import MenuItem from "#/features/public/components/menu/MenuItem";
+import ThemeToggle from "#/features/public/components/menu/ThemeToggle";
 import {
 	MENU_BUTTON_ID,
 	MENU_ITEMS,
@@ -251,13 +252,16 @@ export default function SiteMenu() {
 					))}
 				</ul>
 			</div>
-			<div className="page-grid hidden w-full pb-8 md:grid">
-				<p
+			{/* Theme toggle bottom right on phones; on desktop it moves left of
+			    the escape hint, which only shows where there is a keyboard. */}
+			<div className="page-grid w-full pb-8">
+				<div
 					data-menu-label
-					className="type-label col-span-full border-rule-inverse border-t pt-5 text-right text-inverse-muted"
+					className="type-label col-span-full flex items-center justify-end border-rule-inverse border-t pt-2 text-inverse-muted md:justify-between"
 				>
-					Esc to close
-				</p>
+					<ThemeToggle />
+					<p className="hidden md:block">Esc to close</p>
+				</div>
 			</div>
 		</nav>
 	);
