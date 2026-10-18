@@ -55,7 +55,7 @@ export default function ProjectCaseStudy({ page }: ProjectCaseStudyProps) {
 						</Link>
 					}
 				/>
-				{isFeatured != null && (
+				{isFeatured && (
 					<p className="type-label bg-primary px-1.5 py-1 text-primary-foreground">
 						featured
 					</p>

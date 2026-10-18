@@ -46,6 +46,11 @@ describe("getProjectPage", () => {
 		});
 	});
 
+	it("marks only featured projects as featured", () => {
+		expect(getProjectPage("featured")?.isFeatured).toBe(true);
+		expect(getProjectPage("new")?.isFeatured).toBe(false);
+	});
+
 	it("names the credited collaborators", () => {
 		expect(getProjectPage("new")?.credits).toEqual([
 			{ name: "Jane Doe", role: "Artist", profileUrl: null },
