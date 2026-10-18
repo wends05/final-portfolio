@@ -43,6 +43,7 @@ How to build the interface. shadcn is the component and token base ([decision 00
   - `themeHeadScript` runs inline in `<head>` before first paint. A stored `light` or `dark` choice in localStorage wins; anything else follows `prefers-color-scheme`.
   - `themeStore` (zustand, [0015](decisions/0015-zustand-for-client-ui-state.md)) holds the choice: `auto`, `light` or `dark`. It starts as `auto` on the server and in the first render; `hydrate()` reads the stored choice after hydration and follows system changes while on auto. `cycle()` moves auto → light → dark → auto; auto clears the stored key.
 - The toggle is `ThemeToggle`, a text button in the site menu's bottom row: bottom right on phones, left of "Esc to close" on desktop. Each click rolls the old label up out of its mask while the new one rises in.
+- A toggle click crossfades the theme with the View Transitions API (`fadeTheme` in `theme.ts`, 500ms with the `swiss` ease, timed by the `::view-transition-*(root)` rules in `src/styles.css`). Browsers without the API, reduced motion, and system changes on auto switch instantly.
 
 Add primitives with the shadcn CLI into `src/components/ui/` and reuse them, such as [button.tsx](../src/components/ui/button.tsx). After any CLI run, diff `src/styles.css` and restore the `var(--role)` lines if the CLI overwrote them.
 

@@ -107,6 +107,16 @@ body {
   --chart-5: oklch(0.268 0.011 36.5);
 }
 
+/*
+ * Theme toggle crossfade (fadeTheme in src/lib/theme.ts): the old frame fades
+ * into the new one. Reduced motion skips the transition in JS.
+ */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 500ms;
+  animation-timing-function: var(--ease-swiss, ease);
+}
+
 @theme inline {
   --font-sans: "Outfit Variable", "Helvetica Neue", Arial, sans-serif;
   --font-heading: var(--font-sans);

@@ -10,11 +10,19 @@ interface Browser {
 	/** Initial localStorage value under THEME_KEY; "throw" makes storage throw. */
 	stored?: string | null | "throw";
 	systemDark?: boolean;
+	reducedMotion?: boolean;
+	/** Whether document.startViewTransition exists. */
+	viewTransitions?: boolean;
 }
 
 // Stubs the browser globals the theme code touches and returns handles to
 // inspect them and to flip the system scheme.
-function stubBrowser({ stored = null, systemDark = false }: Browser = {}) {
+function stubBrowser({
+	stored = null,
+	systemDark = false,
+	reducedMotion = false,
+	viewTransitions = false,
+}: Browser = {}) {
 	const storage = new Map<string, string>();
 	if (stored !== null && stored !== "throw") storage.set(THEME_KEY, stored);
 	const blocked = stored === "throw";
@@ -37,7 +45,11 @@ function stubBrowser({ stored = null, systemDark = false }: Browser = {}) {
 	});
 
 	const classes = new Set<string>();
+	// Runs the update straight away, as the browser does once it has the
+	// old frame's snapshot.
+	const startViewTransition = vi.fn((update: () => void) => update());
 	vi.stubGlobal("document", {
+		...(viewTransitions && { startViewTransition }),
 		documentElement: {
 			classList: {
 				toggle: (name: string, force: boolean) => {
@@ -51,9 +63,10 @@ function stubBrowser({ stored = null, systemDark = false }: Browser = {}) {
 
 	let dark = systemDark;
 	const listeners: Array<() => void> = [];
-	vi.stubGlobal("matchMedia", () => ({
+	vi.stubGlobal("matchMedia", (query: string) => ({
 		get matches() {
-			return dark;
+			if (query === "(prefers-reduced-motion: reduce)") return reducedMotion;
+			return query === "(prefers-color-scheme: dark)" && dark;
 		},
 		addEventListener: (_: string, listener: () => void) => {
 			listeners.push(listener);
@@ -64,6 +77,7 @@ function stubBrowser({ stored = null, systemDark = false }: Browser = {}) {
 		storage,
 		classes,
 		listeners,
+		startViewTransition,
 		setSystemDark: (value: boolean) => {
 			dark = value;
 			for (const listener of listeners) listener();
@@ -169,5 +183,37 @@ describe("themeStore", () => {
 		store.getState().hydrate();
 		store.getState().hydrate();
 		expect(browser.listeners).toHaveLength(1);
+	});
+});
+
+describe("themeStore fade", () => {
+	it("crossfades a click through a view transition", () => {
+		const browser = stubBrowser({ viewTransitions: true });
+		createThemeStore().getState().cycle();
+		expect(browser.startViewTransition).toHaveBeenCalledTimes(1);
+		expect(browser.storage.get(THEME_KEY)).toBe("light");
+	});
+
+	it("switches instantly without view transition support", () => {
+		const browser = stubBrowser({ viewTransitions: false });
+		createThemeStore().getState().cycle();
+		expect(browser.storage.get(THEME_KEY)).toBe("light");
+	});
+
+	it("switches instantly with reduced motion", () => {
+		const browser = stubBrowser({ viewTransitions: true, reducedMotion: true });
+		const store = createThemeStore();
+		store.getState().cycle();
+		store.getState().cycle();
+		expect(browser.startViewTransition).not.toHaveBeenCalled();
+		expect(browser.classes.has("dark")).toBe(true);
+	});
+
+	it("does not fade a system change while on auto", () => {
+		const browser = stubBrowser({ viewTransitions: true });
+		createThemeStore().getState().hydrate();
+		browser.setSystemDark(true);
+		expect(browser.startViewTransition).not.toHaveBeenCalled();
+		expect(browser.classes.has("dark")).toBe(true);
 	});
 });

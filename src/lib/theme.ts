@@ -1,4 +1,5 @@
 import { createStore } from "zustand";
+import { REDUCED_MOTION } from "#/integrations/animations/motion";
 
 export const THEME_KEY = "color-schema";
 
@@ -44,6 +45,22 @@ export function applyChoice(choice: ThemeChoice) {
 	setDarkClass(choice);
 }
 
+/**
+ * Runs a theme change as a crossfade: the browser snapshots the old frame,
+ * runs `update`, then fades to the new one (timing in src/styles.css). Without
+ * View Transitions support, or with reduced motion, it switches instantly.
+ */
+function fadeTheme(update: () => void) {
+	if (
+		typeof document.startViewTransition !== "function" ||
+		matchMedia(REDUCED_MOTION).matches
+	) {
+		update();
+		return;
+	}
+	document.startViewTransition(update);
+}
+
 interface ThemeStore {
 	/** "auto" on the server and in the first client render; hydrate() reads the real one. */
 	choice: ThemeChoice;
@@ -73,7 +90,8 @@ export const createThemeStore = () =>
 			cycle: () => {
 				const choice = NEXT_CHOICE[get().choice];
 				set({ choice });
-				applyChoice(choice);
+				// Only a click fades; a system change on auto switches instantly.
+				fadeTheme(() => applyChoice(choice));
 			},
 		};
 	});
