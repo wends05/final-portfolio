@@ -30,8 +30,13 @@ const date = s
 		);
 	}, "Not a real date");
 
+// Links render as `href`, so only web URLs pass (not `javascript:` or `mailto:`).
 // An empty YAML value (`endedAt:`) parses as null, so optional fields accept it.
-const url = s.string().url().nullish();
+const url = s
+	.string()
+	.url()
+	.refine((value) => /^https?:\/\//.test(value), "Use an http or https URL")
+	.nullish();
 
 // `metadata` values are text, numbers, booleans, or lists of those.
 const metadataScalar = s.union([s.string(), s.number(), s.boolean()]);
