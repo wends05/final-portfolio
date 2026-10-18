@@ -73,7 +73,7 @@ function ContactTile({ link }: { link: ContactLink }) {
 				? { download: RESUME_FILENAME }
 				: { target: "_blank", rel: "noopener noreferrer" })}
 			className={cn(
-				"group flex min-h-30 flex-col justify-between gap-6 border border-rule p-4 focus-ring transition-[background-color,color,scale] duration-200 ease-swiss focus-visible:outline-offset-3 active:scale-98 sm:aspect-3/4 sm:p-5",
+				"group focus-ring flex min-h-30 flex-col justify-between gap-6 border border-rule p-4 transition-[background-color,color,scale] duration-200 ease-swiss focus-visible:outline-offset-3 active:scale-98 sm:aspect-3/4 sm:p-5",
 				download
 					? "bg-primary text-primary-foreground"
 					: "hover:bg-primary hover:text-primary-foreground focus-visible:bg-primary focus-visible:text-primary-foreground",
@@ -84,8 +84,8 @@ function ContactTile({ link }: { link: ContactLink }) {
 					className={cn(
 						"type-label",
 						download
-							? "text-steel"
-							: "text-muted-foreground group-hover:text-steel group-focus-visible:text-steel",
+							? "text-on-accent-muted"
+							: "text-muted-foreground group-hover:text-on-accent-muted group-focus-visible:text-on-accent-muted",
 					)}
 				>
 					{link.kicker}
@@ -101,8 +101,8 @@ function ContactTile({ link }: { link: ContactLink }) {
 					className={cn(
 						"type-meta wrap-anywhere",
 						download
-							? "text-steel"
-							: "text-muted-foreground group-hover:text-steel group-focus-visible:text-steel",
+							? "text-on-accent-muted"
+							: "text-muted-foreground group-hover:text-on-accent-muted group-focus-visible:text-on-accent-muted",
 					)}
 				>
 					{link.meta}
@@ -159,14 +159,14 @@ function EmailPanel() {
 			</fieldset>
 			<a
 				href={mailtoHref(email.address)}
-				className="wrap-anywhere w-fit text-heading-l focus-ring hover:underline focus-visible:outline-offset-4"
+				className="wrap-anywhere focus-ring w-fit text-heading-l hover:underline focus-visible:outline-offset-4"
 			>
 				{email.address}
 			</a>
 			<div className="flex flex-wrap items-center gap-2">
 				<a
 					href={mailtoHref(email.address)}
-					className="type-label inline-flex min-h-11 items-center gap-2 border border-rule bg-primary px-4 text-primary-foreground focus-ring"
+					className="type-label focus-ring inline-flex min-h-11 items-center gap-2 border border-rule bg-primary px-4 text-primary-foreground"
 				>
 					Write an email
 					<ArrowRightIcon size={16} aria-hidden />
@@ -174,7 +174,7 @@ function EmailPanel() {
 				<button
 					type="button"
 					onClick={copy}
-					className="type-label inline-flex min-h-11 items-center border border-rule px-4 focus-ring transition-colors duration-150 ease-swiss hover:bg-primary hover:text-primary-foreground active:bg-primary active:text-primary-foreground"
+					className="type-label focus-ring inline-flex min-h-11 items-center border border-rule px-4 transition-colors duration-150 ease-swiss hover:bg-primary hover:text-primary-foreground active:bg-primary active:text-primary-foreground"
 				>
 					{copied ? "Copied" : "Copy address"}
 				</button>

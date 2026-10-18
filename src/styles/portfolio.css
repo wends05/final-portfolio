@@ -26,6 +26,7 @@ html {
   --surface-inverse: var(--ink-black);
   --surface-accent: var(--ink-black);
   --on-accent: var(--paper);
+  --on-accent-muted: var(--steel-grey);
   --text: var(--ink-black);
   --text-muted: var(--dim-grey);
   --text-subtle: var(--steel-grey); /* 24px+ only (3.1:1) */
@@ -177,4 +178,16 @@ html {
    spanning N columns: `indent-span-4 md:indent-span-8`. */
 @utility indent-span-* {
   text-indent: calc((100% + var(--page-gap)) / --value(integer));
+}
+
+/* Split words that ink from --text-subtle to --text as --ink goes 0 → 1.
+   Colors resolve in CSS, so a theme switch mid-scroll re-mixes them. */
+@utility ink-words {
+  & > span {
+    color: color-mix(
+      in srgb,
+      var(--text) calc(var(--ink, 1) * 100%),
+      var(--text-subtle)
+    );
+  }
 }
