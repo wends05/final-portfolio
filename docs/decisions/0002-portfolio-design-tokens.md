@@ -1,7 +1,7 @@
 # 0002: Portfolio design tokens under the shadcn variables
 
 Date: 2026-10-04
-Status: Accepted
+Status: Accepted; amended 2026-10-18 with the Graphite dark theme (see [Amendment](#amendment-2026-10-18-graphite-dark-theme))
 
 ## Context
 
@@ -36,7 +36,7 @@ flowchart LR
 
 - shadcn primitives render with the portfolio colours (ink primary, paper surfaces, steel-grey borders and inputs) without changing their source.
 - shadcn primitives stay rounded, which departs from the system's `radius-none` rule. Portfolio components should use `rounded-none` or rely on square defaults.
-- `.dark` keeps shadcn's dark palette; the design system defines no dark theme.
+- ~~`.dark` keeps shadcn's dark palette; the design system defines no dark theme.~~ Superseded by the amendment below.
 - `shadcn add` or `shadcn apply` may write literal `oklch()` values back into `:root`. Diff `src/styles.css` after any CLI run and restore the `var(--role)` lines.
 - `src/styles/**` is excluded from Biome, as `src/styles.css` already was, because Biome's CSS parser has Tailwind directives disabled.
 - Tailwind's default spacing (`--spacing: 0.25rem`), border widths, the `md` breakpoint (768px) and the default durations already match the system, so no tokens were added for them.
@@ -46,3 +46,37 @@ flowchart LR
 On 2026-10-04: `bun --bun run build` passed, `bun --bun run lint:ds` passed, `bunx tsc --noEmit` showed only the existing `TS6198` in `ProjectCard.tsx`, and Biome reported no findings in the touched files. In the running dev server, `body` computed to paper `rgb(245, 244, 240)` and ink `rgb(4, 21, 31)` in Outfit Variable, both variable fonts loaded, and `bg-primary` resolved to ink with paper text. A Tailwind CLI compile of `src/styles.css` with a probe file emitted the expected `text-display-*`, `type-*`, `page-grid`, `bg-ink`, `border-rule`, `max-w-grid` and `ease-swiss` rules, and `cn("text-display-l", "text-muted-foreground")` kept both classes.
 
 Not verified: rendered pages using the new utilities (none use them yet), responsive behaviour on real pages, and whether `@shadcn/lint` rules such as `no-unknown-classes` see tokens defined in the imported `portfolio.css`.
+
+## Amendment 2026-10-18: Graphite dark theme
+
+### Context
+
+The design system gained a second theme, Graphite (dark): bone `#ecebe7` on a neutral charcoal `#131517`, with `graphite-raised` `#1d2023` for the footer, menu and sheet header, and ash, smoke, iron, slate and slate-light for secondary text and rules. Emphasis still comes from inversion: a bone block with graphite type. The shadcn `.dark` block was still shadcn's taupe literals, which override the `var(--role)` mappings on the same element.
+
+### Decision
+
+- Replace the shadcn `.dark` literals in `src/styles.css` with the Graphite palette and dark values for the portfolio roles. Every shadcn variable that `:root` maps to a role follows without being redeclared.
+- In `.dark`, point only the variables `:root` sets as literals at roles: `--secondary`, `--muted`, `--accent` and `--sidebar-accent` at `--surface-inverse`, their foregrounds at `--text`. `--destructive` and `--chart-*` keep shadcn's dark values; the design system defines none.
+- Add `on-accent-muted` (steel on ink, slate on bone) for muted text on an accent block. Steel on bone measures 2.9:1, under the 4.5:1 floor.
+- Set `color-scheme: light` on `html` and `color-scheme: dark` in `.dark`, so native controls and scrollbars match.
+- Components paint with roles only; palette utilities (`bg-ink`, `text-paper`, `text-steel`, `text-dim`) do not change with the theme.
+
+```mermaid
+flowchart LR
+  P["portfolio.css<br/>light palette + roles"] --> R[":root roles"]
+  D["styles.css .dark<br/>Graphite palette + roles"] -->|"class on html"| R
+  R --> S["shadcn variables<br/>var(--role)"]
+  S --> U["Tailwind utilities"]
+```
+
+`.dark` and `:root` have equal specificity, so `.dark` must come after the `:root` blocks in the compiled CSS. That is why it lives in `src/styles.css` after `:root`, not in `portfolio.css`, which is imported first.
+
+### Alternatives
+
+- **A separate dark stylesheet or `[data-theme]` attribute:** rejected. The `dark` Tailwind variant already keys off the `.dark` class (`@custom-variant dark (&:is(.dark *))`).
+- **Keeping shadcn's dark palette:** rejected. Its warm taupe clashes with the Graphite roles and paints shadcn primitives differently from portfolio components.
+
+### Consequences
+
+- Any colour JavaScript reads with `getComputedStyle` is frozen at that moment; animations tween numbers and let CSS resolve the roles ([UI conventions](../ui.md#themes)).
+- Theme switching (head script, store, toggle) is described in [UI conventions](../ui.md#themes).

@@ -87,7 +87,7 @@ Answered with the owner on 2026-10-04:
 Answered with the owner on 2026-10-05:
 
 - **Contact links:** LinkedIn and GitHub only, for now. On 2026-10-11 the owner added email: both addresses are offered, with the main (Gmail) address picked by default.
-- **Dark mode:** light mode only for now. Dark mode is deferred to the week of 2026-10-12 (Linear WD-43).
+- **Dark mode:** two themes, Light and Graphite (dark), from the Rence Portfolio design system (Linear WD-43). The site follows the visitor's system setting by default; a toggle in the site menu cycles auto, light and dark, and the browser remembers the choice.
 - **Tests:** every pull request that changes behavior includes tests, run with Vitest ([decision 0010](decisions/0010-vitest-tests-in-every-pr.md)).
 - **Runtime:** Node.js in production on Vercel; Bun stays the package manager and dev tool. No Bun-only runtime APIs ([decision 0005](decisions/0005-vercel-deployment.md)).
 - **React Server Components:** not used for now; server functions return plain data ([decision 0011](decisions/0011-no-react-server-components.md)).
