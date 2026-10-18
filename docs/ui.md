@@ -72,7 +72,7 @@ For every page: check keyboard focus, heading order, image alt text, and small-s
 Not-found and error pages share one template, [ErrorPage](../src/features/site/components/ErrorPage.tsx): a small label, a large lowercase title over a rule, then the path, the explanation, and two actions. The copy and actions for each kind live in `getErrorPageCopy` in [../src/features/site/site.utils.ts](../src/features/site/site.utils.ts).
 
 - The router's `defaultNotFoundComponent` renders the 404, and `defaultErrorComponent` ([RouteErrorPage](../src/features/site/components/RouteErrorPage.tsx)) renders errors.
-- Throw `notFound()` from a loader when content doesn't exist. Unpublished content 404s the same way as missing content.
+- Throw `notFound()` from a loader when content doesn't exist. A draft 404s the same way as missing content when drafts are off.
 - Unknown URLs fall through to the catch-all `routes/_public/$.tsx`, so the layout's coming-soon gate runs first and the 404 renders inside the layout.
 - A server-rendering error returns HTTP 500. An error after the page has loaded in the browser shows the same page; "Try again" calls `router.invalidate()`, which re-runs the loaders.
 - An error in the `/_public` layout itself renders without the Navbar, so that page draws its own wordmark (`standalone`).

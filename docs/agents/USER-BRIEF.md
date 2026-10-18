@@ -34,3 +34,7 @@ Scope: Documented portfolio goals and the initial storage discussion.
 | This request concerns project image uploads to Neon Object Storage. | `[A]` | Medium | High | Ask the owner whether storage means files, database rows, or both before choosing implementation scope. |
 
 The storage question was presented to the owner on 2026-10-04. No storage workflow or implementation scope has been accepted. Feature-specific journeys will belong with the feature's planning once the requested operations are known.
+
+## Update: 2026-10-17
+
+`[E]` The storage question no longer applies. The owner dropped the admin dashboard and the database: content, including images, lives in the repository and is edited by pull request ([decision 0019](../decisions/0019-static-site-content-in-repo.md)). Source: owner's decision on 2026-10-17. The owner's job "create or edit projects and skills" is now done by editing files, because the owner already works in the codebase.

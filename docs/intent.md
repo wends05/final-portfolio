@@ -1,6 +1,6 @@
 # Product intent
 
-Agreed with the owner: **2026-10-04**. This document states what the portfolio should become. When the code differs, this document is the direction.
+Agreed with the owner: **2026-10-04**. Updated with the owner: **2026-10-17** (no admin dashboard; content in the repository). This document states what the portfolio should become. When the code differs, this document is the direction.
 
 ## Purpose
 
@@ -21,7 +21,6 @@ flowchart TD
     Projects["/projects — all projects"]
     Detail["/projects/:project — case study"]
     Skills["/skills — all skills and the projects that use them"]
-    Admin["Admin — create and edit projects and skills"]
     Home --> Projects --> Detail
     Home --> Skills
     Skills --> Detail
@@ -34,52 +33,36 @@ flowchart TD
 | Skills | Skills such as Web development, each with its tools and the projects that used them |
 | Contact | Links only: LinkedIn, GitHub, and email (main and school addresses, main picked by default). No form and no contact backend |
 | Resume | A downloadable PDF |
-| Content editing | A protected admin dashboard with full create, edit, and delete for all content; see [Admin dashboard](#admin-dashboard) |
+| Content editing | Content lives in the repository and changes by pull request; see [Content editing](#content-editing) |
 
 ## Content rules
 
-- **Featured order is manual.** The three featured projects and three top skills are chosen and ordered explicitly through an order field, not by date or computed ranking.
+- **Featured order is manual.** The three featured projects and three top skills are chosen and ordered by hand, not by date or computed ranking.
 - **Projects and tools are many-to-many.** A project lists the tools it used; a skill page shows the projects that used any of its tools, filtered by tool. A tool can sit under several skills.
+- **Drafts are never public.** A draft project is hidden on the live site, even if it is featured.
 
-## Admin dashboard
+## Content editing
 
-Direction from the owner on 2026-10-05: a standard dashboard layout where the owner picks a content type, then adds, edits, or deletes entries. Full CRUD for everything, with edge cases handled.
+Direction from the owner on 2026-10-17: the owner edits content as files in the repository, so the site needs no admin dashboard ([decision 0019](decisions/0019-static-site-content-in-repo.md)). The site is static: pages are built ahead of time and change when a pull request merges.
 
-| Content type | Operations |
-| --- | --- |
-| Projects | Create, edit, delete, publish/unpublish, set featured rank, attach tools, collaborators, and images |
-| Skills | Create, edit, delete, set top rank and confidence |
-| Tools | Create, edit, delete, add to or remove from skills |
-| Collaborators | Create, edit, delete, link to projects with a role |
-| Project images | Upload, reorder, edit alt text, delete |
-
-Edge cases the dashboard must handle include:
-
-- Duplicate slugs and duplicate ranks (both unique): show a clear error, or offer to swap ranks.
-- Deleting a skill that still has tools: the tools stay and lose that skill (the database removes the `SkillTool` rows); say so before confirming.
-- Deleting a project: confirm, and remove its images from storage as well as its rows.
-- Unpublished projects: never shown publicly, even if ranked.
-- Confidence outside 0–100, missing required fields (such as image `alt`), invalid URLs and dates (`endedAt` before `startedAt`).
-- Concurrent edits and failed saves: no silent data loss.
-- Only the owner (`neon_auth.user.role = 'admin'`) can reach the dashboard or call its server functions.
+Adding or editing a project, skill, tool, or collaborator means editing files and opening a pull request. The build rejects invalid content before it ships: duplicate slugs, unknown tools or collaborators, confidence outside 0–100, missing image `alt`, invalid URLs, and `endedAt` before `startedAt`.
 
 ## Non-goals
 
 - Blog or long-form writing
 - Visitor analytics or tracking
 - Internationalization (English only)
+- An admin dashboard or any in-browser content editing
+- Authentication of any kind: there are no owner or visitor accounts
 
-Authentication is not a non-goal: the admin page needs it, for the owner only. Visitor accounts are out of scope.
-
-Changing the data model or adding auth is significant; record the chosen approach in [decisions](decisions/README.md).
+Changing the content model is significant; record the chosen approach in [decisions](decisions/README.md).
 
 ## Answered questions
 
 Answered with the owner on 2026-10-04:
 
-- **Admin authentication:** Neon Auth (Better Auth). The owner's user has `role = 'admin'` in `neon_auth.user`; no app table.
 - **Case-study URLs:** a unique `slug` field, so URLs are `/projects/<slug>`.
-- **Case-study content:** a `description` field for now; problem, approach, and result fields may come later.
+- **Case-study content:** a `description` field for now; problem, approach, and result fields may come later. On 2026-10-17 the owner chose a Markdown write-up for problem, approach, and result, with `description` kept as the short summary.
 - **Resume:** a static file at `public/resume.pdf`, replaced by commit.
 - **Skills and tools:** two levels ([0018](decisions/0018-skills-group-tools.md)). A skill (for example Web development, with a 0–100 confidence) groups tools (for example React), and a tool can sit under several skills. Projects link to tools, and the homepage's top skills are skills.
 - **Collaborators:** projects can credit a team name and collaborators with optional roles.
@@ -89,12 +72,14 @@ Answered with the owner on 2026-10-05:
 - **Contact links:** LinkedIn and GitHub only, for now. On 2026-10-11 the owner added email: both addresses are offered, with the main (Gmail) address picked by default.
 - **Dark mode:** two themes, Light and Graphite (dark), from the Rence Portfolio design system (Linear WD-43). The site follows the visitor's system setting by default; a toggle in the site menu cycles auto, light and dark, and the browser remembers the choice.
 - **Tests:** every pull request that changes behavior includes tests, run with Vitest ([decision 0010](decisions/0010-vitest-tests-in-every-pr.md)).
-- **Runtime:** Node.js in production on Vercel; Bun stays the package manager and dev tool. No Bun-only runtime APIs ([decision 0005](decisions/0005-vercel-deployment.md)).
+- **Runtime:** Node.js in production on Vercel; Bun stays the package manager and dev tool. No Bun-only runtime APIs ([decision 0005](decisions/0005-vercel-deployment.md)). Since 2026-10-17 the site is static output ([decision 0019](decisions/0019-static-site-content-in-repo.md)), so no runtime is chosen; Bun stays the tool, and code still avoids Bun-only APIs.
 - **React Server Components:** not used for now; server functions return plain data ([decision 0011](decisions/0011-no-react-server-components.md)).
 
-Answered with the owner on 2026-10-08:
+Answered with the owner on 2026-10-17:
 
-- **Admin sign-in:** email and password for the owner's existing account only. There is no sign-up, and one shared `requireAdmin()` guards every admin server function ([decision 0013](decisions/0013-admin-authentication-and-authorization.md)).
+- **Admin dashboard and authentication:** dropped. Content lives in the repository and is edited by pull request; the database, sign-in, and image bucket go away ([decision 0019](decisions/0019-static-site-content-in-repo.md)). This replaces the earlier answers on admin authentication (2026-10-04) and admin sign-in (2026-10-08).
+- **Drafts:** a `draft` flag replaces publish/unpublish. Drafts show only in local or preview builds with drafts switched on.
+- **Collaborators:** listed once and referenced from each project's credits, so a public collaborators feature can come later.
 
 ## Open questions
 
