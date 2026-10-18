@@ -52,23 +52,31 @@ export default function LandingSkillsSection({
 				Top skills I have experience with
 			</h2>
 			<div className="col-span-full space-y-3 md:-col-start-7 md:row-span-3 md:row-start-2">
-				{skills.map((skill) => (
-					<LandingSkillCard
-						key={skill.slug}
-						skill={skill}
-						onPick={setPicking}
-					/>
-				))}
+				{skills.length === 0 ? (
+					<p className="border-t pt-6 text-lead text-muted-foreground">
+						No skills up for display
+					</p>
+				) : (
+					skills.map((skill) => (
+						<LandingSkillCard
+							key={skill.slug}
+							skill={skill}
+							onPick={setPicking}
+						/>
+					))
+				)}
 			</div>
 			{/* Same link as the projects section's "see more". On phones it follows
 			    the rows; from md it sits under the heading. It fades out with the
 			    heading when a skill is picked. */}
-			<SeeMoreLink
-				to="/skills"
-				label="See more of my skills here"
-				pickFade
-				className="col-span-full mt-6 self-start justify-self-start md:col-span-4 md:col-start-1 md:row-start-3 md:mt-0"
-			/>
+			{skills.length > 0 && (
+				<SeeMoreLink
+					to="/skills"
+					label="See more of my skills here"
+					pickFade
+					className="col-span-full mt-6 self-start justify-self-start md:col-span-4 md:col-start-1 md:row-start-3 md:mt-0"
+				/>
+			)}
 		</div>
 	);
 }
