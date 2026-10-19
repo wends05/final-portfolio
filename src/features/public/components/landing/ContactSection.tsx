@@ -73,10 +73,10 @@ function ContactTile({ link }: { link: ContactLink }) {
 				? { download: RESUME_FILENAME }
 				: { target: "_blank", rel: "noopener noreferrer" })}
 			className={cn(
-				"group flex min-h-30 flex-col justify-between gap-6 border border-rule p-4 focus-ring transition-[background-color,color,scale] duration-200 ease-swiss focus-visible:outline-offset-3 active:scale-98 sm:aspect-3/4 sm:p-5",
+				"group focus-ring flex min-h-30 flex-col justify-between gap-6 border border-rule p-4 transition-[background-color,color,scale] duration-200 ease-swiss focus-visible:outline-offset-3 active:scale-98 sm:aspect-3/4 sm:p-5",
 				download
-					? "bg-ink text-paper"
-					: "hover:bg-ink hover:text-paper focus-visible:bg-ink focus-visible:text-paper",
+					? "bg-primary text-primary-foreground"
+					: "hover:bg-primary hover:text-primary-foreground focus-visible:bg-primary focus-visible:text-primary-foreground",
 			)}
 		>
 			<span className="flex items-start justify-between gap-2">
@@ -84,8 +84,8 @@ function ContactTile({ link }: { link: ContactLink }) {
 					className={cn(
 						"type-label",
 						download
-							? "text-steel"
-							: "text-dim group-hover:text-steel group-focus-visible:text-steel",
+							? "text-on-accent-muted"
+							: "text-muted-foreground group-hover:text-on-accent-muted group-focus-visible:text-on-accent-muted",
 					)}
 				>
 					{link.kicker}
@@ -101,8 +101,8 @@ function ContactTile({ link }: { link: ContactLink }) {
 					className={cn(
 						"type-meta wrap-anywhere",
 						download
-							? "text-steel"
-							: "text-dim group-hover:text-steel group-focus-visible:text-steel",
+							? "text-on-accent-muted"
+							: "text-muted-foreground group-hover:text-on-accent-muted group-focus-visible:text-on-accent-muted",
 					)}
 				>
 					{link.meta}
@@ -130,7 +130,7 @@ function EmailPanel() {
 	return (
 		<div className="flex flex-col gap-6 border border-rule p-4 sm:col-span-3 sm:p-5">
 			<div className="flex items-start justify-between gap-2">
-				<span className="type-label text-dim">04 · email</span>
+				<span className="type-label text-muted-foreground">04 · email</span>
 				<EnvelopeSimpleIcon size={28} aria-hidden />
 			</div>
 			<fieldset className="min-w-0">
@@ -139,7 +139,7 @@ function EmailPanel() {
 					{EMAILS.map((option) => (
 						<label
 							key={option.id}
-							className="type-label relative inline-flex min-h-11 cursor-pointer items-center border border-rule px-4 transition-colors duration-150 ease-swiss has-checked:bg-ink has-checked:text-paper has-focus-visible:outline-2 has-focus-visible:outline-ring has-focus-visible:outline-offset-2"
+							className="type-label relative inline-flex min-h-11 cursor-pointer items-center border border-rule px-4 transition-colors duration-150 ease-swiss has-checked:bg-primary has-checked:text-primary-foreground has-focus-visible:outline-2 has-focus-visible:outline-ring has-focus-visible:outline-offset-2"
 						>
 							<input
 								type="radio"
@@ -159,14 +159,14 @@ function EmailPanel() {
 			</fieldset>
 			<a
 				href={mailtoHref(email.address)}
-				className="wrap-anywhere w-fit text-heading-l focus-ring hover:underline focus-visible:outline-offset-4"
+				className="wrap-anywhere focus-ring w-fit text-heading-l hover:underline focus-visible:outline-offset-4"
 			>
 				{email.address}
 			</a>
 			<div className="flex flex-wrap items-center gap-2">
 				<a
 					href={mailtoHref(email.address)}
-					className="type-label inline-flex min-h-11 items-center gap-2 border border-rule bg-ink px-4 text-paper focus-ring"
+					className="type-label focus-ring inline-flex min-h-11 items-center gap-2 border border-rule bg-primary px-4 text-primary-foreground"
 				>
 					Write an email
 					<ArrowRightIcon size={16} aria-hidden />
@@ -174,7 +174,7 @@ function EmailPanel() {
 				<button
 					type="button"
 					onClick={copy}
-					className="type-label inline-flex min-h-11 items-center border border-rule px-4 focus-ring transition-colors duration-150 ease-swiss hover:bg-ink hover:text-paper active:bg-ink active:text-paper"
+					className="type-label focus-ring inline-flex min-h-11 items-center border border-rule px-4 transition-colors duration-150 ease-swiss hover:bg-primary hover:text-primary-foreground active:bg-primary active:text-primary-foreground"
 				>
 					{copied ? "Copied" : "Copy address"}
 				</button>

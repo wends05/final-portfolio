@@ -17,7 +17,7 @@ These docs describe where the portfolio is going and how to build it: product di
 | [Development](development.md) | Setup, commands, checks, generated files, dependency overrides, and Dependabot updates |
 | [Deployment](development.md#vercel) | Vercel setup, which branches deploy, environment variables, and what a push to `main` does |
 | [Content](data.md) | Content files, their fields and rules, drafts, images, and validation |
-| [UI conventions](ui.md) | Building sections, cards, navigation, or styles, or enabling design-system lint rules |
+| [UI conventions](ui.md) | Building sections, cards, navigation, or styles, working on the light and Graphite themes, or enabling design-system lint rules |
 | [Decisions](decisions/README.md) | Recording a significant implementation choice and its rationale |
 
 Read [../AGENTS.md](../AGENTS.md) first. For general orientation, continue through product intent and architecture; read the rest as needed.

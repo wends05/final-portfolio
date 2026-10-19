@@ -48,10 +48,6 @@ export default function PinnedText({
 			if (!trackEl || !stageEl) return;
 
 			matchFullMotion(() => {
-				const styles = getComputedStyle(trackEl);
-				const from = styles.getPropertyValue("--text-subtle").trim();
-				const to = styles.getPropertyValue("--text").trim();
-
 				// One array across all paragraphs, so they ink in reading order.
 				const q = appGSAP.utils.selector(stageEl);
 				const words = (q("p") as HTMLElement[]).flatMap(
@@ -75,9 +71,9 @@ export default function PinnedText({
 					)
 					.fromTo(
 						words,
-						{ color: from },
+						{ "--ink": 0 },
 						{
-							color: to,
+							"--ink": 1,
 							duration: inkTime,
 							ease: "none",
 							stagger: { amount: fill - inkTime },
@@ -111,7 +107,7 @@ export default function PinnedText({
 						// SplitText sets display:inline-block on words, which breaks
 						// text-justify spacing; only color animates, so keep them inline.
 						className={cn(
-							"[&>span]:inline! col-span-4 self-center text-justify font-normal text-heading-l md:col-span-8",
+							"[&>span]:inline! ink-words col-span-4 self-center text-justify font-normal text-heading-l md:col-span-8",
 							paragraphClassName,
 						)}
 					>

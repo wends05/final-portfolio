@@ -1,15 +1,17 @@
 /*
  * Rence Portfolio design system (tokens.json v1).
  * Palette and roles are plain custom properties; src/styles.css points the
- * shadcn variables at the roles. Paint with roles, not palette names.
+ * shadcn variables at the roles, and its .dark block re-points the roles to
+ * the Graphite (dark) palette. Paint with roles, not palette names.
  */
 
 html {
   scrollbar-width: thin;
-  scrollbar-color: var(--steel-grey) transparent;
+  scrollbar-color: var(--rule-soft) transparent;
   scrollbar-gutter: stable; /* no layout jump when a classic scrollbar returns */
   /* In-page jumps (native and Lenis) land clear of the fixed navbar. */
   scroll-padding-top: var(--navbar-height);
+  color-scheme: light;
 }
 
 :root {
@@ -24,6 +26,7 @@ html {
   --surface-inverse: var(--ink-black);
   --surface-accent: var(--ink-black);
   --on-accent: var(--paper);
+  --on-accent-muted: var(--steel-grey);
   --text: var(--ink-black);
   --text-muted: var(--dim-grey);
   --text-subtle: var(--steel-grey); /* 24px+ only (3.1:1) */
@@ -175,4 +178,16 @@ html {
    spanning N columns: `indent-span-4 md:indent-span-8`. */
 @utility indent-span-* {
   text-indent: calc((100% + var(--page-gap)) / --value(integer));
+}
+
+/* Split words that ink from --text-subtle to --text as --ink goes 0 → 1.
+   Colors resolve in CSS, so a theme switch mid-scroll re-mixes them. */
+@utility ink-words {
+  & > span {
+    color: color-mix(
+      in srgb,
+      var(--text) calc(var(--ink, 1) * 100%),
+      var(--text-subtle)
+    );
+  }
 }

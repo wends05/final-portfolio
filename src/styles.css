@@ -8,6 +8,7 @@
 @import "./styles/entrance.css";
 @import "./styles/footer.css";
 @import "./styles/lenis.css";
+@import "./styles/theme-toggle.css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -17,9 +18,9 @@ body {
 }
 
 /*
- * shadcn variables. Light values point at the portfolio roles in
- * src/styles/portfolio.css; secondary, muted, accent, destructive, charts,
- * radius and the .dark block keep their shadcn defaults.
+ * shadcn variables. Values point at the portfolio roles in
+ * src/styles/portfolio.css; secondary, muted, accent, destructive, charts and
+ * radius keep shadcn defaults. The .dark block below re-points the roles.
  */
 :root {
   --background: var(--surface);
@@ -56,38 +57,65 @@ body {
   --sidebar-ring: var(--focus);
 }
 
+/*
+ * Graphite (dark) theme. Re-points the portfolio roles; every shadcn variable
+ * that :root maps to a role follows on its own. Only the variables :root sets
+ * as literals are redeclared here.
+ */
 .dark {
-  --background: oklch(0.147 0.004 49.3);
-  --foreground: oklch(0.986 0.002 67.8);
-  --card: oklch(0.214 0.009 43.1);
-  --card-foreground: oklch(0.986 0.002 67.8);
-  --popover: oklch(0.214 0.009 43.1);
-  --popover-foreground: oklch(0.986 0.002 67.8);
-  --primary: oklch(0.922 0.005 34.3);
-  --primary-foreground: oklch(0.214 0.009 43.1);
-  --secondary: oklch(0.268 0.011 36.5);
-  --secondary-foreground: oklch(0.986 0.002 67.8);
-  --muted: oklch(0.268 0.011 36.5);
-  --muted-foreground: oklch(0.714 0.014 41.2);
-  --accent: oklch(0.268 0.011 36.5);
-  --accent-foreground: oklch(0.986 0.002 67.8);
+  color-scheme: dark;
+
+  /* Palette (dark) */
+  --graphite: #131517;
+  --graphite-raised: #1d2023;
+  --bone: #ecebe7;
+  --ash: #9ba0a4;
+  --smoke: #686e73;
+  --iron: #8b9196;
+  --slate: #5e6469;
+  --slate-light: #6a7075;
+
+  /* Roles */
+  --surface: var(--graphite);
+  --surface-inverse: var(--graphite-raised);
+  --surface-accent: var(--bone);
+  --on-accent: var(--graphite);
+  --on-accent-muted: var(--slate);
+  --text: var(--bone);
+  --text-muted: var(--ash);
+  --text-subtle: var(--smoke); /* 24px+ only (3.5:1) */
+  --text-inverse: var(--bone);
+  --text-inverse-muted: var(--ash);
+  --rule: var(--iron);
+  --rule-soft: var(--slate);
+  --rule-inverse: var(--slate-light);
+  --focus: var(--bone);
+  --focus-inverse: var(--bone);
+
+  /* shadcn variables that :root sets as light literals */
+  --secondary: var(--surface-inverse);
+  --secondary-foreground: var(--text);
+  --muted: var(--surface-inverse);
+  --accent: var(--surface-inverse);
+  --accent-foreground: var(--text);
+  --sidebar-accent: var(--surface-inverse);
+  --sidebar-accent-foreground: var(--text);
   --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.547 0.021 43.1);
   --chart-1: oklch(0.868 0.007 39.5);
   --chart-2: oklch(0.547 0.021 43.1);
   --chart-3: oklch(0.438 0.017 39.3);
   --chart-4: oklch(0.367 0.016 35.7);
   --chart-5: oklch(0.268 0.011 36.5);
-  --sidebar: oklch(0.214 0.009 43.1);
-  --sidebar-foreground: oklch(0.986 0.002 67.8);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.986 0.002 67.8);
-  --sidebar-accent: oklch(0.268 0.011 36.5);
-  --sidebar-accent-foreground: oklch(0.986 0.002 67.8);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.547 0.021 43.1);
+}
+
+/*
+ * Theme toggle crossfade (fadeTheme in src/lib/theme.ts): the old frame fades
+ * into the new one. Reduced motion skips the transition in JS.
+ */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 500ms;
+  animation-timing-function: var(--ease-swiss, ease);
 }
 
 @theme inline {
@@ -141,6 +169,7 @@ body {
   --color-inverse: var(--surface-inverse);
   --color-inverse-foreground: var(--text-inverse);
   --color-inverse-muted: var(--text-inverse-muted);
+  --color-on-accent-muted: var(--on-accent-muted);
   --color-rule: var(--rule);
   --color-rule-soft: var(--rule-soft);
   --color-rule-inverse: var(--rule-inverse);

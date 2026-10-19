@@ -4,14 +4,15 @@ How to build the interface. shadcn is the component and token base ([decision 00
 
 ## Styles and tokens
 
-1. [../src/styles/portfolio.css](../src/styles/portfolio.css): the Rence Portfolio design system. Palette (`--ink-black`, `--paper`, `--steel-grey`, `--dim-grey`), semantic roles (`--surface`, `--text`, `--text-muted`, `--rule`, `--focus`…), type scale, fonts, layout utilities.
-2. [../src/styles.css](../src/styles.css): the shadcn entry. Its light variables point at the portfolio roles (`--background: var(--surface)`, `--primary: var(--surface-accent)`, `--border: var(--rule-soft)`, `--ring: var(--focus)`).
+1. [../src/styles/portfolio.css](../src/styles/portfolio.css): the Rence Portfolio design system. Light palette (`--ink-black`, `--paper`, `--steel-grey`, `--dim-grey`), semantic roles (`--surface`, `--text`, `--text-muted`, `--rule`, `--focus`…), type scale, fonts, layout utilities.
+2. [../src/styles.css](../src/styles.css): the shadcn entry. Its variables point at the portfolio roles (`--background: var(--surface)`, `--primary: var(--surface-accent)`, `--border: var(--rule-soft)`, `--ring: var(--focus)`). Its `.dark` block holds the Graphite palette (`--graphite`, `--graphite-raised`, `--bone`, `--ash`, `--smoke`, `--iron`, `--slate`, `--slate-light`) and re-points the roles to it, so every variable mapped to a role follows.
 3. Feature-specific CSS goes in `src/styles/`, for example `intro.css`.
 
 | Need | Use |
 | --- | --- |
 | Page ground, text, muted text | `bg-background`, `text-foreground`, `text-muted-foreground` |
-| Emphasis by inversion | `bg-primary text-primary-foreground`, or `bg-ink text-paper` |
+| Emphasis by inversion | `bg-primary text-primary-foreground`; muted text on that block `text-on-accent-muted` |
+| Inversion on an inverse ground (the menu wash) | `bg-inverse-foreground text-inverse` |
 | Footer and inverse blocks | `bg-inverse text-inverse-foreground`, secondary text `text-inverse-muted` |
 | Hairlines | `border-rule` (primary), `border-rule-soft` (secondary); `border` = 1px, `border-2` = heavy rule |
 | Ghost display type (24px+ only) | `text-subtle` |
@@ -31,7 +32,19 @@ How to build the interface. shadcn is the component and token base ([decision 00
 - Use semantic tokens, not raw colors or arbitrary values.
 - Give every custom focusable element `focus-ring`. Do not combine `outline-none` with `focus-visible:outline-2`: in Tailwind v4, `outline-none` also sets `--tw-outline-style: none`, and `outline-2` reads that variable, so no ring draws. shadcn primitives keep their own `focus-visible:ring-*` box-shadow ring.
 - Values JavaScript needs (durations, eases, scroll distances) live in TypeScript and reach CSS as custom properties, as `PinnedText` and `CoverEdge` do. Values only CSS uses stay in CSS.
-- Build for light mode only for now. The `.dark` block in `src/styles.css` is unused until dark mode is designed ([intent](intent.md#answered-questions)).
+- Build every surface for both themes, Light and Graphite (dark) ([intent](intent.md#answered-questions), [decision 0002](decisions/0002-portfolio-design-tokens.md)). Check text contrast in both: 4.5:1, or 3:1 for 24px+ text, rules, focus rings and icons.
+
+## Themes
+
+- Paint with roles, never palette names. `bg-ink`, `text-paper`, `text-steel`, `text-dim` and `var(--ink-black)`-style values stay the same in Graphite; the role utilities and `var(--surface)`-style values follow the theme. A new role needs a light value in `portfolio.css` and a Graphite value in the `.dark` block.
+- The theme is the `dark` class on `<html>`. It must sit on `<html>`: the shadcn variables resolve there, so a class lower down would not reach them.
+- Never read a resolved colour in JavaScript and write it inline (`getComputedStyle(...).getPropertyValue("--text")` into a GSAP `color` tween): the value freezes and a theme switch leaves it behind. Animate a number and let CSS pick the colours, as `PinnedText` does with `--ink` and the `ink-words` utility.
+- Switching lives in [../src/lib/theme.ts](../src/lib/theme.ts):
+  - `themeHeadScript` runs inline in `<head>` before first paint. A stored `light` or `dark` choice in localStorage wins; anything else follows `prefers-color-scheme`. It also leaves the choice on `<html>` as `data-theme-choice` (absent for auto); `applyChoice` keeps it in step.
+  - `themeStore` (zustand, [0015](decisions/0015-zustand-for-client-ui-state.md)) holds the choice: `auto`, `light` or `dark`. It starts as `auto` on the server and in the first render; `hydrate()` reads the stored choice after hydration and follows system changes while on auto. `cycle()` moves auto → light → dark → auto; auto clears the stored key.
+- The toggle is `ThemeToggle`, a text button in two places: the navbar, left of the Menu button, on desktop only; and the site menu's bottom row, bottom right on phones and left of "Esc to close" on desktop. Each click rolls the old label up out of its mask while the new one rises in.
+- Anything visible before hydration that depends on the stored choice must come from the head script, not the store: the store says `auto` until `hydrate()` runs. `ThemeToggle` renders all three labels and [../src/styles/theme-toggle.css](../src/styles/theme-toggle.css) shows the one matching `data-theme-choice`, so the label is right from the first paint and the server and client render the same markup.
+- A toggle click crossfades the theme with the View Transitions API (`fadeTheme` in `theme.ts`, 500ms with the `swiss` ease, timed by the `::view-transition-*(root)` rules in `src/styles.css`). Browsers without the API, reduced motion, and system changes on auto switch instantly. Each toggle has its own `view-transition-name` (`theme-toggle-nav`, `theme-toggle-menu`; names must be unique on the page), and `theme-toggle.css` hides its old snapshot, so the label roll is never overlaid by the old frame's label.
 
 Add primitives with the shadcn CLI into `src/components/ui/` and reuse them, such as [button.tsx](../src/components/ui/button.tsx). After any CLI run, diff `src/styles.css` and restore the `var(--role)` lines if the CLI overwrote them.
 
