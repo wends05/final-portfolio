@@ -1,23 +1,6 @@
 import { getProjectPeriodLabel } from "#/features/public/utils/project-meta";
-import type { ProjectLinkTarget, ProjectSummary } from "./projects.types";
-
-type Orderable = Pick<ProjectSummary, "featuredRank" | "createdAt">;
-
-/**
- * The /projects order: featured projects by their rank, then the rest newest
- * first. Returns a new array.
- */
-export function orderProjectsForIndex<T extends Orderable>(projects: T[]): T[] {
-	const featured: T[] = [];
-	const rest: T[] = [];
-	for (const project of projects) {
-		(project.featuredRank == null ? rest : featured).push(project);
-	}
-	featured.sort((a, b) => (a.featuredRank ?? 0) - (b.featuredRank ?? 0));
-	// ISO timestamps sort by plain string comparison.
-	rest.sort((a, b) => b.createdAt.localeCompare(a.createdAt));
-	return [...featured, ...rest];
-}
+import type { Collaborator, Project } from "#content";
+import type { ProjectCredit, ProjectLinkTarget } from "./projects.types";
 
 /**
  * Where `slug` sits in an ordered list (from 1), and the project after it,
@@ -77,7 +60,7 @@ export const padIndex = (n: number) => String(n).padStart(2, "0");
  * site comes first: it is the one the page shows as the solid button.
  */
 export function getProjectLinks(
-	project: Pick<ProjectSummary, "githubUrl" | "liveUrl">,
+	project: Pick<Project, "githubUrl" | "liveUrl">,
 ): { label: string; href: string }[] {
 	return [
 		{ label: "live site", href: project.liveUrl },
@@ -90,7 +73,7 @@ export function getProjectLinks(
  * "about" line: "Sep 2024 – now · ongoing", or just the status without dates.
  */
 export function getProjectDateLine(
-	project: Pick<ProjectSummary, "status" | "startedAt" | "endedAt">,
+	project: Pick<Project, "status" | "startedAt" | "endedAt">,
 ): string {
 	// An ongoing project without a start date already reads "ongoing".
 	const parts = new Set([
@@ -148,5 +131,43 @@ export function getMetadataRows(metadata: unknown): ProjectMetaRow[] {
 		return typeof label === "string" && label.trim() && text
 			? [{ label: label.trim(), value: text }]
 			: [];
+	});
+}
+
+/** Featured projects in `featured` order, then the rest newest first. Returns a new array. */
+export function orderProjects<T extends { slug: string; startedAt: string }>(
+	projects: T[],
+	featured: string[],
+): T[] {
+	// map out the featured projects
+	const featuredRanked: Map<string, number> = new Map(
+		featured.map((s, i) => [s, i]),
+	);
+	return [...projects].sort((a, b) => {
+		const ra = featuredRanked.get(a.slug) ?? Number.POSITIVE_INFINITY;
+		const rb = featuredRanked.get(b.slug) ?? Number.POSITIVE_INFINITY;
+		if (ra !== rb) return ra - rb; // featured first, in featured order
+
+		return b.startedAt.localeCompare(a.startedAt); // then newest first
+	});
+}
+
+/* The project’s credits with each collaborator’s name and profile URL, in credit order; unknown slugs are skipped */
+export function resolveCredits(
+	credits: Project["credits"],
+	collaborators: Collaborator[],
+): ProjectCredit[] {
+	const collaboratorsMap: Map<string, Collaborator> = new Map(
+		collaborators.map((c) => [c.slug, c]),
+	);
+
+	return credits.flatMap((credit) => {
+		const col = collaboratorsMap.get(credit.collaborator);
+		if (!col) return [];
+		return {
+			name: col.name,
+			role: credit.role ?? null,
+			profileUrl: col.profileUrl ?? null,
+		};
 	});
 }

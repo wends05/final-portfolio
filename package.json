@@ -4,7 +4,8 @@
   "private": true,
   "type": "module",
   "imports": {
-    "#/*": "./src/*"
+    "#/*": "./src/*",
+    "#content": "./.velite/index.js"
   },
   "scripts": {
     "dev": "vite dev --port 3000",
@@ -19,7 +20,14 @@
     "verify": "bun scripts/verify.mjs",
     "test": "vitest run",
     "test:watch": "vitest",
-    "contract:emit": "prisma contract emit"
+    "contract:emit": "prisma contract emit",
+    "postinstall": "bun run content",
+    "content": "velite build --strict",
+    "new:project": "bun scripts/new-project.ts",
+    "pretypecheck": "bun run content",
+    "pretest": "bun run content",
+    "pretest:watch": "bun run content",
+    "prelint:ds": "bun run content"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1150.0",
@@ -74,6 +82,7 @@
     "oxlint": "^1.87.0",
     "tsx": "^4.23.15",
     "typescript": "^7.0.2",
+    "velite": "^0.4.0",
     "vite": "^8.3.4",
     "vitest": "^5.0.4"
   },

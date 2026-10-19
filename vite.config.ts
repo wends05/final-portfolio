@@ -4,7 +4,8 @@ import { devtools } from "@tanstack/devtools-vite";
 import { tanstackStart } from "@tanstack/react-start/plugin/vite";
 import viteReact, { reactCompilerPreset } from "@vitejs/plugin-react";
 import { nitro } from "nitro/vite";
-import { defineConfig } from "vite";
+import { build as buildContent } from "velite";
+import { defineConfig, type Plugin, type ResolvedConfig } from "vite";
 
 // Nitro's own ignore list; a custom `onwarn` replaces Nitro's, so it is repeated here.
 const NITRO_IGNORED_WARNINGS = new Set([
@@ -14,9 +15,32 @@ const NITRO_IGNORED_WARNINGS = new Set([
 	"EMPTY_BUNDLE",
 ]);
 
+// Runs Velite inside Vite (ADR 0019): watching in dev, one cleaning build in build.
+function velite(): Plugin {
+	let resolved: ResolvedConfig;
+	let started = false;
+	return {
+		name: "velite",
+		configResolved(config) {
+			resolved = config;
+		},
+		async buildStart() {
+			// Vite 8 calls buildStart once per environment; Velite runs once.
+			if (started) return;
+			started = true;
+			// Vite loads .env files into import.meta.env only; prepare reads process.env.
+			const showDrafts = resolved.env.VITE_SHOW_DRAFTS;
+			if (showDrafts) process.env.VITE_SHOW_DRAFTS = showDrafts;
+			const isDev = resolved.command === "serve";
+			await buildContent({ watch: isDev, clean: !isDev });
+		},
+	};
+}
+
 const config = defineConfig({
 	resolve: { tsconfigPaths: true },
 	plugins: [
+		velite(),
 		devtools(),
 		nitro({
 			rollupConfig: { external: [/^@sentry\//] },

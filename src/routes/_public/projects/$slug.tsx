@@ -1,21 +1,10 @@
 import { createFileRoute, notFound } from "@tanstack/react-router";
 import ProjectCaseStudy from "#/features/projects/components/ProjectCaseStudy";
-import { getProjectPageFn } from "#/features/projects/projects.functions";
+import { getProjectPage } from "#/features/projects/projects.content";
 
-export const Route = createFileRoute("/_public/projects/$")({
+export const Route = createFileRoute("/_public/projects/$slug")({
 	loader: async ({ params }) => {
-		const slug = params._splat ?? "";
-		if (!slug) throw notFound();
-		// Unknown and unpublished slugs both 404, so drafts stay hidden.
-		let page = await getProjectPageFn({ data: { slug } });
-		// In development, mock slugs resolve until real projects are published.
-		// The dynamic import keeps the mocks out of the production bundle.
-		if (import.meta.env.DEV && !page) {
-			const { getMockProjectPage } = await import(
-				"#/features/projects/utils/project-mocks"
-			);
-			page = getMockProjectPage(slug);
-		}
+		const page = getProjectPage(params.slug);
 		if (!page) throw notFound();
 		return { page };
 	},
@@ -28,8 +17,8 @@ export const Route = createFileRoute("/_public/projects/$")({
 				{ name: "description", content: project.description },
 				{ property: "og:title", content: project.title },
 				{ property: "og:description", content: project.description },
-				...(project.coverImageUrl
-					? [{ property: "og:image", content: project.coverImageUrl }]
+				...(project.cover
+					? [{ property: "og:image", content: project.cover.src }]
 					: []),
 			],
 		};

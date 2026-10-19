@@ -2,11 +2,11 @@ import { Link } from "@tanstack/react-router";
 import type { FocusEvent, PointerEvent } from "react";
 import { isPlainClick } from "#/features/public/utils/pick";
 import { cn } from "#/lib/utils";
-import type { ProjectSummary } from "../projects.types";
+import type { Project } from "#content";
 import { padIndex } from "../projects.utils";
 
 interface ProjectCardProps {
-	project: ProjectSummary;
+	project: Project;
 	/** Position in the /projects order, from 0. */
 	index: number;
 	/** This tile is the one in the details panel. */
@@ -38,8 +38,8 @@ export default function ProjectCard({
 		<li data-pick-fade data-entrance>
 			<Link
 				data-tile
-				to="/projects/$"
-				params={{ _splat: project.slug }}
+				to="/projects/$slug"
+				params={{ slug: project.slug }}
 				onPointerEnter={onPointerEnter}
 				onFocus={onFocus}
 				onClick={(e) => {
@@ -60,9 +60,9 @@ export default function ProjectCard({
 						row && "max-md:w-5/12 max-md:shrink-0",
 					)}
 				>
-					{project.coverImageUrl && (
+					{project.cover && (
 						<img
-							src={project.coverImageUrl}
+							src={project.cover.src}
 							alt=""
 							loading="lazy"
 							className="absolute inset-0 size-full object-cover"

@@ -5,21 +5,21 @@ import EndSection from "#/features/public/components/landing/EndSection";
 import HeroSection from "#/features/public/components/landing/HeroSection";
 import LandingProjectsSection from "#/features/public/components/landing/LandingProjectsSection";
 import LandingSkillsSection from "#/features/public/components/landing/LandingSkillsSection";
-import { getHomepageFn } from "#/features/public/public.functions";
+import { getHomepage } from "#/features/public/public.content";
 
 export const Route = createFileRoute("/_public/")({
 	component: Home,
-	loader: () => getHomepageFn(),
+	loader: getHomepage,
 });
 
 function Home() {
-	const { projects, skills } = Route.useLoaderData();
+	const { featuredProjects, topSkills } = Route.useLoaderData();
 	return (
 		<div>
 			<HeroSection />
 			<DescriptionSection />
-			<LandingProjectsSection projects={projects} />
-			<LandingSkillsSection skills={skills} />
+			<LandingProjectsSection projects={featuredProjects} />
+			<LandingSkillsSection skills={topSkills} />
 			<EndSection />
 			<ContactSection />
 		</div>

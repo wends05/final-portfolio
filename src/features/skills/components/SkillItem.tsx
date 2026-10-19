@@ -3,11 +3,11 @@ import { Link } from "@tanstack/react-router";
 import { Progress, ProgressValue } from "#/components/ui/progress";
 import WashText from "#/features/public/components/landing/WashText";
 import { isPlainClick } from "#/features/public/utils/pick";
-import type { SkillsPageSkill } from "../skills.types";
+import type { SkillOverview } from "../skills.types";
 import { splitVisibleTools } from "../skills.utils";
 
 interface SkillItemProps {
-	skill: SkillsPageSkill;
+	skill: SkillOverview;
 	active: boolean;
 	onActivate: () => void;
 	/** Starts the pick transition; the page navigates when it ends. */
@@ -58,18 +58,16 @@ export default function SkillItem({
 						<WashText>{skill.name}</WashText>
 					</h2>
 					<span data-pick-fade className={`type-index ${hideClassName}`}>
-						{visible.map((s) => s.name).join(" · ")}
+						{visible.join(" · ")}
 						{hidden > 0 && <span> +{hidden}</span>}
 					</span>
-					{skill.confidence !== null && (
-						<Progress
-							data-pick-fade
-							value={skill.confidence}
-							className={hideClassName}
-						>
-							<ProgressValue className="type-meta" />
-						</Progress>
-					)}
+					<Progress
+						data-pick-fade
+						value={skill.confidence}
+						className={hideClassName}
+					>
+						<ProgressValue className="type-meta" />
+					</Progress>
 				</div>
 				<span className="self-center">
 					<CaretRightIcon />

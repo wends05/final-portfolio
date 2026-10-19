@@ -1,10 +1,7 @@
 import { format, parseISO } from "date-fns";
-import type { ProjectWithCoverImageUrl } from "#/features/projects/projects.types";
+import type { Project } from "#content";
 
-type ProjectDates = Pick<
-	ProjectWithCoverImageUrl,
-	"status" | "startedAt" | "endedAt"
->;
+type ProjectDates = Pick<Project, "status" | "startedAt" | "endedAt">;
 
 // parseISO reads a date-only string as local midnight, so the month never
 // slips back a day in timezones behind UTC (unlike `new Date("2026-03-01")`).
@@ -24,7 +21,7 @@ export function getProjectPeriodLabel(project: ProjectDates): string | null {
 
 /** The project's meta line: its period and team, each only when present. */
 export function getProjectMetaLine(
-	project: ProjectDates & Pick<ProjectWithCoverImageUrl, "teamName">,
+	project: ProjectDates & Pick<Project, "teamName">,
 ): string {
 	return [getProjectPeriodLabel(project), project.teamName]
 		.filter(Boolean)

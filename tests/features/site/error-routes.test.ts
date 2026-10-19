@@ -1,13 +1,21 @@
 import { isNotFound, isRedirect } from "@tanstack/react-router";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-const { getProjectPageFn, getSiteGate } = vi.hoisted(() => ({
-	getProjectPageFn: vi.fn(),
-	getSiteGate: vi.fn(),
-}));
+const { getSiteGate } = vi.hoisted(() => ({ getSiteGate: vi.fn() }));
 
-vi.mock("#/features/projects/projects.functions", () => ({
-	getProjectPageFn,
+// One published project. Drafts are removed before the data is generated, so
+// a draft's slug is as unknown here as a typo.
+vi.mock("#content", () => ({
+	projects: [
+		{
+			slug: "portfolio",
+			title: "Portfolio",
+			startedAt: "2026-10-01",
+			credits: [],
+		},
+	],
+	collaborators: [],
+	site: { featured: [], topSkills: [] },
 }));
 vi.mock("#/features/site/site.functions", () => ({ getSiteGate }));
 // The layout component pulls in GSAP and Lenis; these tests only need the
@@ -18,7 +26,7 @@ vi.mock("#/features/public/components/RootLayout", () => ({
 
 const { Route: publicLayout } = await import("#/routes/_public/route");
 const { Route: catchAll } = await import("#/routes/_public/$");
-const { Route: projectRoute } = await import("#/routes/_public/projects/$");
+const { Route: projectRoute } = await import("#/routes/_public/projects/$slug");
 
 // Route hooks take a large context object; these only read what is passed.
 type Hook = (ctx: unknown) => unknown;
@@ -52,38 +60,18 @@ describe("unknown URLs", () => {
 });
 
 describe("project page loader", () => {
-	const load = (slug: string | undefined) =>
-		run(projectRoute.options.loader, { params: { _splat: slug } });
+	const load = (slug: string) =>
+		run(projectRoute.options.loader, { params: { slug } });
 
-	it("throws notFound when no published project has the slug", async () => {
-		// getProjectBySlug filters on published, so drafts come back null too.
-		getProjectPageFn.mockResolvedValue(null);
-
+	it("throws notFound for a slug with no project, drafts included", async () => {
 		await expect(load("draft-or-missing")).rejects.toSatisfy(isNotFound);
-		expect(getProjectPageFn).toHaveBeenCalledWith({
-			data: { slug: "draft-or-missing" },
-		});
 	});
 
-	it("throws notFound for an empty slug without querying", async () => {
-		await expect(load("")).rejects.toSatisfy(isNotFound);
-		expect(getProjectPageFn).not.toHaveBeenCalled();
-	});
-
-	it("returns the page when the project exists", async () => {
-		const page = { project: { slug: "portfolio", title: "Portfolio" } };
-		getProjectPageFn.mockResolvedValue(page);
-
-		await expect(load("portfolio")).resolves.toEqual({ page });
-	});
-
-	it("falls back to a mock project in development", async () => {
-		// Vitest runs in development mode, like `bun run dev`.
-		getProjectPageFn.mockResolvedValue(null);
-
-		const { page } = (await load("capycopy")) as {
-			page: { project: { slug: string } };
+	it("returns the case study when the project exists", async () => {
+		const { page } = (await load("portfolio")) as {
+			page: { project: { slug: string }; position: number; total: number };
 		};
-		expect(page.project.slug).toBe("capycopy");
+		expect(page.project.slug).toBe("portfolio");
+		expect(page).toMatchObject({ position: 1, total: 1 });
 	});
 });

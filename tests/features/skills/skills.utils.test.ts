@@ -2,11 +2,13 @@ import { describe, expect, it } from "vitest";
 import {
 	filterProjectsByTool,
 	getProjectsUsingTools,
+	getSkillPosition,
+	orderSkillsPage,
 	splitPicked,
 	splitVisibleTools,
 } from "#/features/skills/skills.utils";
 
-const tools = (...names: string[]) => names.map((name) => ({ name }));
+const tools = (...names: string[]) => names;
 
 describe("splitVisibleTools", () => {
 	it("shows the first tools and counts the rest", () => {
@@ -14,11 +16,7 @@ describe("splitVisibleTools", () => {
 			tools("React", "TypeScript", "Prisma", "Tailwind CSS", "Go"),
 			3,
 		);
-		expect(visible.map((s) => s.name)).toEqual([
-			"React",
-			"TypeScript",
-			"Prisma",
-		]);
+		expect(visible).toEqual(["React", "TypeScript", "Prisma"]);
 		expect(hidden).toBe(2);
 	});
 
@@ -64,17 +62,17 @@ describe("splitPicked", () => {
 
 describe("filterProjectsByTool", () => {
 	const projects = [
-		{ slug: "taskflow", tools: [{ id: "react" }, { id: "prisma" }] },
-		{ slug: "wends-dev", tools: [{ id: "react" }] },
-		{ slug: "ledger-cli", tools: [{ id: "go" }] },
+		{ slug: "taskflow", tools: ["React", "Prisma"] },
+		{ slug: "wends-dev", tools: ["react"] },
+		{ slug: "ledger-cli", tools: ["Go"] },
 	];
 
 	it("keeps every project when no tool is selected", () => {
 		expect(filterProjectsByTool(projects, null)).toBe(projects);
 	});
 
-	it("keeps only the projects that used the selected tool", () => {
-		expect(filterProjectsByTool(projects, "react").map((p) => p.slug)).toEqual([
+	it("keeps the projects that used the selected tool, ignoring case", () => {
+		expect(filterProjectsByTool(projects, "React").map((p) => p.slug)).toEqual([
 			"taskflow",
 			"wends-dev",
 		]);
@@ -84,20 +82,20 @@ describe("filterProjectsByTool", () => {
 	});
 
 	it("returns nothing for a tool no project used", () => {
-		expect(filterProjectsByTool(projects, "redis")).toEqual([]);
+		expect(filterProjectsByTool(projects, "Redis")).toEqual([]);
 	});
 });
 
 describe("getProjectsUsingTools", () => {
 	const projects = [
-		{ slug: "taskflow", tools: [{ id: "react" }, { id: "prisma" }] },
-		{ slug: "wends-dev", tools: [{ id: "react" }] },
-		{ slug: "ledger-cli", tools: [{ id: "go" }] },
+		{ slug: "taskflow", tools: ["React", "Prisma"] },
+		{ slug: "wends-dev", tools: ["react"] },
+		{ slug: "ledger-cli", tools: ["Go"] },
 		{ slug: "notes", tools: [] },
 	];
 
-	it("keeps the projects that used any of the tools", () => {
-		const used = getProjectsUsingTools(projects, new Set(["react", "go"]));
+	it("keeps the projects that used any of the skill's tools, ignoring case", () => {
+		const used = getProjectsUsingTools(projects, ["React", "go"]);
 		expect(used.map((p) => p.slug)).toEqual([
 			"taskflow",
 			"wends-dev",
@@ -105,12 +103,51 @@ describe("getProjectsUsingTools", () => {
 		]);
 	});
 
-	it("keeps only the given tools on each project", () => {
-		const [taskflow] = getProjectsUsingTools(projects, new Set(["prisma"]));
-		expect(taskflow?.tools).toEqual([{ id: "prisma" }]);
+	it("keeps only the skill's tools on each project, as the project spells them", () => {
+		const [taskflow, wendsDev] = getProjectsUsingTools(projects, ["REACT"]);
+		expect(taskflow?.tools).toEqual(["React"]);
+		expect(wendsDev?.tools).toEqual(["react"]);
 	});
 
 	it("returns nothing when the skill has no tools", () => {
-		expect(getProjectsUsingTools(projects, new Set())).toEqual([]);
+		expect(getProjectsUsingTools(projects, [])).toEqual([]);
+	});
+});
+
+describe("getSkillPosition", () => {
+	it("is the index in topSkills, or -1", () => {
+		expect(getSkillPosition("games", ["web", "games"])).toBe(1);
+		expect(getSkillPosition("devops", ["web", "games"])).toBe(-1);
+	});
+});
+
+describe("orderSkillsPage", () => {
+	const skill = (slug: string, confidence: number) => ({
+		slug,
+		name: slug,
+		confidence,
+	});
+	const skills = [
+		skill("devops", 40),
+		skill("web", 80),
+		skill("games", 60),
+		skill("backend", 70),
+		skill("design", 70),
+	];
+
+	it("puts top skills first in topSkills order, then by confidence, then by slug", () => {
+		expect(orderSkillsPage(skills, ["games"]).map((s) => s.slug)).toEqual([
+			"games",
+			"web",
+			"backend",
+			"design",
+			"devops",
+		]);
+	});
+
+	it("does not change the input", () => {
+		const before = skills.map((s) => s.slug);
+		orderSkillsPage(skills, ["games"]);
+		expect(skills.map((s) => s.slug)).toEqual(before);
 	});
 });

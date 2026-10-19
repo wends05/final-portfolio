@@ -1,13 +1,14 @@
 import { ArrowCounterClockwiseIcon } from "@phosphor-icons/react/ssr";
 import { Button } from "#/components/ui/button";
-import type { SkillProject, ToolPreview } from "../skills.types";
+import type { Tool } from "#content";
+import type { SkillProject } from "../skills.types";
 import SkillProjectItem from "./SkillProjectItem";
 
 interface SkillProjectListProps {
 	/** The projects left after the filter. */
 	projects: SkillProject[];
 	/** The selected tool, or undefined when the filter shows all tools. */
-	selected: ToolPreview | undefined;
+	selected: Tool | null;
 	skillName: string;
 	/** Clears the tool filter. */
 	onReset: () => void;
@@ -41,7 +42,7 @@ export default function SkillProjectList({
 					Projects
 				</h2>
 				<p aria-live="polite" className="type-meta text-muted-foreground">
-					{selected ? `using ${selected.name}` : "all tools"}
+					{selected ? `using ${selected}` : "all tools"}
 				</p>
 			</div>
 			{/* A stable wrapper carries the entrance: the content inside remounts
@@ -50,12 +51,12 @@ export default function SkillProjectList({
 			<div data-entrance>
 				{projects.length === 0 ? (
 					<div
-						key={selected?.id ?? "all"}
+						key={selected ?? "all"}
 						data-pick-fade
 						className="flex starting:translate-y-4 flex-col items-start gap-5 py-12 starting:opacity-0 transition-[opacity,translate] duration-300 ease-swiss motion-reduce:starting:translate-y-0"
 					>
 						<p className="text-muted-foreground">
-							No published projects use {selected?.name ?? skillName} yet.
+							No published projects use {selected ?? skillName} yet.
 						</p>
 						{selected && (
 							<Button
@@ -73,7 +74,7 @@ export default function SkillProjectList({
 					<ul className="grid grid-cols-1 gap-3 md:grid-cols-2">
 						{projects.map((project, index) => (
 							<SkillProjectItem
-								key={`${selected?.id ?? "all"}:${project.id}`}
+								key={`${selected ?? "all"}:${project.slug}`}
 								index={index}
 								project={project}
 								onPick={onPick}

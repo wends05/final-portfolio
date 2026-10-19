@@ -1,0 +1,3 @@
+# People credited on projects. Placeholders from the old mocks.
+- { slug: collaborator-1, name: "[collaborator 1]", profileUrl: https://example.com }
+- { slug: collaborator-2, name: "[collaborator 2]" }
