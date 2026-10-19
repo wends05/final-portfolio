@@ -15,11 +15,19 @@ html[data-theme-choice="dark"] [data-theme-label="dark"] {
 
 /*
  * During the theme crossfade each toggle is captured apart from the page
- * (view-transition-name set in ThemeToggle). Only its live new state shows,
+ * (view-transition-name set by ThemeToggle's data-transition-name). Only its live new state shows,
  * unanimated, so the label roll plays alone instead of under a fading copy
  * of the old label. The group jumps to its new size rather than morphing,
  * which would stretch the live label while it rolls.
  */
+[data-transition-name="theme-toggle-nav"] {
+  view-transition-name: theme-toggle-nav;
+}
+
+[data-transition-name="theme-toggle-menu"] {
+  view-transition-name: theme-toggle-menu;
+}
+
 ::view-transition-old(theme-toggle-nav),
 ::view-transition-old(theme-toggle-menu) {
   display: none;

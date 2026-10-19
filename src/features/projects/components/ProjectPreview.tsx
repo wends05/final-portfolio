@@ -41,7 +41,7 @@ export default function ProjectPreview({
 			data-slug={project.slug}
 			data-active={shown}
 			inert={!shown}
-			className="col-start-1 row-start-1 transition-[opacity,translate,visibility] duration-300 ease-swiss data-[active=false]:invisible data-[active=false]:translate-y-4 data-[active=false]:opacity-0 motion-reduce:translate-y-0"
+			className="col-start-1 row-start-1 transition-reveal duration-300 ease-swiss data-[active=false]:invisible data-[active=false]:translate-y-4 data-[active=false]:opacity-0 motion-reduce:translate-y-0"
 		>
 			<p data-pick-fade className="type-label flex items-baseline gap-3">
 				<span>
@@ -71,7 +71,8 @@ export default function ProjectPreview({
 					)}
 					<Button
 						nativeButton={false}
-						className="type-label mt-6 h-11 gap-2 rounded-none px-4"
+						size="page"
+						className="mt-6"
 						render={
 							<Link
 								to="/projects/$slug"

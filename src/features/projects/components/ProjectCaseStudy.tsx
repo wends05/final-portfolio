@@ -46,8 +46,8 @@ export default function ProjectCaseStudy({ page }: ProjectCaseStudyProps) {
 			>
 				<Button
 					nativeButton={false}
-					variant="outline"
-					className="type-label h-11 gap-2 rounded-none border-rule px-4 hover:bg-primary hover:text-primary-foreground max-md:px-3"
+					variant="outline-rule"
+					size="page-compact"
 					render={
 						<Link to="/projects">
 							<ArrowLeftIcon aria-hidden />
@@ -66,7 +66,7 @@ export default function ProjectCaseStudy({ page }: ProjectCaseStudyProps) {
 			<div className="col-span-full mt-12 grid grid-cols-subgrid gap-y-3">
 				<p
 					data-entrance
-					className="type-index col-span-full md:col-span-1 md:mt-[calc(var(--text-display-l)*0.12)]"
+					className="type-index col-span-full md:col-span-1 md:mt-align-display-l"
 				>
 					<span aria-hidden>{padIndex(position)}</span>
 					<span className="sr-only">

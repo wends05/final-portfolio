@@ -73,7 +73,7 @@ function ContactTile({ link }: { link: ContactLink }) {
 				? { download: RESUME_FILENAME }
 				: { target: "_blank", rel: "noopener noreferrer" })}
 			className={cn(
-				"group focus-ring flex min-h-30 flex-col justify-between gap-6 border border-rule p-4 transition-[background-color,color,scale] duration-200 ease-swiss focus-visible:outline-offset-3 active:scale-98 sm:aspect-3/4 sm:p-5",
+				"group focus-ring flex min-h-30 flex-col justify-between gap-6 border border-rule p-4 transition-colors-scale duration-200 ease-swiss focus-visible:outline-offset-3 active:scale-98 sm:aspect-3/4 sm:p-5",
 				download
 					? "bg-primary text-primary-foreground"
 					: "hover:bg-primary hover:text-primary-foreground focus-visible:bg-primary focus-visible:text-primary-foreground",

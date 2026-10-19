@@ -1,5 +1,19 @@
 import { Progress as ProgressPrimitive } from "@base-ui/react/progress";
+import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "#/lib/utils";
+
+const progressValueVariants = cva("ml-auto text-muted-foreground", {
+	variants: {
+		variant: {
+			default: "text-xs/relaxed tabular-nums",
+			// type-meta sets the mono family and its own size (12px, 13px from md).
+			meta: "type-meta leading-relaxed",
+		},
+	},
+	defaultVariants: {
+		variant: "default",
+	},
+});
 
 function Progress({
 	className,
@@ -58,13 +72,14 @@ function ProgressLabel({ className, ...props }: ProgressPrimitive.Label.Props) {
 	);
 }
 
-function ProgressValue({ className, ...props }: ProgressPrimitive.Value.Props) {
+function ProgressValue({
+	className,
+	variant = "default",
+	...props
+}: ProgressPrimitive.Value.Props & VariantProps<typeof progressValueVariants>) {
 	return (
 		<ProgressPrimitive.Value
-			className={cn(
-				"ml-auto text-muted-foreground text-xs/relaxed tabular-nums",
-				className,
-			)}
+			className={cn(progressValueVariants({ variant, className }))}
 			data-slot="progress-value"
 			{...props}
 		/>

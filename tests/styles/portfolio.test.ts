@@ -51,3 +51,73 @@ describe("focus-ring", () => {
 		expect(css).toContain("outline-style: var(--tw-outline-style);");
 	});
 });
+
+describe("utilities that stand in for arbitrary values", () => {
+	it("pads and offsets a wash box by its overhang, in em", () => {
+		const css = buildUtilities([
+			"-left-overhang",
+			"-right-overhang-sm",
+			"pl-overhang",
+			"-mb-overhang",
+		]);
+
+		expect(css).toContain("left: calc(var(--spacing-overhang) * -1);");
+		expect(css).toContain("right: calc(var(--spacing-overhang-sm) * -1);");
+		expect(css).toContain("padding-left: var(--spacing-overhang);");
+		expect(css).toContain("margin-bottom: calc(var(--spacing-overhang) * -1);");
+	});
+
+	it("hides a wash by clipping it from the right", () => {
+		expect(buildUtilities(["wash-hidden"])).toContain(
+			"clip-path: inset(0% 100% 0% 0%);",
+		);
+	});
+
+	it.each([
+		["transition-fade-rise", "opacity, translate"],
+		["transition-reveal", "opacity, translate, visibility"],
+		["transition-colors-scale", "background-color, color, scale"],
+	])(
+		"%s transitions %s and reads duration-* and ease-*",
+		(name, properties) => {
+			const css = buildUtilities([name]);
+
+			expect(css).toContain(`transition-property: ${properties};`);
+			expect(css).toContain(
+				"var(--tw-duration, var(--default-transition-duration))",
+			);
+			expect(css).toContain(
+				"var( --tw-ease, var(--default-transition-timing-function) )",
+			);
+		},
+	);
+
+	it("sizes a grid from the leftover height", () => {
+		const css = buildUtilities([
+			"grid-rows-fill-auto",
+			"grid-rows-auto-auto-fill",
+		]);
+
+		expect(css).toContain("grid-template-rows: 1fr auto;");
+		expect(css).toContain("grid-template-rows: auto auto minmax(0, 1fr);");
+	});
+
+	it("reads a dynamic height or delay from a custom property", () => {
+		const css = buildUtilities(["h-(--track)", "delay-(--stagger)"]);
+
+		expect(css).toContain("height: var(--track);");
+		expect(css).toContain("transition-delay: var(--stagger);");
+	});
+
+	it("mixes the secondary hover color from the theme", () => {
+		expect(buildUtilities(["hover:bg-secondary-hover"])).toMatch(
+			/color-mix\(\s*in oklch,\s*var\(--secondary\),\s*var\(--foreground\) 5%\s*\)/,
+		);
+	});
+
+	it("sets the text-2xs size", () => {
+		expect(buildUtilities(["text-2xs"])).toContain(
+			"font-size: var(--text-2xs);",
+		);
+	});
+});

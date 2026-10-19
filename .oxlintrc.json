@@ -5,5 +5,20 @@
     "correctness": "off"
   },
   "ignorePatterns": ["src/routeTree.gen.ts"],
-  "rules": {}
+  "settings": {
+    "shadcn": {
+      "note": "Design-system rules and how to fix them: docs/ui.md#design-system-linting."
+    }
+  },
+  "rules": {
+    "shadcn/no-arbitrary-values": "error",
+    "shadcn/no-inline-styles": "error",
+    "shadcn/no-restyle": ["error", { "allow": ["layout"] }]
+  },
+  "overrides": [
+    {
+      "files": ["src/components/ui/**"],
+      "rules": { "shadcn/no-restyle": "off" }
+    }
+  ]
 }

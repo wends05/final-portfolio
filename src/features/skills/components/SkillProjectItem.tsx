@@ -1,4 +1,5 @@
 import { Link } from "@tanstack/react-router";
+import type { CSSProperties } from "react";
 import WashText from "#/features/public/components/landing/WashText";
 import { isPlainClick } from "#/features/public/utils/pick";
 import type { SkillProject } from "../skills.types";
@@ -25,8 +26,8 @@ export default function SkillProjectItem({
 		<li
 			data-project
 			data-slug={project.slug}
-			style={{ transitionDelay: `${Math.min(index, 5) * 60}ms` }}
-			className="starting:translate-y-4 starting:opacity-0 transition-[opacity,translate] duration-300 ease-swiss motion-reduce:starting:translate-y-0"
+			style={{ "--stagger": `${Math.min(index, 5) * 60}ms` } as CSSProperties}
+			className="starting:translate-y-4 starting:opacity-0 transition-fade-rise delay-(--stagger) duration-300 ease-swiss motion-reduce:starting:translate-y-0"
 		>
 			<Link
 				to="/projects/$slug"
@@ -36,7 +37,7 @@ export default function SkillProjectItem({
 					e.preventDefault();
 					onPick(project.slug);
 				}}
-				className="focus-ring flex min-h-40 items-end bg-background p-5 transition-[scale] duration-300 ease-swiss active:scale-98 md:min-h-55"
+				className="focus-ring flex min-h-40 items-end bg-background p-5 transition-transform duration-300 ease-swiss active:scale-98 md:min-h-55"
 			>
 				<span data-pick-title className="text-heading-m">
 					<WashText>{project.title}</WashText>

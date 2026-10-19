@@ -53,16 +53,16 @@ export default function SkillProjectList({
 					<div
 						key={selected ?? "all"}
 						data-pick-fade
-						className="flex starting:translate-y-4 flex-col items-start gap-5 py-12 starting:opacity-0 transition-[opacity,translate] duration-300 ease-swiss motion-reduce:starting:translate-y-0"
+						className="flex starting:translate-y-4 flex-col items-start gap-5 py-12 starting:opacity-0 transition-fade-rise duration-300 ease-swiss motion-reduce:starting:translate-y-0"
 					>
 						<p className="text-muted-foreground">
 							No published projects use {selected ?? skillName} yet.
 						</p>
 						{selected && (
 							<Button
-								variant="outline"
+								variant="outline-rule"
+								size="page-compact"
 								onClick={onReset}
-								className="type-label h-11 gap-2 rounded-none border-rule px-4 hover:bg-primary hover:text-primary-foreground max-md:px-3"
 							>
 								<ArrowCounterClockwiseIcon aria-hidden />
 								Reset filter

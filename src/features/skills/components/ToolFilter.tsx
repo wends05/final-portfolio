@@ -53,7 +53,7 @@ function ToolFilterButton({ label, pressed, onPress }: ToolFilterButtonProps) {
 			type="button"
 			aria-pressed={pressed}
 			onClick={onPress}
-			className="focus-ring origin-left text-left font-light text-heading-m transition-[scale] duration-150 ease-swiss active:scale-98 aria-pressed:font-bold md:text-heading-l"
+			className="focus-ring origin-left text-left font-light text-heading-m transition-transform duration-150 ease-swiss active:scale-98 aria-pressed:font-bold md:text-heading-l"
 		>
 			{label}
 		</button>
