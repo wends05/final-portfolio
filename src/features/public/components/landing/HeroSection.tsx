@@ -80,7 +80,7 @@ export default function HeroSection() {
 	return (
 		<section
 			ref={root}
-			className="intro-hero page-grid min-h-svh w-full grid-rows-[1fr_auto] gap-y-8 pt-32 pb-8"
+			className="intro-hero page-grid min-h-svh w-full grid-rows-fill-auto gap-y-8 pt-32 pb-8"
 		>
 			<h1
 				ref={nameRef}

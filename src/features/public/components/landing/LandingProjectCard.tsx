@@ -15,7 +15,7 @@ interface LandingProjectCardProps {
 }
 
 const transitionClassnames =
-	"transition-[opacity,translate] duration-300 ease-swiss group-data-[active=false]:translate-y-4 group-data-[active=false]:opacity-0 motion-reduce:translate-y-0";
+	"transition-fade-rise duration-300 ease-swiss group-data-[active=false]:translate-y-4 group-data-[active=false]:opacity-0 motion-reduce:translate-y-0";
 
 export default function LandingProjectCard({
 	project,
@@ -82,7 +82,7 @@ export default function LandingProjectCard({
 				<div className="flex flex-wrap items-center gap-x-2 gap-y-1">
 					<Button
 						nativeButton={false}
-						className="type-label h-11 gap-2 rounded-none px-4"
+						size="page"
 						render={
 							<Link
 								to="/projects/$slug"

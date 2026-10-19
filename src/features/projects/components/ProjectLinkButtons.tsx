@@ -30,12 +30,8 @@ export default function ProjectLinkButtons({
 				<li key={link.label}>
 					<Button
 						nativeButton={false}
-						variant={i === 0 ? "default" : "outline"}
-						className={cn(
-							"type-label h-11 gap-2 rounded-none px-4",
-							i > 0 &&
-								"border-rule hover:bg-primary hover:text-primary-foreground",
-						)}
+						variant={i === 0 ? "default" : "outline-rule"}
+						size="page"
 						render={
 							<a href={link.href} target="_blank" rel="noreferrer">
 								{link.label}

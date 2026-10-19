@@ -2,15 +2,6 @@ import { toolKey } from "#/lib/content.checks";
 import type { Tool } from "#content";
 
 /**
- * The first `count` tools to list by name, and how many are left over for
- * the "+N" after them.
- */
-export function splitVisibleTools<T>(tools: T[], count: number) {
-	const visible = tools.slice(0, Math.max(count, 0));
-	return { visible, hidden: tools.length - visible.length };
-}
-
-/**
  * The projects that used `tool` (matched ignoring case), or all of them when
  * no tool is selected.
  */

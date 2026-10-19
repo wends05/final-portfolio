@@ -3,8 +3,8 @@ import { Link } from "@tanstack/react-router";
 import { Progress, ProgressValue } from "#/components/ui/progress";
 import WashText from "#/features/public/components/landing/WashText";
 import { isPlainClick } from "#/features/public/utils/pick";
+import { splitVisibleTools } from "#/lib/tools";
 import type { SkillOverview } from "../skills.types";
-import { splitVisibleTools } from "../skills.utils";
 
 interface SkillItemProps {
 	skill: SkillOverview;
@@ -61,13 +61,11 @@ export default function SkillItem({
 						{visible.join(" · ")}
 						{hidden > 0 && <span> +{hidden}</span>}
 					</span>
-					<Progress
-						data-pick-fade
-						value={skill.confidence}
-						className={hideClassName}
-					>
-						<ProgressValue className="type-meta" />
-					</Progress>
+					<div data-pick-fade className={hideClassName}>
+						<Progress value={skill.confidence}>
+							<ProgressValue variant="meta" />
+						</Progress>
+					</div>
 				</div>
 				<span className="self-center">
 					<CaretRightIcon />

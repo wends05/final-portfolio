@@ -44,13 +44,21 @@ How to build the interface. shadcn is the component and token base ([decision 00
   - `themeStore` (zustand, [0015](decisions/0015-zustand-for-client-ui-state.md)) holds the choice: `auto`, `light` or `dark`. It starts as `auto` on the server and in the first render; `hydrate()` reads the stored choice after hydration and follows system changes while on auto. `cycle()` moves auto → light → dark → auto; auto clears the stored key.
 - The toggle is `ThemeToggle`, a text button in two places: the navbar, left of the Menu button, on desktop only; and the site menu's bottom row, bottom right on phones and left of "Esc to close" on desktop. Each click rolls the old label up out of its mask while the new one rises in.
 - Anything visible before hydration that depends on the stored choice must come from the head script, not the store: the store says `auto` until `hydrate()` runs. `ThemeToggle` renders all three labels and [../src/styles/theme-toggle.css](../src/styles/theme-toggle.css) shows the one matching `data-theme-choice`, so the label is right from the first paint and the server and client render the same markup.
-- A toggle click crossfades the theme with the View Transitions API (`fadeTheme` in `theme.ts`, 500ms with the `swiss` ease, timed by the `::view-transition-*(root)` rules in `src/styles.css`). Browsers without the API, reduced motion, and system changes on auto switch instantly. Each toggle has its own `view-transition-name` (`theme-toggle-nav`, `theme-toggle-menu`; names must be unique on the page), and `theme-toggle.css` hides its old snapshot, so the label roll is never overlaid by the old frame's label.
+- A toggle click crossfades the theme with the View Transitions API (`fadeTheme` in `theme.ts`, 500ms with the `swiss` ease, timed by the `::view-transition-*(root)` rules in `src/styles.css`). Browsers without the API, reduced motion, and system changes on auto switch instantly. Each toggle has its own `view-transition-name` (`theme-toggle-nav`, `theme-toggle-menu`; names must be unique on the page), which `theme-toggle.css` sets from the toggle's `data-transition-name` attribute, and `theme-toggle.css` hides its old snapshot, so the label roll is never overlaid by the old frame's label.
 
-Add primitives with the shadcn CLI into `src/components/ui/` and reuse them, such as [button.tsx](../src/components/ui/button.tsx). After any CLI run, diff `src/styles.css` and restore the `var(--role)` lines if the CLI overwrote them.
+Add primitives with the shadcn CLI into `src/components/ui/` and reuse them, such as [button.tsx](../src/components/ui/button.tsx). After any CLI run, diff `src/styles.css` and restore the `var(--role)` lines if the CLI overwrote them. Also restore the project's own `Button` sizes and variants (`page`, `page-compact`, `outline-rule`) and the `ProgressValue` `meta` variant if it overwrote those files.
 
 ## Design-system linting
 
-`bun --bun run lint:ds` runs Oxlint with `@shadcn/lint` ([decision 0001](decisions/0001-oxlint-for-design-system-lint.md)). Rules to consider enabling: `no-arbitrary-values`, `no-raw-colors`, `no-unknown-classes`, `no-inline-styles`, `require-static-classes`, and `no-restyle` (turned off for `src/components/ui/**`). See the [rule reference](https://github.com/shadcn-ui/lint/blob/main/README.md#rules). Choosing rules is a design decision; record it in [decisions](decisions/README.md).
+`bun --bun run lint:ds` runs Oxlint with `@shadcn/lint` ([decision 0001](decisions/0001-oxlint-for-design-system-lint.md)). Three rules are errors ([decision 0020](decisions/0020-design-system-lint-rules.md)); see the [rule reference](https://github.com/shadcn-ui/lint/blob/main/README.md#rules).
+
+| Rule | Instead of | Do this |
+| --- | --- | --- |
+| `no-arbitrary-values` | `p-[13px]`, `transition-[opacity,translate]` | Use a scale value or theme token. If none fits, add a token to `@theme` or an `@utility` in [../src/styles/portfolio.css](../src/styles/portfolio.css). |
+| `no-inline-styles` | `style={{ height: x }}` | Set a custom property in `style` and read it with a class: `style={{ "--track": x }}` and `h-(--track)`. A fixed value is a class. |
+| `no-restyle` | `<Button className="rounded-none px-4">` | Use a variant or size. A treatment no variant provides becomes a new variant in `src/components/ui/`. Layout classes such as `mt-6` and `w-full` are allowed. |
+
+`no-restyle` is off for `src/components/ui/**`. Changing a rule or adding one is a decision; record it in [decisions](decisions/README.md).
 
 ## Homepage plan
 
@@ -235,8 +243,8 @@ flowchart LR
 
 - The header: the project's number in the margin column (its place in the `/projects` order), the title across 8 columns, and "by <team>" at the right end of the title's last line. No team name, no byline.
 - The links as buttons under the title (`ProjectLinkButtons`, live site solid and first), and again at the end beside the next project, so they are there before and after reading.
-- The cover on the left (6 columns, 4:3) with the label/value list and the credits under it, and the write-up beside the cover under an "about" line that holds the date and status (`getProjectDateLine`). Explicit grid rows from `md` place them; on phones they stack as cover, write-up, details.
-- The stack is not shown: it is not a column of the project.
+- The cover on the left (6 columns, 4:3) with the label/value list and the credits under it, and the write-up beside the cover under an "about" line that holds the date and status (`getProjectDateLine`). The three sit in one subgrid block with its own rows from `md`; on phones they stack as cover, write-up, details. Nothing else on the page takes a `row-start-*`: the link buttons render nothing for a project without links, and an element placed by row number would let the gallery or the footer fall into the empty row.
+- A "tools" list opens the details under the cover, above the label/value list: every tool in the project's `tools` order, one per row, styled like the credits rows. The owner orders each project's `tools` by importance, because the `/projects` panel shows only the first three (`splitVisibleTools` in [../src/lib/tools.ts](../src/lib/tools.ts)) with "+N" for the rest, the same pattern as the skills list. Phones hide the panel's tools line with the rest of its detail; the case study list shows at every width.
 - [ProjectGallery](../src/features/projects/components/ProjectGallery.tsx) is the project's `gallery` only, in file order, one at a time with the alt text as the caption. The cover is never one of them. Slides change instantly; the counter and ‹ › buttons show only with more than one image, and the section is left out with none.
 - Credits come from the project's `credits`, named from `content/collaborators.yaml`: one ruled row per person with the role on the right, linked when the person has a profile URL.
 - "next project" wraps from the last project to the first.

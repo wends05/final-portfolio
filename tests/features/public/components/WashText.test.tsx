@@ -15,10 +15,10 @@ describe("WashText", () => {
 	// is exactly as wide: each overhang is cancelled by padding of the same size.
 	it("pads the wash by the same amount it overhangs on each side", () => {
 		const classes = washClasses();
-		expect(classes).toContain("left-[-0.12em]");
-		expect(classes).toContain("pl-[0.12em]");
-		expect(classes).toContain("right-[-0.08em]");
-		expect(classes).toContain("pr-[0.08em]");
+		expect(classes).toContain("-left-overhang");
+		expect(classes).toContain("pl-overhang");
+		expect(classes).toContain("-right-overhang-sm");
+		expect(classes).toContain("pr-overhang-sm");
 	});
 
 	it("renders the text twice: the copy in the wash and the text itself", () => {

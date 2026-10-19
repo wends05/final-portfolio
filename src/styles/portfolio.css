@@ -92,6 +92,13 @@ html {
   --text-body-s--line-height: 1.5;
   --text-body-s--font-weight: 400;
 
+  /* Smaller than text-xs (Button size xs) */
+  --text-2xs: 0.625rem;
+
+  /* Overhang of a wash box past its text, in em so it follows the type size */
+  --spacing-overhang: 0.12em;
+  --spacing-overhang-sm: 0.08em;
+
   --ease-swiss: cubic-bezier(0.2, 0, 0, 1);
   --container-grid: 1440px;
 }
@@ -158,6 +165,60 @@ html {
     --page-pad: 1.5rem;
     grid-template-columns: repeat(12, minmax(0, 1fr));
   }
+}
+
+/* Transitions with a property list Tailwind has no class for. They read
+   duration-* and ease-* like the built-in transition-* utilities. */
+@utility transition-fade-rise {
+  transition-property: opacity, translate;
+  transition-timing-function: var(
+    --tw-ease,
+    var(--default-transition-timing-function)
+  );
+  transition-duration: var(--tw-duration, var(--default-transition-duration));
+}
+
+@utility transition-reveal {
+  transition-property: opacity, translate, visibility;
+  transition-timing-function: var(
+    --tw-ease,
+    var(--default-transition-timing-function)
+  );
+  transition-duration: var(--tw-duration, var(--default-transition-duration));
+}
+
+@utility transition-colors-scale {
+  transition-property: background-color, color, scale;
+  transition-timing-function: var(
+    --tw-ease,
+    var(--default-transition-timing-function)
+  );
+  transition-duration: var(--tw-duration, var(--default-transition-duration));
+}
+
+/* Row tracks for page sections: `fill` takes the height left over. */
+@utility grid-rows-fill-auto {
+  grid-template-rows: 1fr auto;
+}
+
+@utility grid-rows-auto-auto-fill {
+  grid-template-rows: auto auto minmax(0, 1fr);
+}
+
+/* A third of the small viewport height. */
+@utility h-svh-third {
+  height: 33svh;
+}
+
+/* Drops a block beside a display-l title to the title's first line. */
+@utility mt-align-display-l {
+  margin-top: calc(var(--text-display-l) * 0.12);
+}
+
+/* A wash's resting state: clipped away from the right. usePickTransition and
+   SiteMenu animate clip-path to inset(0), which shows it. */
+@utility wash-hidden {
+  clip-path: inset(0% 100% 0% 0%);
 }
 
 /* Keyboard focus ring: a 2px solid `--focus` outline on :focus-visible only.

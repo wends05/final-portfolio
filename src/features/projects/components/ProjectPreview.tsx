@@ -4,6 +4,7 @@ import { Button } from "#/components/ui/button";
 import WashText from "#/features/public/components/landing/WashText";
 import { isPlainClick } from "#/features/public/utils/pick";
 import { getProjectMetaLine } from "#/features/public/utils/project-meta";
+import { splitVisibleTools } from "#/lib/tools";
 import type { Project } from "#content";
 import { padIndex } from "../projects.utils";
 
@@ -33,7 +34,7 @@ export default function ProjectPreview({
 	isFeatured,
 }: ProjectPreviewProps) {
 	const meta = getProjectMetaLine(project);
-	const stack = project.tools.join(" · ");
+	const { visible, hidden } = splitVisibleTools(project.tools, 3);
 
 	return (
 		<article
@@ -41,7 +42,7 @@ export default function ProjectPreview({
 			data-slug={project.slug}
 			data-active={shown}
 			inert={!shown}
-			className="col-start-1 row-start-1 transition-[opacity,translate,visibility] duration-300 ease-swiss data-[active=false]:invisible data-[active=false]:translate-y-4 data-[active=false]:opacity-0 motion-reduce:translate-y-0"
+			className="col-start-1 row-start-1 transition-reveal duration-300 ease-swiss data-[active=false]:invisible data-[active=false]:translate-y-4 data-[active=false]:opacity-0 motion-reduce:translate-y-0"
 		>
 			<p data-pick-fade className="type-label flex items-baseline gap-3">
 				<span>
@@ -66,12 +67,16 @@ export default function ProjectPreview({
 				{/* Phones show the strip only: number, title, two lines. */}
 				<div className="max-md:hidden">
 					{meta && <p className="type-meta mt-4">{meta}</p>}
-					{stack && (
-						<p className="type-meta mt-1 text-muted-foreground">{stack}</p>
+					{visible.length > 0 && (
+						<p className="type-meta mt-1 text-muted-foreground">
+							{visible.join(" · ")}
+							{hidden > 0 && <span> +{hidden}</span>}
+						</p>
 					)}
 					<Button
 						nativeButton={false}
-						className="type-label mt-6 h-11 gap-2 rounded-none px-4"
+						size="page"
+						className="mt-6"
 						render={
 							<Link
 								to="/projects/$slug"

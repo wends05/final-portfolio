@@ -63,8 +63,8 @@ export default function SkillPage({ page }: SkillPageProps) {
 			>
 				<Button
 					nativeButton={false}
-					variant="outline"
-					className="type-label h-11 gap-2 rounded-none border-rule px-4 hover:bg-primary hover:text-primary-foreground max-md:px-3"
+					variant="outline-rule"
+					size="page-compact"
 					render={
 						<Link to="/skills">
 							<ArrowLeftIcon aria-hidden />
@@ -92,9 +92,7 @@ export default function SkillPage({ page }: SkillPageProps) {
 					className="w-full shrink-0 md:w-56"
 				>
 					<ProgressLabel className="sr-only">Confidence</ProgressLabel>
-					{/* ProgressValue's own text-xs wins over type-meta's size, so
-					    restate type-meta's 13px from md. */}
-					<ProgressValue className="type-meta text-muted-foreground md:text-[0.8125rem]">
+					<ProgressValue variant="meta">
 						{(formattedValue) => `${formattedValue} confidence`}
 					</ProgressValue>
 				</Progress>
