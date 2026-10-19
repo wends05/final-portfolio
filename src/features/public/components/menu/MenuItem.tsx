@@ -36,7 +36,7 @@ export default function MenuItem({ item, pathname, ref }: MenuItemProps) {
 						pick(item.to);
 					}
 				}}
-				className="flex items-center gap-4 pt-3 pb-2 text-display-xl focus-ring focus-visible:outline-focus-inverse group-hover/list:not-hover:text-inverse-muted md:gap-6"
+				className="focus-ring flex items-center gap-4 pt-3 pb-2 text-display-xl focus-visible:outline-focus-inverse group-hover/list:not-hover:text-inverse-muted md:gap-6"
 			>
 				<span
 					aria-hidden
@@ -50,20 +50,19 @@ export default function MenuItem({ item, pathname, ref }: MenuItemProps) {
 				{/* The mask: clips the word while it rises. The em padding
 				    keeps descenders (p, j) and the wash's left overhang
 				    inside it, and the negative margins keep the row still. */}
-				<span className="mb-[-0.12em] ml-[-0.12em] block grow overflow-hidden pb-[0.12em] pl-[0.12em]">
+				<span className="-mb-overhang -ml-overhang block grow overflow-hidden pb-overhang pl-overhang">
 					{/* The part that moves: the word and its wash rise together. */}
 					<span data-menu-word className="relative inline-block">
 						<span>{item.label}</span>
 						{/* Paper box holding an ink copy of the word, hidden by its
-						    inline clip-path. On a pick, the leaving timeline reveals it
+						    clip-path (wash-hidden). On a pick, the leaving timeline reveals it
 						    left to right, so the word turns ink at the wash's edge.
 						    The left padding equals the left overhang, so the copy
 						    lines up with the word underneath. */}
 						<span
 							aria-hidden
 							data-pick-wash
-							className="absolute inset-y-0 right-[-0.08em] left-[-0.12em] whitespace-nowrap bg-inverse-foreground pl-[0.12em] text-inverse"
-							style={{ clipPath: "inset(0% 100% 0% 0%)" }}
+							className="wash-hidden absolute inset-y-0 -right-overhang-sm -left-overhang whitespace-nowrap bg-inverse-foreground pl-overhang text-inverse"
 						>
 							{item.label}
 						</span>

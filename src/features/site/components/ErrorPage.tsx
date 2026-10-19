@@ -52,7 +52,7 @@ export default function ErrorPage({
 					<Link
 						to="/"
 						aria-label="wends.dev, home"
-						className="col-span-full w-fit font-semibold text-heading-s leading-11 tracking-tight focus-ring"
+						className="focus-ring col-span-full w-fit font-semibold text-heading-s leading-11 tracking-tight"
 					>
 						wends.dev
 					</Link>

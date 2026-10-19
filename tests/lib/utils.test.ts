@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { cn } from "#/lib/utils";
 
 const SIZES = [
+	"2xs",
 	"display-xl",
 	"display-l",
 	"display-m",

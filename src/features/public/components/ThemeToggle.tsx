@@ -104,7 +104,7 @@ export default function ThemeToggle({
 		<button
 			type="button"
 			onClick={onClick}
-			style={{ viewTransitionName: transitionName }}
+			data-transition-name={transitionName}
 			className={cn(
 				"type-label focus-ring inline-flex min-h-11 items-center",
 				className,

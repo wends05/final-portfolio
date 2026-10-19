@@ -14,7 +14,7 @@ Add Oxlint as a second linter whose only job is design-system rules.
 - `@shadcn/lint` and `oxlint` are dev dependencies.
 - [../../.oxlintrc.json](../../.oxlintrc.json) registers the plugin through `jsPlugins`, turns off Oxlint's default `correctness` category, and ignores `src/routeTree.gen.ts`.
 - `bun --bun run lint:ds` runs it. The Biome `lint`, `format`, and `check` scripts are unchanged.
-- No `shadcn/*` rules are enabled. Choosing them is a separate decision.
+- No `shadcn/*` rules are enabled. Choosing them is a separate decision, made in [0020](0020-design-system-lint-rules.md).
 
 ```mermaid
 flowchart LR

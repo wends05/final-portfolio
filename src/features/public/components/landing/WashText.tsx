@@ -19,8 +19,7 @@ export default function WashText({ children, className }: WashTextProps) {
 			<span
 				aria-hidden
 				data-pick-wash
-				className="absolute inset-y-0 right-[-0.08em] left-[-0.12em] bg-primary pl-[0.12em] text-primary-foreground"
-				style={{ clipPath: "inset(0% 100% 0% 0%)" }}
+				className="wash-hidden absolute inset-y-0 -right-overhang-sm -left-overhang bg-primary pl-overhang text-primary-foreground"
 			>
 				{children}
 			</span>

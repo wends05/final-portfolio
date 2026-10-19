@@ -100,24 +100,24 @@ export default function LandingProjectsSection({
 					</div>
 				) : (
 					<div
-						className="relative"
+						className="relative h-(--track)"
 						ref={track}
-						style={{
-							height: `${(items.length + 0.5) * 100}svh`,
-						}}
+						style={
+							{ "--track": `${(items.length + 0.5) * 100}svh` } as CSSProperties
+						}
 					>
 						{/* Full-screen stage from md, where the image row fills it. On phones
 					    the card is shorter, so the stage fits it and "See more" follows
 					    the last project instead of a screen's worth of empty stage. */}
 						<div
 							ref={stage}
-							className="page-grid sticky top-0 grid-rows-[auto_auto_minmax(0,1fr)] gap-y-6 overflow-hidden pt-24 pb-8 md:h-svh md:pt-32 md:pb-10"
+							className="page-grid sticky top-0 grid-rows-auto-auto-fill gap-y-6 overflow-hidden pt-24 pb-8 md:h-svh md:pt-32 md:pb-10"
 						>
 							<div
 								data-pick-fade
 								role="progressbar"
 								aria-label="Progress through this project"
-								className="col-span-full h-0.5 w-1/3 md:absolute md:top-1/2 md:right-6 md:h-[33svh] md:w-0.5 md:-translate-y-1/2"
+								className="col-span-full h-0.5 w-1/3 md:absolute md:top-1/2 md:right-6 md:h-svh-third md:w-0.5 md:-translate-y-1/2"
 							>
 								<span className="block size-full bg-border">
 									<span

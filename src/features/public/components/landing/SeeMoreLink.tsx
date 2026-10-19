@@ -23,7 +23,7 @@ export default function SeeMoreLink({
 			className={className}
 			data-pick-fade={pickFade || undefined}
 			render={
-				<Link to={to} className="flex w-min items-center gap-1 px-2 py-1">
+				<Link to={to} className="flex w-min items-center">
 					<span>
 						<CaretRightIcon />
 					</span>

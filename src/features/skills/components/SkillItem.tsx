@@ -61,13 +61,11 @@ export default function SkillItem({
 						{visible.join(" · ")}
 						{hidden > 0 && <span> +{hidden}</span>}
 					</span>
-					<Progress
-						data-pick-fade
-						value={skill.confidence}
-						className={hideClassName}
-					>
-						<ProgressValue className="type-meta" />
-					</Progress>
+					<div data-pick-fade className={hideClassName}>
+						<Progress value={skill.confidence}>
+							<ProgressValue variant="meta" />
+						</Progress>
+					</div>
 				</div>
 				<span className="self-center">
 					<CaretRightIcon />
