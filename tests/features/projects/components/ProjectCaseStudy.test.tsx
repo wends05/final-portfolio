@@ -124,3 +124,47 @@ describe("ProjectCaseStudy placement", () => {
 		expect(markup).toMatch(about);
 	});
 });
+
+describe("ProjectCaseStudy tools", () => {
+	const toolsList = (markup: string) =>
+		[
+			...(
+				/<section[^>]*aria-labelledby="project-tools".*?<\/section>/s.exec(
+					markup,
+				)?.[0] ?? ""
+			).matchAll(/<li[^>]*>([^<]*)<\/li>/g),
+		].map((match) => match[1]);
+
+	it("lists every tool, one per row, in the project's order", () => {
+		const tools = ["React", "TypeScript", "Vite", "Tailwind CSS", "Convex"];
+		const markup = render(makePage({ tools }));
+		expect(toolsList(markup)).toEqual(tools);
+	});
+
+	it("puts the tools above the label/value list and the credits", () => {
+		const page = makePage({
+			tools: ["Godot"],
+			metadata: [{ label: "role", value: "programmer" }],
+		} as Partial<ProjectPageData["project"]>);
+		const markup = render({
+			...page,
+			credits: [{ name: "Ada", role: "art", profileUrl: null }],
+		});
+		const tools = markup.indexOf('id="project-tools"');
+		expect(tools).toBeGreaterThan(markup.indexOf("Cover of Wishlist App"));
+		expect(tools).toBeLessThan(markup.indexOf("<dl"));
+		expect(tools).toBeLessThan(markup.indexOf('id="project-credits"'));
+	});
+
+	it("still shows the details column for a project with tools but no credits or metadata", () => {
+		const markup = render(makePage({ tools: ["Godot"] }));
+		expect(markup).toContain('id="project-tools"');
+		expect(markup).not.toContain("<dl");
+		expect(markup).not.toContain('id="project-credits"');
+	});
+
+	it("leaves the tools block out when the project has none", () => {
+		const markup = render(makePage({ tools: [] }));
+		expect(markup).not.toContain('id="project-tools"');
+	});
+});

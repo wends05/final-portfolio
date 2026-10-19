@@ -4,6 +4,7 @@ import { Button } from "#/components/ui/button";
 import WashText from "#/features/public/components/landing/WashText";
 import { isPlainClick } from "#/features/public/utils/pick";
 import { getProjectMetaLine } from "#/features/public/utils/project-meta";
+import { splitVisibleTools } from "#/lib/tools";
 import type { Project } from "#content";
 import { padIndex } from "../projects.utils";
 
@@ -33,7 +34,7 @@ export default function ProjectPreview({
 	isFeatured,
 }: ProjectPreviewProps) {
 	const meta = getProjectMetaLine(project);
-	const stack = project.tools.join(" · ");
+	const { visible, hidden } = splitVisibleTools(project.tools, 3);
 
 	return (
 		<article
@@ -66,8 +67,11 @@ export default function ProjectPreview({
 				{/* Phones show the strip only: number, title, two lines. */}
 				<div className="max-md:hidden">
 					{meta && <p className="type-meta mt-4">{meta}</p>}
-					{stack && (
-						<p className="type-meta mt-1 text-muted-foreground">{stack}</p>
+					{visible.length > 0 && (
+						<p className="type-meta mt-1 text-muted-foreground">
+							{visible.join(" · ")}
+							{hidden > 0 && <span> +{hidden}</span>}
+						</p>
 					)}
 					<Button
 						nativeButton={false}
