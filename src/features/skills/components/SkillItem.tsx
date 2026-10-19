@@ -3,8 +3,8 @@ import { Link } from "@tanstack/react-router";
 import { Progress, ProgressValue } from "#/components/ui/progress";
 import WashText from "#/features/public/components/landing/WashText";
 import { isPlainClick } from "#/features/public/utils/pick";
+import { splitVisibleTools } from "#/lib/tools";
 import type { SkillOverview } from "../skills.types";
-import { splitVisibleTools } from "../skills.utils";
 
 interface SkillItemProps {
 	skill: SkillOverview;

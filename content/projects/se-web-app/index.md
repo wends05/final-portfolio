@@ -5,7 +5,7 @@ description: "Official Software Engineering Department web application."
 status: COMPLETED
 startedAt: 2024-01-15
 endedAt: 2024-05-30
-tools: ["Next.js", "Tailwind CSS", "Firebase", "React Query"]
+tools: ["Next.js", "Firebase", "Tailwind CSS", "React Query"]
 teamName: "SE 2024 – 2025"
 credits:
   - { collaborator: collaborator-1, role: art }
