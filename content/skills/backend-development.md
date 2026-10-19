@@ -1,9 +1,9 @@
 ---
 slug: backend-development
 name: "Backend development"
-confidence: 70
-tools: ["Go", "Node.js", "Express", "Redis"]
-# Placeholder made from the old mocks; replace before publishing.
+confidence: 75
+tools: ["Node.js", "Bun", "Hono", "NestJS", "Express", "Go", "Gin", "FastAPI", "GraphQL", "Better Auth", "Prisma", "Drizzle", "PostgreSQL", "Neon", "Supabase", "MongoDB", "Mongoose", "Convex", "Firebase", "Zod"]
+# draft: the overview is a placeholder the owner replaces.
 draft: true
 ---
-What backend development means in my work: the tools I reach for first, the projects where they did the work, and what I am learning next.
+[owner writes overview]

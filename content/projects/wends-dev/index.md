@@ -1,21 +1,23 @@
 ---
 slug: wends-dev
 title: "wends.dev"
-description: "This portfolio."
+description: "[owner writes description]"
 status: ONGOING
-startedAt: 2026-10-01
-tools: ["TanStack Start", "React", "Velite"]
-# Placeholder made from the old mocks; replace before publishing.
+startedAt: 2026-10-04
+tools: ["TypeScript", "React", "TanStack Start", "TanStack Router", "TanStack Query", "Velite", "Tailwind CSS", "Base UI", "shadcn/ui", "GSAP", "Zod", "Vite", "Vitest", "Biome", "GitHub Actions", "Vercel", "Claude Code", "Codex", "Agent skills"]
+githubUrl: https://github.com/wends05/final-portfolio
+liveUrl: https://portfolio.wends.dev
+# draft: the description is a placeholder the owner replaces.
 draft: true
 ---
 ## Problem
 
-Placeholder write-up for wends.dev.
+[owner writes this section]
 
 ## Approach
 
-Placeholder.
+[owner writes this section]
 
 ## Result
 
-Placeholder.
+[owner writes this section]
