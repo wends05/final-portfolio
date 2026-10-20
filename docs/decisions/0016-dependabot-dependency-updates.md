@@ -29,7 +29,7 @@ Major updates get their own pull request so each changelog can be read and each 
 
 `@types/node` is ignored from version 25: its major must match the Node.js runtime (24, [0005](0005-vercel-deployment.md)), not the newest release. Raise the bound when the runtime changes.
 
-`prisma`, `@prisma/orm-postgres` and `@prisma/cli-engine` are ignored entirely. The CLI pins the `@prisma/orm-toolchain` and `@prisma/cli-engine` versions it works with, and `@prisma/orm-postgres` must resolve the same toolchain version. Dependabot bumps one package at a time (and `orm-postgres` ships releases behind the CLI), so a single bump produced a mismatched set and a failing `contract:emit`. Bump the three by hand in one pull request ([../development.md](../development.md#prisma-version-set)).
+`prisma`, `@prisma/orm-postgres` and `@prisma/cli-engine` are ignored entirely. The CLI pins the `@prisma/orm-toolchain` and `@prisma/cli-engine` versions it works with, and `@prisma/orm-postgres` must resolve the same toolchain version. Dependabot bumps one package at a time (and `orm-postgres` ships releases behind the CLI), so a single bump produced a mismatched set and a failing `contract:emit`. Bump the three by hand in one pull request. Since [0019](0019-static-site-content-in-repo.md) removed Prisma, this rule no longer applies and `dependabot.yml` no longer ignores them.
 
 [../../.github/workflows/ci.yml](../../.github/workflows/ci.yml) runs `bun audit` before `verify` on every pull request and every push to `main`, with `continue-on-error: true`. Advisories show in the job log but do not fail the job.
 

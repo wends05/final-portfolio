@@ -1,6 +1,5 @@
 {
-  "include": ["**/*.ts", "**/*.tsx", "src/integrations/prisma/contract.ts"],
-  "exclude": ["./src/integrations/prisma/**", "migrations/**"],
+  "include": ["**/*.ts", "**/*.tsx"],
   "compilerOptions": {
     "target": "ES2022",
     "jsx": "react-jsx",

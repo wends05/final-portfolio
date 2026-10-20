@@ -4,15 +4,15 @@ Setup, commands, checks, and deployment.
 
 ## Local setup
 
-Use Bun (`bun.lock`). The database is PostgreSQL 15 or newer on Neon.
+Use Bun (`bun.lock`). There is no database: content is files in `content/` ([data.md](data.md)).
 
 ```bash
 bun install
-# If .env does not exist, copy .env.example to .env and set DATABASE_URL.
+# Optional: copy .env.example to .env to set VITE_SHOW_DRAFTS or COMING_SOON.
 bun --bun run dev
 ```
 
-The dev server runs on port **3000**. `DATABASE_URL` must point at the Neon database before pages that read data can load. See [decision 0003](decisions/0003-neon-database-and-portfolio-schema.md); the database is removed per [decision 0019](decisions/0019-static-site-content-in-repo.md).
+The dev server runs on port **3000**.
 
 ## Available scripts
 
@@ -30,7 +30,6 @@ The dev server runs on port **3000**. `DATABASE_URL` must point at the Neon data
 | `bun --bun run test` | Vitest, once (runs on Node.js) |
 | `bun --bun run test:watch` | Vitest in watch mode |
 | `bun --bun run verify` | Sequential check, lint:ds, typecheck, test, and build; nonzero if any fail |
-| `bun --bun run contract:emit` | Prisma contract emission |
 
 Biome 2.5.15 (CLI and `biome.json` schema) scopes its checks through [../biome.json](../biome.json); it includes `scripts/**/*.mjs` and excludes the generated route tree, the stylesheets, and `.delta/` (tool-managed clones whose nested `biome.json` otherwise stops Biome with a "nested root configuration" error). The scripts do not pass `--write`; add it only when you intend to change files.
 
@@ -42,8 +41,6 @@ Two linters run side by side and do not overlap ([decision 0008](decisions/0008-
 | Oxlint + `@shadcn/lint` | [../.oxlintrc.json](../.oxlintrc.json) | Design-system rules only; Oxlint's default `correctness` category is turned off |
 
 `@shadcn/lint` reads [../components.json](../components.json) to discover components and theme tokens. See [UI conventions](ui.md#design-system-linting).
-
-Database and contract commands are Prisma Next; see [decision 0003](decisions/0003-neon-database-and-portfolio-schema.md).
 
 ### Class sorting on save in Zed
 
@@ -77,9 +74,9 @@ bun --bun run verify   # Biome check, lint:ds, typecheck, Vitest, build
 bun run test           # tests only
 ```
 
-Tests use Vitest ([decision 0010](decisions/0010-vitest-tests-in-every-pr.md)) and live as `*.test.ts` in the top-level `tests/` folder, which mirrors `src/`: `tests/features/projects/projects.server.test.ts` covers `src/features/projects/projects.server.ts`. Tests import the code under test through `#/` aliases. Every pull request that changes behavior includes tests. For now the suite is unit tests only; components, database queries, and browser flows are not tested. [../vitest.config.ts](../vitest.config.ts) is separate from `vite.config.ts`, so tests don't load the Nitro or TanStack Start plugins. Tests run on Node.js, like production: `verify` starts the test step without Bun's `node` shim.
+Tests use Vitest ([decision 0010](decisions/0010-vitest-tests-in-every-pr.md)) and live as `*.test.ts` in the top-level `tests/` folder, which mirrors `src/`: `tests/features/projects/projects.utils.test.ts` covers `src/features/projects/projects.utils.ts`. Tests import the code under test through `#/` aliases. Every pull request that changes behavior includes tests. For now the suite is unit tests only; components and browser flows are not tested. [../vitest.config.ts](../vitest.config.ts) is separate from `vite.config.ts`, so tests don't load the Nitro or TanStack Start plugins. Tests run on Node.js, like production: `verify` starts the test step without Bun's `node` shim.
 
-[../scripts/verify.mjs](../scripts/verify.mjs) runs every check from the repository root, keeps going after a failure, and exits 1 if any check fails. It never touches the database.
+[../scripts/verify.mjs](../scripts/verify.mjs) runs every check from the repository root, keeps going after a failure, and exits 1 if any check fails. It needs no environment variables or network services.
 
 ### CI
 
@@ -98,8 +95,6 @@ The workflow needs the `CLAUDE_CODE_OAUTH_TOKEN` repository secret, created with
 ## Generated files
 
 - Edit route files, then use route generation; do not manually patch `src/routeTree.gen.ts`.
-- Edit `src/integrations/prisma/contract.ts`, then emit its generated `contract.json` and `contract.d.ts`. Emission does not apply database migrations.
-- Treat migration snapshots and references as tool-managed artifacts. Do not rewrite migration history casually.
 - `.velite/` and `public/static/` are Velite's output from `content/` ([data.md](data.md#generated-output)); never edit them. The Vite plugin in `vite.config.ts` rebuilds them in `dev` and `build`, and `bun run content` does it for scripts that do not start Vite.
 - Drafts are kept only when `VITE_SHOW_DRAFTS` is `true` when Velite runs. The plugin reads it from Vite's env, `.env.local` included; `bun run content` and the pre-scripts see only the shell's environment, so they always drop drafts unless you run `VITE_SHOW_DRAFTS=true bun run content`.
 - Keep `bun.lock` aligned with intentional dependency changes. TanStack Start and Router use caret ranges from their stable releases ([decision 0006](decisions/0006-tanstack-start-application-stack.md)); several other ranges use `latest`. Inspect installed versions before applying version-specific advice.
@@ -107,7 +102,7 @@ The workflow needs the `CLAUDE_CODE_OAUTH_TOKEN` repository secret, created with
 
 ## Dependency overrides
 
-`package.json` pins transitive packages through `overrides`. Four are security fixes: `@hono/node-server`, `hono`, and `valibot` (under `@prisma/dev`) and `lodash` (under Chevrotain); `arktype` is also pinned. Remove each security override once its parent package ships a safe version. `braces` (under `fast-glob` → `micromatch`) has a high advisory with no fix published; update it when one appears.
+`package.json` pins transitive packages through `overrides`. Both are security fixes: `@hono/node-server` and `hono` (under `@modelcontextprotocol/sdk`). Remove each security override once its parent package ships a safe version. `braces` (under `fast-glob` → `micromatch`) has a high advisory with no fix published; update it when one appears.
 
 ```bash
 bun audit
@@ -117,7 +112,7 @@ CI runs `bun audit` on every pull request without failing the job ([CI](#ci)). F
 
 ### Dependabot
 
-Dependabot opens the update pull requests, except for the Prisma packages, which you bump by hand ([Prisma version set](#prisma-version-set); [decision 0016](decisions/0016-dependabot-dependency-updates.md)). [../.github/dependabot.yml](../.github/dependabot.yml) configures two update streams:
+Dependabot opens the update pull requests ([decision 0016](decisions/0016-dependabot-dependency-updates.md)). [../.github/dependabot.yml](../.github/dependabot.yml) configures two update streams:
 
 | Ecosystem | Schedule | Pull requests |
 | --- | --- | --- |
@@ -127,8 +122,6 @@ Dependabot opens the update pull requests, except for the Prisma packages, which
 Neither schedule sets a `time`, so GitHub picks the time of day. A run with nothing to update opens no PR.
 
 `@types/node` stays on the Node.js major that production runs (24, [decision 0005](decisions/0005-vercel-deployment.md)): `dependabot.yml` ignores `@types/node` 25 and later. When the runtime moves to a new major, bump `@types/node` to match and raise that bound in the same PR.
-
-`dependabot.yml` also ignores `prisma`, `@prisma/orm-postgres` and `@prisma/cli-engine`: they must move together ([Prisma version set](#prisma-version-set)).
 
 To handle a Dependabot PR:
 
@@ -143,16 +136,6 @@ Dependabot PRs differ from other PRs:
 - They have no Vercel preview, like every branch except `main` and `development`.
 
 `dependabot.yml` configures version updates only; Dependabot security updates are a separate repository setting.
-
-### Prisma version set
-
-`prisma` (the CLI), `@prisma/orm-postgres` and `@prisma/cli-engine` are pinned to exact versions and bumped together in one pull request. The `prisma` CLI depends on an exact `@prisma/orm-toolchain` and `@prisma/cli-engine`; `@prisma/orm-postgres` depends on the same `@prisma/orm-toolchain` version. When the CLI and `orm-postgres` resolve different toolchains, `contract:emit` fails (`CONTRACT.PACK_CONTRIBUTION_INVALID`, `Invalid authoring type constructor "sql.String"`). Dependabot would bump one package at a time, so it ignores all three.
-
-To bump the set:
-
-1. Pick a `prisma` release and read its dependencies: `npm view prisma@<version> dependencies`.
-2. Pick the `@prisma/orm-postgres` release whose `npm view @prisma/orm-postgres@<version> dependencies` lists the same `@prisma/orm-toolchain` version, and use the `@prisma/cli-engine` version `prisma` lists.
-3. Install all three with `bun add --exact`, run `bun --bun run contract:emit`, and commit any change to `contract.json` and `contract.d.ts` with the bump, along with the code those changes need.
 
 ## Build output and deployment
 
@@ -204,11 +187,10 @@ Set these environment variables in the Vercel project for each environment that 
 
 | Variable | Needed for |
 | --- | --- |
-| `DATABASE_URL` | Every page that reads the database. Preview deployments without it fail with a database error while reading the contract marker. |
 | `VITE_SHOW_DRAFTS` | Preview only (`development`), to show drafts. Never set it for Production: it would publish every draft and its images. |
 | `COMING_SOON` | The [coming-soon gate](architecture.md#coming-soon-gate). Vercel applies a changed value only to new deployments, so redeploy after changing it. |
 
-A Preview variable applies to every branch that deploys unless it is scoped. In the Vercel dashboard (Settings → Environment Variables), add the variable for Preview and pick a specific branch to give that branch its own value, such as a `DATABASE_URL` for `development`. A branch-specific value overrides an all-branches Preview value with the same name.
+A Preview variable applies to every branch that deploys unless it is scoped. In the Vercel dashboard (Settings → Environment Variables), add the variable for Preview and pick a specific branch to give that branch its own value, such as `VITE_SHOW_DRAFTS` for `development`. A branch-specific value overrides an all-branches Preview value with the same name.
 
 To reproduce the Vercel build locally, which writes the ignored `.vercel/output/` (check `functions/__server.func/.vc-config.json` shows a `nodejs` runtime):
 
