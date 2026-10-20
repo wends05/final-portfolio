@@ -42,17 +42,16 @@ Agents: write only what the owner gave you. Placeholder text stays `draft: true`
 
 ## Rules
 
-- Do not edit generated files by hand: `src/routeTree.gen.ts` (route generator) and `src/integrations/prisma/contract.json` / `contract.d.ts` (`contract:emit`). See [docs/development.md](docs/development.md#generated-files) and [docs/data.md](docs/data.md).
-- Keep database access in `*.server.ts` modules and server functions; UI receives plain data through route loaders and server functions. Do not use React Server Components or Bun-only runtime APIs ([docs/decisions/0011-no-react-server-components.md](docs/decisions/0011-no-react-server-components.md), [docs/decisions/0005-vercel-deployment.md](docs/decisions/0005-vercel-deployment.md)).
+- Do not edit generated files by hand: `src/routeTree.gen.ts` (route generator), `.velite/`, and `public/static/` (Velite). See [docs/development.md](docs/development.md#generated-files) and [docs/data.md](docs/data.md).
+- Keep server-only code in `*.server.ts` modules and server functions; UI receives plain data through route loaders and server functions. Do not use React Server Components or Bun-only runtime APIs ([docs/decisions/0011-no-react-server-components.md](docs/decisions/0011-no-react-server-components.md), [docs/decisions/0005-vercel-deployment.md](docs/decisions/0005-vercel-deployment.md)).
 - Follow the feature folder layout in [docs/decisions/0009-feature-folder-structure.md](docs/decisions/0009-feature-folder-structure.md): `<feature>.server.ts`, `<feature>.functions.ts`, `utils`, `types`, `hooks/`, and `components/` per feature; shared code in `#/components` and `#/lib`.
-- Ask before running anything that changes a database (`prisma db update`, `prisma db migrate`, `prisma db init`, seed scripts, migration apply). Never print or commit `DATABASE_URL` or the contents of `.env`.
+- Never print or commit the contents of `.env`.
 - `.delta/` holds tool-managed clones and worktrees. Do not edit, lint, or commit it.
 - Pushing `main` deploys to production on Vercel ([docs/development.md](docs/development.md#vercel)). Don't push to `main`; all changes go through pull requests.
 - Branches are `<type>/<short-name>` (`feat/navbar-links`), PR titles are conventional commits, and Linear issues go in the PR description (`Closes WD-21`, `Part of WD-13`). See [docs/sdlc.md](docs/sdlc.md#git-workflow) and [ADR 0012](docs/decisions/0012-trunk-based-pr-workflow.md). Never rename a branch with an open PR.
 
 ## Skills
 
-- Data layer work: use the project's `prisma-8` skill (Prisma Next, in `.agents/skills/` and mirrored for other agents). The runtime is Prisma Next, not traditional Prisma Client; do not reintroduce `@prisma/client` or `@prisma/adapter-pg`.
 - UI components and theming: use the `shadcn` and `base-ui` skills; `components.json` uses the `base-mira` style.
 
 ## Development workflow
