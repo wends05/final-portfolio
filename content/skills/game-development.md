@@ -1,9 +1,9 @@
 ---
 slug: game-development
 name: "Game development"
-confidence: 60
-tools: ["Godot"]
-# Placeholder made from the old mocks; replace before publishing.
+confidence: 75
+tools: ["Godot", "GDScript"]
+# draft: the overview is a placeholder the owner replaces.
 draft: true
 ---
-What game development means in my work: the tools I reach for first, the projects where they did the work, and what I am learning next.
+[owner writes overview]

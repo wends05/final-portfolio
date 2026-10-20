@@ -1,9 +1,9 @@
 ---
 slug: machine-learning
-name: "Machine learning"
-confidence: 35
-tools: ["Python", "PyTorch", "scikit-learn"]
-# Placeholder made from the old mocks; replace before publishing.
+name: "Machine learning & computer vision"
+confidence: 35  # low on purpose
+tools: ["Python", "TensorFlow", "Keras", "MediaPipe", "OpenCV", "NumPy", "scikit-learn", "Jupyter"]
+# draft: the overview is a placeholder the owner replaces.
 draft: true
 ---
-What machine learning means in my work: the tools I reach for first, the projects where they did the work, and what I am learning next.
+[owner writes overview]
