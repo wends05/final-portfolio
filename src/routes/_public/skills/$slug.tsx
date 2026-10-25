@@ -1,4 +1,5 @@
 import { createFileRoute, notFound } from "@tanstack/react-router";
+import { buildSeo, truncateDescription } from "#/features/seo/seo.utils";
 import SkillPage from "#/features/skills/components/SkillPage";
 import { getSkillPage } from "#/features/skills/skills.content";
 
@@ -11,12 +12,11 @@ export const Route = createFileRoute("/_public/skills/$slug")({
 	head: ({ loaderData }) => {
 		const page = loaderData?.page;
 		if (!page) return {};
-		return {
-			meta: [
-				{ title: `${page.name} · wends.dev` },
-				{ name: "description", content: page.description },
-			],
-		};
+		return buildSeo({
+			title: page.name,
+			description: truncateDescription(page.description),
+			path: `/skills/${page.slug}`,
+		});
 	},
 	component: RouteComponent,
 });

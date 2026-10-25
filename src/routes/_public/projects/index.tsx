@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import ProjectsPage from "#/features/projects/components/ProjectsPage";
 import { getProjectsPage } from "#/features/projects/projects.content";
+import { buildSeo } from "#/features/seo/seo.utils";
 
 const DESCRIPTION =
 	"Apps, games and experiments by Wendell Terence Dador, featured projects first.";
@@ -15,12 +16,12 @@ export const Route = createFileRoute("/_public/projects/")({
 
 		return page;
 	},
-	head: () => ({
-		meta: [
-			{ title: "projects · wends.dev" },
-			{ name: "description", content: DESCRIPTION },
-		],
-	}),
+	head: () =>
+		buildSeo({
+			title: "projects",
+			description: DESCRIPTION,
+			path: "/projects",
+		}),
 	component: RouteComponent,
 });
 

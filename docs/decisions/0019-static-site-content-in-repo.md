@@ -71,7 +71,7 @@ draft: false
 | Velite in Vite | A small plugin in `vite.config.ts` runs Velite's `build()` once: watching in `dev`, cleaning in `build`. Scripts that do not start Vite (`typecheck`, `test`, `lint:ds`) run the `velite` CLI first, and so does `postinstall`. |
 | Imports | `#content` resolves to the generated `.velite/index.js` through `package.json` `imports`. Route loaders read it directly; there are no server functions for content. |
 | Prerender | TanStack Start's `prerender` builds every route to HTML. A post-build check confirms the expected pages exist, because a failed page does not fail the build on its own. |
-| Coming-soon gate | `VITE_COMING_SOON=true` at build time redirects public routes to `/coming-soon`. Changing it takes a new deployment. The gate is removed after launch. |
+| Coming-soon gate | `COMING_SOON=true` in the server environment redirects public routes to `/coming-soon`. Changing it takes a new deployment. The gate is removed after launch. |
 | Adding content | `bun run new:project <slug>` scaffolds a project, and the "adding content" recipe in [AGENTS.md](../../AGENTS.md) lists the steps for people and agents. |
 
 ## Alternatives
