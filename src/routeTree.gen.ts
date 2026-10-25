@@ -11,6 +11,8 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as PublicRouteRouteImport } from './routes/_public/route'
 import { Route as ComingSoonRouteImport } from './routes/coming-soon'
+import { Route as RobotsDottxtRouteImport } from './routes/robots[.]txt'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as PublicIndexRouteImport } from './routes/_public/index'
 import { Route as PublicSplatRouteImport } from './routes/_public/$'
 import { Route as PublicProjectsIndexRouteImport } from './routes/_public/projects/index'
@@ -25,6 +27,16 @@ const PublicRouteRoute = PublicRouteRouteImport.update({
 const ComingSoonRoute = ComingSoonRouteImport.update({
   id: '/coming-soon',
   path: '/coming-soon',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RobotsDottxtRoute = RobotsDottxtRouteImport.update({
+  id: '/robots.txt',
+  path: '/robots.txt',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PublicIndexRoute = PublicIndexRouteImport.update({
@@ -61,6 +73,8 @@ const PublicSkillsSlugRoute = PublicSkillsSlugRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof PublicIndexRoute
   '/coming-soon': typeof ComingSoonRoute
+  '/robots.txt': typeof RobotsDottxtRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/$': typeof PublicSplatRoute
   '/projects/$slug': typeof PublicProjectsSlugRoute
   '/skills/$slug': typeof PublicSkillsSlugRoute
@@ -69,6 +83,8 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/coming-soon': typeof ComingSoonRoute
+  '/robots.txt': typeof RobotsDottxtRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/$': typeof PublicSplatRoute
   '/': typeof PublicIndexRoute
   '/projects/$slug': typeof PublicProjectsSlugRoute
@@ -80,6 +96,8 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_public': typeof PublicRouteRouteWithChildren
   '/coming-soon': typeof ComingSoonRoute
+  '/robots.txt': typeof RobotsDottxtRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/_public/$': typeof PublicSplatRoute
   '/_public/': typeof PublicIndexRoute
   '/_public/projects/$slug': typeof PublicProjectsSlugRoute
@@ -92,6 +110,8 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/coming-soon'
+    | '/robots.txt'
+    | '/sitemap.xml'
     | '/$'
     | '/projects/$slug'
     | '/skills/$slug'
@@ -100,6 +120,8 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/coming-soon'
+    | '/robots.txt'
+    | '/sitemap.xml'
     | '/$'
     | '/'
     | '/projects/$slug'
@@ -110,6 +132,8 @@ export interface FileRouteTypes {
     | '__root__'
     | '/_public'
     | '/coming-soon'
+    | '/robots.txt'
+    | '/sitemap.xml'
     | '/_public/$'
     | '/_public/'
     | '/_public/projects/$slug'
@@ -121,6 +145,8 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   PublicRouteRoute: typeof PublicRouteRouteWithChildren
   ComingSoonRoute: typeof ComingSoonRoute
+  RobotsDottxtRoute: typeof RobotsDottxtRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -137,6 +163,20 @@ declare module '@tanstack/react-router' {
       path: '/coming-soon'
       fullPath: '/coming-soon'
       preLoaderRoute: typeof ComingSoonRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/robots.txt': {
+      id: '/robots.txt'
+      path: '/robots.txt'
+      fullPath: '/robots.txt'
+      preLoaderRoute: typeof RobotsDottxtRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_public/': {
@@ -209,6 +249,8 @@ const PublicRouteRouteWithChildren = PublicRouteRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   PublicRouteRoute: PublicRouteRouteWithChildren,
   ComingSoonRoute: ComingSoonRoute,
+  RobotsDottxtRoute: RobotsDottxtRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

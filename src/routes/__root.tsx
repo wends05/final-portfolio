@@ -11,6 +11,7 @@ import {
 } from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 import { introHeadScript } from "#/features/public/utils/intro";
+import { buildSeo, DEFAULT_DESCRIPTION } from "#/features/seo/seo.utils";
 import TanStackQueryDevtools from "#/integrations/tanstack-query/devtools";
 import { themeHeadScript } from "#/lib/theme";
 import appCss from "#/styles.css?url";
@@ -20,26 +21,29 @@ interface MyRouterContext {
 }
 
 export const Route = createRootRouteWithContext<MyRouterContext>()({
-	head: () => ({
-		meta: [
-			{
-				charSet: "utf-8",
-			},
-			{
-				name: "viewport",
-				content: "width=device-width, initial-scale=1",
-			},
-			{
-				title: "wends.dev",
-			},
-		],
-		links: [
-			{
-				rel: "stylesheet",
-				href: appCss,
-			},
-		],
-	}),
+	head: () => {
+		// Defaults for pages that set nothing, such as the 404 page. Every public
+		// route builds its own tags, which replace these.
+		const seo = buildSeo({ description: DEFAULT_DESCRIPTION });
+		return {
+			meta: [
+				{
+					charSet: "utf-8",
+				},
+				{
+					name: "viewport",
+					content: "width=device-width, initial-scale=1",
+				},
+				...seo.meta,
+			],
+			links: [
+				{
+					rel: "stylesheet",
+					href: appCss,
+				},
+			],
+		};
+	},
 	shellComponent: RootDocument,
 });
 

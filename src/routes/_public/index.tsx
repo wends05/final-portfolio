@@ -6,10 +6,26 @@ import HeroSection from "#/features/public/components/landing/HeroSection";
 import LandingProjectsSection from "#/features/public/components/landing/LandingProjectsSection";
 import LandingSkillsSection from "#/features/public/components/landing/LandingSkillsSection";
 import { getHomepage } from "#/features/public/public.content";
+import { CONTACT_LINKS } from "#/features/public/utils/contact";
+import {
+	buildSeo,
+	DEFAULT_DESCRIPTION,
+	homeJsonLd,
+} from "#/features/seo/seo.utils";
 
 export const Route = createFileRoute("/_public/")({
 	component: Home,
 	loader: getHomepage,
+	head: () =>
+		buildSeo({
+			description: DEFAULT_DESCRIPTION,
+			path: "/",
+			jsonLd: homeJsonLd(
+				CONTACT_LINKS.filter((link) => link.kind === "external").map(
+					(link) => link.href,
+				),
+			),
+		}),
 });
 
 function Home() {
