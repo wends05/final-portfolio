@@ -3,7 +3,8 @@ import type { FocusEvent, PointerEvent } from "react";
 import { isPlainClick } from "#/features/public/utils/pick";
 import { cn } from "#/lib/utils";
 import type { Project } from "#content";
-import { padIndex } from "../projects.utils";
+import { getProjectYear, padIndex } from "../projects.utils";
+import ProjectCoverTile from "./ProjectCoverTile";
 
 interface ProjectCardProps {
 	project: Project;
@@ -21,7 +22,7 @@ interface ProjectCardProps {
 	onPick: (slug: string) => void;
 }
 
-/** A /projects tile: cover, then its number and title. */
+/** A /projects tile: cover (or the no-cover tile), then its number and title. */
 export default function ProjectCard({
 	project,
 	index,
@@ -60,12 +61,18 @@ export default function ProjectCard({
 						row && "max-md:w-5/12 max-md:shrink-0",
 					)}
 				>
-					{project.cover && (
+					{project.cover ? (
 						<img
 							src={project.cover.src}
 							alt=""
 							loading="lazy"
 							className="absolute inset-0 size-full object-cover"
+						/>
+					) : (
+						<ProjectCoverTile
+							number={padIndex(index + 1)}
+							status={project.status.toLowerCase()}
+							year={getProjectYear(project.startedAt)}
 						/>
 					)}
 				</div>

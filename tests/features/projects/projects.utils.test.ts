@@ -1,14 +1,18 @@
 import { describe, expect, it } from "vitest";
 import {
+	fitContain,
 	getMetadataRows,
 	getProjectDateLine,
 	getProjectLinks,
 	getProjectPosition,
+	getProjectYear,
 	nearestIndex,
 	orderProjects,
 	padIndex,
 	resolveCredits,
 	stepSlide,
+	swipeStep,
+	viewerStage,
 } from "#/features/projects/projects.utils";
 
 const listed = (slug: string) => ({ slug, title: slug.toUpperCase() });
@@ -254,5 +258,95 @@ describe("resolveCredits", () => {
 			[],
 		);
 		expect(resolveCredits([], collaborators)).toEqual([]);
+	});
+});
+
+describe("getProjectYear", () => {
+	it("takes the year from the start date", () => {
+		expect(getProjectYear("2024-09-01")).toBe("2024");
+	});
+});
+
+describe("viewerStage", () => {
+	it("leaves room for the side arrows from md", () => {
+		expect(viewerStage({ width: 1440, height: 900 })).toEqual({
+			left: 96,
+			top: 72,
+			width: 1248,
+			height: 716,
+		});
+	});
+
+	it("leaves room for the arrow row under the image on phones", () => {
+		expect(viewerStage({ width: 390, height: 844 })).toEqual({
+			left: 16,
+			top: 64,
+			width: 358,
+			height: 644,
+		});
+	});
+
+	it("never goes negative on a tiny viewport", () => {
+		const stage = viewerStage({ width: 20, height: 100 });
+		expect(stage.width).toBe(0);
+		expect(stage.height).toBe(0);
+	});
+});
+
+describe("fitContain", () => {
+	const stage = { left: 96, top: 72, width: 1248, height: 716 };
+
+	it("fits a wide image to the stage's width and centres it down the stage", () => {
+		const box = fitContain({ width: 1600, height: 900 }, stage);
+		expect(box.width).toBe(1248);
+		expect(box.height).toBeCloseTo(702);
+		expect(box.left).toBe(96);
+		expect(box.top).toBeCloseTo(72 + (716 - 702) / 2);
+	});
+
+	it("fits a tall image to the stage's height and centres it across the stage", () => {
+		const box = fitContain({ width: 720, height: 1560 }, stage);
+		expect(box.height).toBe(716);
+		expect(box.width).toBeCloseTo((720 / 1560) * 716);
+		expect(box.left).toBeCloseTo(96 + (1248 - box.width) / 2);
+		expect(box.top).toBe(72);
+	});
+
+	it("keeps the image's aspect ratio and stays inside the stage", () => {
+		for (const image of [
+			{ width: 1600, height: 900 },
+			{ width: 720, height: 1560 },
+			{ width: 1200, height: 1200 },
+		]) {
+			const box = fitContain(image, stage);
+			expect(box.width / box.height).toBeCloseTo(image.width / image.height);
+			expect(box.left).toBeGreaterThanOrEqual(stage.left);
+			expect(box.top).toBeGreaterThanOrEqual(stage.top);
+			expect(box.left + box.width).toBeLessThanOrEqual(
+				stage.left + stage.width + 1e-9,
+			);
+			expect(box.top + box.height).toBeLessThanOrEqual(
+				stage.top + stage.height + 1e-9,
+			);
+		}
+	});
+
+	it("returns the stage when the image or the stage has no area", () => {
+		expect(fitContain({ width: 0, height: 0 }, stage)).toBe(stage);
+		const flat = { left: 0, top: 0, width: 0, height: 0 };
+		expect(fitContain({ width: 10, height: 10 }, flat)).toBe(flat);
+	});
+});
+
+describe("swipeStep", () => {
+	it("steps to the next image on a swipe left and the previous on a swipe right", () => {
+		expect(swipeStep(-80)).toBe(1);
+		expect(swipeStep(80)).toBe(-1);
+	});
+
+	it("ignores a drag shorter than the threshold", () => {
+		expect(swipeStep(47)).toBe(0);
+		expect(swipeStep(-47)).toBe(0);
+		expect(swipeStep(-48)).toBe(1);
 	});
 });

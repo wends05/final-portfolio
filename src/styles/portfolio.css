@@ -167,6 +167,26 @@ html {
   }
 }
 
+/* Six column rules: the backdrop of the tile that stands in for a missing image. */
+@utility tile-columns {
+  background-image: repeating-linear-gradient(
+    90deg,
+    transparent 0,
+    transparent calc(100% / 6 - 1px),
+    color-mix(in oklab, var(--rule-soft) 40%, transparent) calc(100% / 6 - 1px),
+    color-mix(in oklab, var(--rule-soft) 40%, transparent) calc(100% / 6)
+  );
+}
+
+/* The project number on that tile: sized by the tile's width (the tile is a
+   container) and sunk a little below its box, as a display figure sits. */
+@utility tile-numeral {
+  bottom: -0.09em;
+  font-size: 46cqw;
+  line-height: 1;
+  letter-spacing: -0.06em;
+}
+
 /* Transitions with a property list Tailwind has no class for. They read
    duration-* and ease-* like the built-in transition-* utilities. */
 @utility transition-fade-rise {
@@ -189,6 +209,24 @@ html {
 
 @utility transition-colors-scale {
   transition-property: background-color, color, scale;
+  transition-timing-function: var(
+    --tw-ease,
+    var(--default-transition-timing-function)
+  );
+  transition-duration: var(--tw-duration, var(--default-transition-duration));
+}
+
+@utility transition-fade-colors {
+  transition-property: opacity, color, background-color;
+  transition-timing-function: var(
+    --tw-ease,
+    var(--default-transition-timing-function)
+  );
+  transition-duration: var(--tw-duration, var(--default-transition-duration));
+}
+
+@utility transition-dot {
+  transition-property: width, background-color;
   transition-timing-function: var(
     --tw-ease,
     var(--default-transition-timing-function)
