@@ -238,17 +238,32 @@ flowchart LR
 - Every project's details render stacked in one grid cell (`col-start-1 row-start-1`), with only the shown one visible and the rest `inert`, so the panel keeps the tallest one's height and doesn't jump.
 - Clicking a tile or "Read more" is a [list pick](#list-pick) whose wash runs on the panel's title, not on the tile.
 - Phones: the panel becomes a strip under the navbar (number, title, two lines), featured tiles are full-width cards, and the rest are thumbnail-and-title rows.
+- A project without a cover keeps its tile's 3:2 box and shows the [no-cover tile](#no-cover-tile) in it; its number and title under the tile do not change.
 
 **`/projects/<slug>`** ([ProjectCaseStudy](../src/features/projects/components/ProjectCaseStudy.tsx)) follows the canvas's ★ A5 board, which comes from the owner's "Artboard 5 copy":
 
 - The header: the project's number in the margin column (its place in the `/projects` order), the title across 8 columns, and "by <team>" at the right end of the title's last line. No team name, no byline.
 - The links as buttons under the title (`ProjectLinkButtons`, live site solid and first), and again at the end beside the next project, so they are there before and after reading.
-- The cover on the left (6 columns, 4:3) with the label/value list and the credits under it, and the write-up beside the cover under an "about" line that holds the date and status (`getProjectDateLine`). The three sit in one subgrid block with its own rows from `md`; on phones they stack as cover, write-up, details. Nothing else on the page takes a `row-start-*`: the link buttons render nothing for a project without links, and an element placed by row number would let the gallery or the footer fall into the empty row.
+- The cover on the left (6 columns, 4:3) with the label/value list and the credits under it, and the write-up beside the cover under an "about" line that holds the date and status (`getProjectDateLine`). The three sit in one subgrid block with its own rows from `md`; on phones they stack as cover, write-up, details. Nothing else on the page takes a `row-start-*`: the link buttons render nothing for a project without links, and an element placed by row number would let the gallery or the footer fall into the empty row. A project without a cover keeps the cover's 6 columns and 4:3 box and fills it with the [no-cover tile](#no-cover-tile), so the grid never changes with the images.
 - A "tools" list opens the details under the cover, above the label/value list: every tool in the project's `tools` order, one per row, styled like the credits rows. The owner orders each project's `tools` by importance, because the `/projects` panel shows only the first three (`splitVisibleTools` in [../src/lib/tools.ts](../src/lib/tools.ts)) with "+N" for the rest, the same pattern as the skills list. Phones hide the panel's tools line with the rest of its detail; the case study list shows at every width.
-- [ProjectGallery](../src/features/projects/components/ProjectGallery.tsx) is the project's `gallery` only, in file order, one at a time with the alt text as the caption. The cover is never one of them. Slides change instantly; the counter and ‹ › buttons show only with more than one image, and the section is left out with none.
+- [ProjectGallery](../src/features/projects/components/ProjectGallery.tsx) is the project's `gallery` only, in file order, one at a time with the alt text as the caption. The cover is never one of them. Slides change instantly; the counter and ‹ › buttons show only with more than one image, and the section is left out with none. The expand button after them (always present, even with one image) opens the [full-screen view](#full-screen-gallery); clicking an image does nothing.
 - Credits come from the project's `credits`, named from `content/collaborators.yaml`: one ruled row per person with the role on the right, linked when the person has a profile URL.
 - "next project" wraps from the last project to the first.
 - The label/value list shows only the `metadata` list (`getMetadataRows`), in file order, never fields that have a place of their own. Values can be text, numbers, booleans, or lists of those. With no rows the list is left out.
 - The label/value list is a `grid-cols-subgrid`, so labels and values sit on the page columns (1 + 3 on phones, 2 + 4 from `md`).
+
+### No-cover tile
+
+[ProjectCoverTile](../src/features/projects/components/ProjectCoverTile.tsx) stands in for a missing cover in the case study and on the `/projects` tiles. It fills the box the image would, as a decorative `aria-hidden` block: six column rules (`tile-columns`), the project's number as a display figure sized by the tile's own width (`tile-numeral`), and the status and year in label type. Tiles narrower than 12.5rem drop the status and year and keep the number. The landing section's cover box is not covered by this yet.
+
+### Full-screen gallery
+
+[ProjectGalleryViewer](../src/features/projects/components/ProjectGalleryViewer.tsx) is a Base UI `Dialog` that shows the case study's gallery uncropped. The page's gallery owns the open state and the current image, so closing returns to the slide that was on show.
+
+- **Opening:** the image on show grows from the page's cropped frame into its own shape, fitted to the stage (`viewerStage`, `fitContain` in [projects.utils.ts](../src/features/projects/projects.utils.ts)), while the page darkens and blurs a little (`bg-inverse` at 60%). The frame's own image stays hidden until the flight back lands, so it is never drawn twice. The viewer animates `left/top/width/height` with the Web Animations API on an `object-cover` image, which opens the crop smoothly; it measures the frame when it opens and when it closes.
+- **Controls:** the counter and close button, then the arrows, then the caption and dots fade in one after another once the image is moving, and out together and fast. Add a new control the same way: a `fade` class with its own delay. Controls and bars are `pointer-events-none` so a click on empty space closes.
+- **Input:** ← and → step, Esc and the close button close, and a swipe (touch and pen only) steps. The arrows sit at the sides from `md` and in a row with the dots on phones. With one image there are no arrows, counter or dots.
+- **Scrolling:** the popup carries `data-lenis-prevent`, and the dialog locks the page, so the page behind does not scroll.
+- **Reduced motion:** no flight and no fades; the viewer appears and disappears at once.
 
 There are no mocks. Placeholder projects and skills are content files marked `draft: true` ([data.md](data.md#drafts)); preview them with `VITE_SHOW_DRAFTS=true`. Without drafts the routes show their empty state and 404s.

@@ -168,3 +168,47 @@ describe("ProjectCaseStudy tools", () => {
 		expect(markup).not.toContain('id="project-tools"');
 	});
 });
+
+describe("ProjectCaseStudy cover", () => {
+	it("shows the cover image when the project has one", () => {
+		const markup = render(
+			makePage({
+				cover: { src: "/static/cover.png" },
+			} as Partial<ProjectPageData["project"]>),
+		);
+		expect(markup).toContain('alt="Cover of Wishlist App"');
+		expect(markup).not.toContain("tile-columns");
+	});
+
+	it("fills the cover slot with the no-cover tile when there is none", () => {
+		const markup = render(makePage());
+		expect(markup).not.toContain("Cover of Wishlist App");
+		expect(markup).toContain("tile-columns");
+		expect(markup).toContain(">01<");
+		expect(markup).toContain(">completed<");
+		expect(markup).toContain(">2024<");
+	});
+
+	it("keeps the tile inside the 4:3 cover box", () => {
+		const markup = render(makePage());
+		const figure = /<figure.*?<\/figure>/s.exec(markup)?.[0] ?? "";
+		expect(figure).toContain("aspect-4/3");
+		expect(figure).toContain("tile-columns");
+	});
+
+	it("leaves the gallery section out with no images", () => {
+		expect(render(makePage())).not.toContain("Gallery of Wishlist App");
+	});
+
+	it("shows the gallery, with its expand button, when there are images", () => {
+		const markup = render(
+			makePage({
+				gallery: [
+					{ image: { src: "/a.png", width: 800, height: 600 }, alt: "A" },
+				],
+			} as Partial<ProjectPageData["project"]>),
+		);
+		expect(markup).toContain("Gallery of Wishlist App");
+		expect(markup).toContain('aria-label="View full screen"');
+	});
+});
