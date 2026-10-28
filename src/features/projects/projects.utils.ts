@@ -234,3 +234,39 @@ export function resolveCredits(
 		};
 	});
 }
+
+/** The parts of a GSAP timeline the tools dialog drives. */
+export interface ShutterTimeline {
+	play(): unknown;
+	reverse(): unknown;
+	timeScale(value: number): unknown;
+}
+
+/**
+ * The tools dialog's answer to Base UI's `onOpenChange`. Opening (again, even
+ * mid-close) plays the shutter forwards at normal speed. Closing keeps the
+ * dialog mounted (`preventUnmount`) and plays it backwards at `closeSpeed`;
+ * the timeline's `onReverseComplete` then unmounts it. With no timeline yet
+ * there is nothing to play, so Base UI closes on its own.
+ */
+export function playToolsShutter(
+	open: boolean,
+	timeline: ShutterTimeline | null,
+	preventUnmount: () => void,
+	closeSpeed: number,
+) {
+	if (!timeline) return;
+	if (open) {
+		timeline.timeScale(1);
+		timeline.play();
+		return;
+	}
+	preventUnmount();
+	timeline.timeScale(closeSpeed);
+	timeline.reverse();
+}
+
+/** The shutter timeline's settings: built paused, and unmounted once it has run backwards. */
+export function toolsShutterVars(unmount: () => void) {
+	return { paused: true, onReverseComplete: unmount };
+}

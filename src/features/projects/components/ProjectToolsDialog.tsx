@@ -3,6 +3,7 @@ import { XIcon } from "@phosphor-icons/react/ssr";
 import { useRef, useState } from "react";
 import { appGSAP, useAppGSAP } from "#/integrations/animations/gsap";
 import { matchMotion } from "#/integrations/animations/motion";
+import { playToolsShutter, toolsShutterVars } from "../projects.utils";
 import ProjectToolsGrid from "./ProjectToolsGrid";
 
 type Timeline = ReturnType<typeof appGSAP.timeline>;
@@ -55,10 +56,9 @@ export default function ProjectToolsDialog({
 			const blur = backdrop.current;
 
 			matchMotion(({ reduce }) => {
-				const tl = appGSAP.timeline({
-					paused: true,
-					onReverseComplete: () => actions.current?.unmount(),
-				});
+				const tl = appGSAP.timeline(
+					toolsShutterVars(() => actions.current?.unmount()),
+				);
 
 				if (reduce) {
 					appGSAP.set("[data-tools-hairline]", { autoAlpha: 0 });
@@ -134,16 +134,12 @@ export default function ProjectToolsDialog({
 			actionsRef={actions}
 			onOpenChange={(next, details) => {
 				setOpen(next);
-				const tl = timeline.current;
-				if (next) {
-					// Opened again while closing: run forwards from where it is.
-					tl?.timeScale(1).play();
-					return;
-				}
-				// Nothing to play yet: let Base UI close on its own.
-				if (!tl) return;
-				details.preventUnmountOnClose();
-				tl.timeScale(TIMING.closeSpeed).reverse();
+				playToolsShutter(
+					next,
+					timeline.current,
+					details.preventUnmountOnClose,
+					TIMING.closeSpeed,
+				);
 			}}
 		>
 			<Dialog.Trigger className="type-label -my-2 inline-flex min-h-11 items-center underline-offset-4 outline-none hover:underline focus-visible:outline-2 focus-visible:outline-ring">
