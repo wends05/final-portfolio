@@ -71,7 +71,7 @@ Sections live in `src/features/public/components/landing/`. The navbar, footer a
 | Featured projects | 3 projects in `featuredRank` order, each linking to its case study |
 | Top skills | 3 skills in `topRank` order, linking to `/skills` |
 | Contact | "More of me" heading beside three tiles (LinkedIn, GitHub, CV download from `public/cv.pdf`) and an email panel: Main/School choice with Main picked by default, a mailto link and a copy button. Links and addresses live in `features/public/utils/contact.ts` |
-| Navbar | Fixed top bar: `wends.dev` wordmark linking to `/`, and a Menu button that opens the full-screen menu ([WD-53](https://linear.app/wends/issue/WD-53)). Menu state lives in `menuStore` ([0015](decisions/0015-zustand-for-client-ui-state.md)). The bar is transparent at the top of the page and takes the page background once scrolled (`useNavbarSolid`), so content never shows through it; over the open menu it stays transparent |
+| Navbar | Fixed top bar: `wends.dev` wordmark linking to `/`, and a Menu button that opens the full-screen menu ([WD-53](https://linear.app/wends/issue/WD-53)). Menu state lives in `menuStore` ([0015](decisions/0015-zustand-for-client-ui-state.md)) |
 | Footer | Sits behind the page: the page scrolls up to reveal it. `footer-reveal` (in [../src/styles/footer.css](../src/styles/footer.css)) clips a `footer-reveal-content` child that is fixed to the viewport bottom. Keyboard focus inside it scrolls it into view. |
 
 For every page: check keyboard focus, heading order, image alt text, and small-screen layout.
@@ -237,7 +237,7 @@ flowchart LR
 - Hover is an enhancement, never required, so phones and desktops get the same page: only `pointerType === "mouse"` hovers and only `:focus-visible` focus counts, so touch stays on scroll and tap. The other tiles dim while a mouse is over the grid.
 - Every project's details render stacked in one grid cell (`col-start-1 row-start-1`), with only the shown one visible and the rest `inert`, so the panel keeps the tallest one's height and doesn't jump.
 - Clicking a tile or "Read more" is a [list pick](#list-pick) whose wash runs on the panel's title, not on the tile.
-- Phones: the panel becomes a strip under the navbar (number, title, two lines), featured tiles are full-width cards, and the rest are thumbnail-and-title rows.
+- Phones: the panel becomes a strip under the navbar (number, title, two lines), with a fixed `bg-background` bar behind the navbar so tiles scroll under the strip and never show through the bar (the navbar itself stays transparent), featured tiles are full-width cards, and the rest are thumbnail-and-title rows.
 - A project without a cover keeps its tile's 3:2 box and shows the [no-cover tile](#no-cover-tile) in it; its number and title under the tile do not change.
 
 **`/projects/<slug>`** ([ProjectCaseStudy](../src/features/projects/components/ProjectCaseStudy.tsx)) follows the canvas's ★ A5 board, which comes from the owner's "Artboard 5 copy":
