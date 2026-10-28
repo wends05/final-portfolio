@@ -23,11 +23,3 @@ Claude outputs
 
 .velite
 public/static
-# Agent files, written by scripts/agent-files.ts before each build (ADR 0021)
-/public/index.md
-/public/projects.md
-/public/skills.md
-/public/llms.txt
-/public/sitemap.md
-/public/projects/
-/public/skills/

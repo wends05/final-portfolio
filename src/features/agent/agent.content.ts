@@ -218,7 +218,7 @@ export function getAgentCopy(
 	return entry ? toCopy(entry, origin) : undefined;
 }
 
-/** Every file the build writes into `public/`: each copy, `llms.txt` and `sitemap.md`. */
+/** Every agent file the server routes answer: each copy, `llms.txt` and `sitemap.md`. */
 export function getAgentFiles(origin: string = getAgentOrigin()): AgentFile[] {
 	const { pages, home } = pageEntries();
 	return [
@@ -229,4 +229,12 @@ export function getAgentFiles(origin: string = getAgentOrigin()): AgentFile[] {
 		{ file: "/llms.txt", text: llmsTxt(home, pages, origin) },
 		{ file: "/sitemap.md", text: sitemapMd(pages, SITE_NAME, origin) },
 	];
+}
+
+/** One agent file by its path from the site root, or undefined when there is none. */
+export function getAgentFile(
+	file: string,
+	origin: string = getAgentOrigin(),
+): AgentFile | undefined {
+	return getAgentFiles(origin).find((entry) => entry.file === file);
 }

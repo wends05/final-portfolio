@@ -98,7 +98,7 @@ export function buildSeo(input: SeoInput): SeoHead {
 
 /**
  * The `<link>` to a page's agent copy (ADR 0021). Every indexable page with a
- * path has one, written into `public/` at build time.
+ * path has one, served by a server route.
  */
 export function markdownAlternate(path: string) {
 	return {

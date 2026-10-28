@@ -10,7 +10,6 @@
   "scripts": {
     "dev": "vite dev --port 3000",
     "generate-routes": "tsr generate",
-    "prebuild": "bun run content && bun run agent-files",
     "build": "vite build",
     "preview": "vite preview",
     "format": "biome format",
@@ -24,7 +23,6 @@
     "postinstall": "bun run content",
     "content": "velite build --strict",
     "new:project": "bun scripts/new-project.ts",
-    "agent-files": "bun scripts/agent-files.ts",
     "pretypecheck": "bun run content",
     "pretest": "bun run content",
     "pretest:watch": "bun run content",

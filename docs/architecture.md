@@ -29,7 +29,7 @@ Route groups that start with `_` (`_public`) are pathless layouts and do not app
 | `/coming-soon` | `coming-soon.tsx` | Holding page while the site is gated; `noindex` |
 | `/sitemap.xml` | `sitemap[.]xml.ts` | Server route: the public pages plus every project and skill that is not a draft |
 | `/robots.txt` | `robots[.]txt.ts` | Server route: allows crawlers and names the sitemap, or disallows everything while the site is gated |
-| `/index.md`, `/projects.md`, `/projects/<slug>.md`, `/skills.md`, `/skills/<slug>.md`, `/llms.txt`, `/sitemap.md` | none: static files | [Agent copies](decisions/0021-agent-copies-and-agent-view.md) and their indexes, written into `public/` by `scripts/agent-files.ts` before each build; none while the site is gated |
+| `/index.md`, `/projects.md`, `/projects/<slug>.md`, `/skills.md`, `/skills/<slug>.md`, `/llms.txt`, `/sitemap.md` | `index[.]md.ts`, `projects[.]md.ts`, `projects/{$slug}[.]md.ts`, … | Server routes: the [agent copies](decisions/0021-agent-copies-and-agent-view.md) and their indexes, as text; 404 for a draft or unknown slug, and for every file while the site is gated. Never static files in `public/`: Vercel would serve a static `index.md` at `/` |
 
 ```mermaid
 flowchart TD

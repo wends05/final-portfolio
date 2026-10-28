@@ -13,7 +13,7 @@ export interface AgentCopy {
 	markdown: string;
 }
 
-/** A file written into `public/` at build time: a copy, `llms.txt` or `sitemap.md`. */
+/** An agent file a server route answers: a copy, `llms.txt` or `sitemap.md`. */
 export interface AgentFile {
 	/** From the site root: `/projects/<slug>.md`. */
 	file: string;

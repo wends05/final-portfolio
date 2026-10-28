@@ -12,12 +12,19 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as PublicRouteRouteImport } from './routes/_public/route'
 import { Route as AiRouteRouteImport } from './routes/ai/route'
 import { Route as ComingSoonRouteImport } from './routes/coming-soon'
+import { Route as IndexDotmdRouteImport } from './routes/index[.]md'
+import { Route as LlmsDottxtRouteImport } from './routes/llms[.]txt'
+import { Route as ProjectsDotmdRouteImport } from './routes/projects[.]md'
 import { Route as RobotsDottxtRouteImport } from './routes/robots[.]txt'
+import { Route as SitemapDotmdRouteImport } from './routes/sitemap[.]md'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as SkillsDotmdRouteImport } from './routes/skills[.]md'
 import { Route as PublicIndexRouteImport } from './routes/_public/index'
 import { Route as PublicSplatRouteImport } from './routes/_public/$'
 import { Route as AiIndexRouteImport } from './routes/ai/index'
 import { Route as AiSplatRouteImport } from './routes/ai/$'
+import { Route as ProjectsChar123slugChar125DotmdRouteImport } from './routes/projects/{$slug}[.]md'
+import { Route as SkillsChar123slugChar125DotmdRouteImport } from './routes/skills/{$slug}[.]md'
 import { Route as PublicProjectsIndexRouteImport } from './routes/_public/projects/index'
 import { Route as PublicProjectsSlugRouteImport } from './routes/_public/projects/$slug'
 import { Route as PublicSkillsIndexRouteImport } from './routes/_public/skills/index'
@@ -41,14 +48,39 @@ const ComingSoonRoute = ComingSoonRouteImport.update({
   path: '/coming-soon',
   getParentRoute: () => rootRouteImport,
 } as any)
+const IndexDotmdRoute = IndexDotmdRouteImport.update({
+  id: '/index.md',
+  path: '/index.md',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LlmsDottxtRoute = LlmsDottxtRouteImport.update({
+  id: '/llms.txt',
+  path: '/llms.txt',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProjectsDotmdRoute = ProjectsDotmdRouteImport.update({
+  id: '/projects.md',
+  path: '/projects.md',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const RobotsDottxtRoute = RobotsDottxtRouteImport.update({
   id: '/robots.txt',
   path: '/robots.txt',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SitemapDotmdRoute = SitemapDotmdRouteImport.update({
+  id: '/sitemap.md',
+  path: '/sitemap.md',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SkillsDotmdRoute = SkillsDotmdRouteImport.update({
+  id: '/skills.md',
+  path: '/skills.md',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PublicIndexRoute = PublicIndexRouteImport.update({
@@ -71,6 +103,18 @@ const AiSplatRoute = AiSplatRouteImport.update({
   path: '/$',
   getParentRoute: () => AiRouteRoute,
 } as any)
+const ProjectsChar123slugChar125DotmdRoute =
+  ProjectsChar123slugChar125DotmdRouteImport.update({
+    id: '/projects/{$slug}.md',
+    path: '/projects/{$slug}.md',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const SkillsChar123slugChar125DotmdRoute =
+  SkillsChar123slugChar125DotmdRouteImport.update({
+    id: '/skills/{$slug}.md',
+    path: '/skills/{$slug}.md',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const PublicProjectsIndexRoute = PublicProjectsIndexRouteImport.update({
   id: '/projects/',
   path: '/projects/',
@@ -116,10 +160,17 @@ export interface FileRoutesByFullPath {
   '/': typeof PublicIndexRoute
   '/ai': typeof AiRouteRouteWithChildren
   '/coming-soon': typeof ComingSoonRoute
+  '/index.md': typeof IndexDotmdRoute
+  '/llms.txt': typeof LlmsDottxtRoute
+  '/projects.md': typeof ProjectsDotmdRoute
   '/robots.txt': typeof RobotsDottxtRoute
+  '/sitemap.md': typeof SitemapDotmdRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/skills.md': typeof SkillsDotmdRoute
   '/$': typeof PublicSplatRoute
   '/ai/$': typeof AiSplatRoute
+  '/projects/{$slug}.md': typeof ProjectsChar123slugChar125DotmdRoute
+  '/skills/{$slug}.md': typeof SkillsChar123slugChar125DotmdRoute
   '/ai/': typeof AiIndexRoute
   '/projects/$slug': typeof PublicProjectsSlugRoute
   '/skills/$slug': typeof PublicSkillsSlugRoute
@@ -132,10 +183,17 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/coming-soon': typeof ComingSoonRoute
+  '/index.md': typeof IndexDotmdRoute
+  '/llms.txt': typeof LlmsDottxtRoute
+  '/projects.md': typeof ProjectsDotmdRoute
   '/robots.txt': typeof RobotsDottxtRoute
+  '/sitemap.md': typeof SitemapDotmdRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/skills.md': typeof SkillsDotmdRoute
   '/$': typeof PublicSplatRoute
   '/ai/$': typeof AiSplatRoute
+  '/projects/{$slug}.md': typeof ProjectsChar123slugChar125DotmdRoute
+  '/skills/{$slug}.md': typeof SkillsChar123slugChar125DotmdRoute
   '/': typeof PublicIndexRoute
   '/ai': typeof AiIndexRoute
   '/projects/$slug': typeof PublicProjectsSlugRoute
@@ -152,10 +210,17 @@ export interface FileRoutesById {
   '/_public': typeof PublicRouteRouteWithChildren
   '/ai': typeof AiRouteRouteWithChildren
   '/coming-soon': typeof ComingSoonRoute
+  '/index.md': typeof IndexDotmdRoute
+  '/llms.txt': typeof LlmsDottxtRoute
+  '/projects.md': typeof ProjectsDotmdRoute
   '/robots.txt': typeof RobotsDottxtRoute
+  '/sitemap.md': typeof SitemapDotmdRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/skills.md': typeof SkillsDotmdRoute
   '/_public/$': typeof PublicSplatRoute
   '/ai/$': typeof AiSplatRoute
+  '/projects/{$slug}.md': typeof ProjectsChar123slugChar125DotmdRoute
+  '/skills/{$slug}.md': typeof SkillsChar123slugChar125DotmdRoute
   '/_public/': typeof PublicIndexRoute
   '/ai/': typeof AiIndexRoute
   '/_public/projects/$slug': typeof PublicProjectsSlugRoute
@@ -173,10 +238,17 @@ export interface FileRouteTypes {
     | '/'
     | '/ai'
     | '/coming-soon'
+    | '/index.md'
+    | '/llms.txt'
+    | '/projects.md'
     | '/robots.txt'
+    | '/sitemap.md'
     | '/sitemap.xml'
+    | '/skills.md'
     | '/$'
     | '/ai/$'
+    | '/projects/{$slug}.md'
+    | '/skills/{$slug}.md'
     | '/ai/'
     | '/projects/$slug'
     | '/skills/$slug'
@@ -189,10 +261,17 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/coming-soon'
+    | '/index.md'
+    | '/llms.txt'
+    | '/projects.md'
     | '/robots.txt'
+    | '/sitemap.md'
     | '/sitemap.xml'
+    | '/skills.md'
     | '/$'
     | '/ai/$'
+    | '/projects/{$slug}.md'
+    | '/skills/{$slug}.md'
     | '/'
     | '/ai'
     | '/projects/$slug'
@@ -208,10 +287,17 @@ export interface FileRouteTypes {
     | '/_public'
     | '/ai'
     | '/coming-soon'
+    | '/index.md'
+    | '/llms.txt'
+    | '/projects.md'
     | '/robots.txt'
+    | '/sitemap.md'
     | '/sitemap.xml'
+    | '/skills.md'
     | '/_public/$'
     | '/ai/$'
+    | '/projects/{$slug}.md'
+    | '/skills/{$slug}.md'
     | '/_public/'
     | '/ai/'
     | '/_public/projects/$slug'
@@ -228,8 +314,15 @@ export interface RootRouteChildren {
   PublicRouteRoute: typeof PublicRouteRouteWithChildren
   AiRouteRoute: typeof AiRouteRouteWithChildren
   ComingSoonRoute: typeof ComingSoonRoute
+  IndexDotmdRoute: typeof IndexDotmdRoute
+  LlmsDottxtRoute: typeof LlmsDottxtRoute
+  ProjectsDotmdRoute: typeof ProjectsDotmdRoute
   RobotsDottxtRoute: typeof RobotsDottxtRoute
+  SitemapDotmdRoute: typeof SitemapDotmdRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  SkillsDotmdRoute: typeof SkillsDotmdRoute
+  ProjectsChar123slugChar125DotmdRoute: typeof ProjectsChar123slugChar125DotmdRoute
+  SkillsChar123slugChar125DotmdRoute: typeof SkillsChar123slugChar125DotmdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -255,6 +348,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ComingSoonRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/index.md': {
+      id: '/index.md'
+      path: '/index.md'
+      fullPath: '/index.md'
+      preLoaderRoute: typeof IndexDotmdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/llms.txt': {
+      id: '/llms.txt'
+      path: '/llms.txt'
+      fullPath: '/llms.txt'
+      preLoaderRoute: typeof LlmsDottxtRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/projects.md': {
+      id: '/projects.md'
+      path: '/projects.md'
+      fullPath: '/projects.md'
+      preLoaderRoute: typeof ProjectsDotmdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/robots.txt': {
       id: '/robots.txt'
       path: '/robots.txt'
@@ -262,11 +376,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RobotsDottxtRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/sitemap.md': {
+      id: '/sitemap.md'
+      path: '/sitemap.md'
+      fullPath: '/sitemap.md'
+      preLoaderRoute: typeof SitemapDotmdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/sitemap.xml': {
       id: '/sitemap.xml'
       path: '/sitemap.xml'
       fullPath: '/sitemap.xml'
       preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/skills.md': {
+      id: '/skills.md'
+      path: '/skills.md'
+      fullPath: '/skills.md'
+      preLoaderRoute: typeof SkillsDotmdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_public/': {
@@ -296,6 +424,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/ai/$'
       preLoaderRoute: typeof AiSplatRouteImport
       parentRoute: typeof AiRouteRoute
+    }
+    '/projects/{$slug}.md': {
+      id: '/projects/{$slug}.md'
+      path: '/projects/{$slug}.md'
+      fullPath: '/projects/{$slug}.md'
+      preLoaderRoute: typeof ProjectsChar123slugChar125DotmdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/skills/{$slug}.md': {
+      id: '/skills/{$slug}.md'
+      path: '/skills/{$slug}.md'
+      fullPath: '/skills/{$slug}.md'
+      preLoaderRoute: typeof SkillsChar123slugChar125DotmdRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/_public/projects/': {
       id: '/_public/projects/'
@@ -403,8 +545,15 @@ const rootRouteChildren: RootRouteChildren = {
   PublicRouteRoute: PublicRouteRouteWithChildren,
   AiRouteRoute: AiRouteRouteWithChildren,
   ComingSoonRoute: ComingSoonRoute,
+  IndexDotmdRoute: IndexDotmdRoute,
+  LlmsDottxtRoute: LlmsDottxtRoute,
+  ProjectsDotmdRoute: ProjectsDotmdRoute,
   RobotsDottxtRoute: RobotsDottxtRoute,
+  SitemapDotmdRoute: SitemapDotmdRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  SkillsDotmdRoute: SkillsDotmdRoute,
+  ProjectsChar123slugChar125DotmdRoute: ProjectsChar123slugChar125DotmdRoute,
+  SkillsChar123slugChar125DotmdRoute: SkillsChar123slugChar125DotmdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

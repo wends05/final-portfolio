@@ -27,16 +27,17 @@ Every page has an **agent copy**: the page as Markdown, built from the same Veli
 flowchart LR
     Content["content/"] --> Velite["Velite<br/>.velite/"]
     Velite --> Builders["src/features/agent/<br/>agent.content.ts + utils/agent-copy.ts"]
-    Builders --> Script["scripts/agent-files.ts<br/>(prebuild)"]
-    Script --> Files["public/*.md, llms.txt, sitemap.md"]
+    Builders --> Server["server routes<br/>src/routes/*[.]md.ts, llms[.]txt.ts"]
+    Server --> Files["/index.md, /projects/&lt;slug&gt;.md, llms.txt, …"]
     Builders --> AiRoutes["/ai routes<br/>react-markdown"]
 ```
 
-- **Written before `vite build`, by a script.** `scripts/agent-files.ts` runs in the `prebuild` script after Velite and writes into `public/`, which the build copies to the output. The files are gitignored. A Vite plugin was the alternative; a script keeps the build config small and can be run on its own (`bun run agent-files`).
+- **Served by server routes, never static files.** Each file has a server route, like `/sitemap.xml`: `src/routes/index[.]md.ts`, `projects[.]md.ts`, `projects/{$slug}[.]md.ts`, `skills[.]md.ts`, `skills/{$slug}[.]md.ts`, `llms[.]txt.ts` and `sitemap[.]md.ts`, all calling `agentFileResponse` in `agent.server.ts`. It sets `text/markdown; charset=utf-8` (`text/plain` for `llms.txt`) and answers 404 for an unknown or draft slug.
+  - The owner first chose a script that wrote the files into `public/` before `vite build`. That shipped in #56 and was reverted in #60: Vercel checks static files before the app, and the deployment served the static `index.md` at `/` in place of the home page. Server routes leave nothing in the static output that can stand in for a page, and they work in `dev` too.
 - **Same facts as the page.** Each copy starts with the page's title and description, then a **facts block**: a `Field`/`Value` table (status, dates, team, tools, credits, links, metadata). The case study's write-up and the skill's overview follow as the Markdown the owner wrote: Velite keeps it raw beside the HTML (`bodyMarkdown`, `overviewMarkdown`).
 - **Absolute links.** Copies link to `https://portfolio.wends.dev`, or to `VITE_SITE_URL` when it is set, so a copy read on its own still points at the site.
 - **Each HTML page links its copy** with `<link rel="alternate" type="text/markdown">`. `buildSeo` adds it for every indexable page with a path.
-- **The gate suppresses the files.** With `COMING_SOON=true` the script writes nothing and removes the last build's files. The issue named `VITE_COMING_SOON`; the gate's variable is `COMING_SOON` ([architecture](../architecture.md#coming-soon-gate)), so the script reads that one.
+- **The gate hides the files.** With `COMING_SOON=true` every agent file answers 404. The issue named `VITE_COMING_SOON`; the gate's variable is `COMING_SOON` ([architecture](../architecture.md#coming-soon-gate)), so the routes read that one, as `/sitemap.xml` does.
 - **No content negotiation.** A request with `Accept: text/markdown` still gets HTML. Agents find the copies through the `<link>`, `llms.txt`, and the `.md` paths.
 
 ### Agent view (WD-74)
@@ -66,8 +67,8 @@ getViewTwins("/coming-soon");  // null: no toggle
 
 ## Alternatives
 
-- **A Vite plugin that emits the files.** Rejected in favour of the script: same output, more build config to maintain.
-- **Serving Markdown on `Accept: text/markdown`.** Deferred; it needs a server route per page and the static files cover agents that look for them.
+- **Static files written before the build** (a script, or a Vite plugin). Tried first and reverted: a static `index.md` at the root replaced the home page on Vercel, and `projects.md` beside a `projects/` folder risked the same.
+- **Serving Markdown on `Accept: text/markdown`.** Deferred; the `.md` paths, the `<link>`, and `llms.txt` cover agents that look for them.
 - **Converting the rendered HTML back to Markdown.** Rejected: lossy, and Velite can keep the owner's Markdown as written.
 - **Rendering the `/ai` views from the `.md` files at request time.** Rejected: the files do not exist in `dev` or on the client, and building the string in the loader keeps one code path.
 - **A toggle inside each layout.** Rejected: the layout changes with the view, so the toggle would remount and the slide could not play.
@@ -77,12 +78,11 @@ getViewTwins("/coming-soon");  // null: no toggle
 
 - Velite's output carries each body twice (HTML and Markdown), so the client bundle grows by the size of the write-ups. At this size that is a few kilobytes.
 - `react-markdown` and `remark-gfm` are new dependencies, used only by the `/ai` routes.
-- `public/` holds generated files beside committed ones; `.gitignore` lists the generated paths. Run `bun run agent-files` to see them in `dev`.
-- `vercel.json` sets `text/markdown; charset=utf-8` for `.md` and `text/plain; charset=utf-8` for `llms.txt`, so non-ASCII text reads correctly.
+- The agent files are built per request by the server function and cached at the edge for an hour (`s-maxage=3600`), like `/sitemap.xml`. Nothing is written into `public/`.
 - The TanStack devtools moved to the bottom-left in development, out of the toggle's corner.
 
 ## Validation
 
-On 2026-10-28, a local production build served with Bun returned every copy as `text/markdown`, `/ai` and its pages with `noindex`, a canonical link and the alternate link, and 404 for an unknown slug under `/ai`. In Chromium the toggle moved between twins by click and by keyboard, hid on 404 pages, while the menu was open, and during the intro curtain, and `/ai/projects` had no horizontal overflow at 390px in Graphite with reduced motion.
+On 2026-10-28, a build with the Vercel preset had no `.md` file or `llms.txt` in `.vercel/output/static`. A local production build served with Bun returned `/`, `/projects` and every page as HTML, every copy as `text/markdown`, 404 for a draft or unknown slug, `/ai` and its pages with `noindex`, a canonical link and the alternate link, and 404 for an unknown slug under `/ai`. In Chromium the toggle moved between twins by click and by keyboard, hid on 404 pages, while the menu was open, and during the intro curtain, and `/ai/projects` had no horizontal overflow at 390px in Graphite with reduced motion.
 
-Not yet verified: a Vercel deployment serving the `.md` files with the configured headers.
+Not yet verified: a Vercel deployment of the server routes.
