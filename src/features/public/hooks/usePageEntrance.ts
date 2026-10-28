@@ -6,6 +6,7 @@ import {
 	getEntranceItemOffset,
 } from "#/features/public/utils/entrance";
 import { introPlaying } from "#/features/public/utils/intro";
+import { gateEntrance } from "#/features/public/utils/transition/transition-store";
 import { appGSAP, useAppGSAP } from "#/integrations/animations/gsap";
 import { matchMotion } from "#/integrations/animations/motion";
 
@@ -16,6 +17,9 @@ import { matchMotion } from "#/integrations/animations/motion";
  *
  * Pass `key` when the page can change without remounting (one route, a new
  * slug), so the entrance plays again for the new content.
+ *
+ * During a section transition the entrance waits until the controller
+ * releases it (`gateEntrance`), so it starts as the panel lifts.
  */
 export function usePageEntrance(
 	scope: RefObject<HTMLElement | null>,
@@ -48,7 +52,7 @@ export function usePageEntrance(
 							ease: "none",
 						},
 					);
-					return;
+					return gateEntrance(tl);
 				}
 
 				if (title) {
@@ -91,6 +95,8 @@ export function usePageEntrance(
 						title ? ENTRANCE_TIMING.restAt : 0,
 					);
 				}
+
+				return gateEntrance(tl);
 			});
 		},
 		{ scope, dependencies: [key], revertOnUpdate: true },
