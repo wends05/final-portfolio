@@ -1,3 +1,5 @@
+import { readdir, readFile, writeFile } from "node:fs/promises";
+import { join } from "node:path";
 import babel from "@rolldown/plugin-babel";
 import tailwindcss from "@tailwindcss/vite";
 import { devtools } from "@tanstack/devtools-vite";
@@ -6,6 +8,7 @@ import viteReact, { reactCompilerPreset } from "@vitejs/plugin-react";
 import { nitro } from "nitro/vite";
 import { build as buildContent } from "velite";
 import { defineConfig, type Plugin, type ResolvedConfig } from "vite";
+import { tabsToSpaces } from "./src/lib/content.indent";
 
 // Nitro's own ignore list; a custom `onwarn` replaces Nitro's, so it is repeated here.
 const NITRO_IGNORED_WARNINGS = new Set([
@@ -14,6 +17,17 @@ const NITRO_IGNORED_WARNINGS = new Set([
 	"THIS_IS_UNDEFINED",
 	"EMPTY_BUNDLE",
 ]);
+
+// Content Markdown is indented with spaces: rewrite tab indents before Velite reads them.
+async function indentContentWithSpaces(contentDir: string) {
+	for (const file of await readdir(contentDir, { recursive: true })) {
+		if (!file.endsWith(".md")) continue;
+		const path = join(contentDir, file);
+		const text = await readFile(path, "utf8");
+		const fixed = tabsToSpaces(text);
+		if (fixed !== text) await writeFile(path, fixed);
+	}
+}
 
 // Runs Velite inside Vite (ADR 0019): watching in dev, one cleaning build in build.
 function velite(): Plugin {
@@ -28,6 +42,7 @@ function velite(): Plugin {
 			// Vite 8 calls buildStart once per environment; Velite runs once.
 			if (started) return;
 			started = true;
+			await indentContentWithSpaces(join(resolved.root, "content"));
 			// Vite loads .env files into import.meta.env only; prepare reads process.env.
 			const showDrafts = resolved.env.VITE_SHOW_DRAFTS;
 			if (showDrafts) process.env.VITE_SHOW_DRAFTS = showDrafts;

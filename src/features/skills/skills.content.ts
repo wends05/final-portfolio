@@ -1,4 +1,8 @@
-import { orderProjects } from "#/features/projects/projects.utils";
+import {
+	getProjectYear,
+	orderProjects,
+	padIndex,
+} from "#/features/projects/projects.utils";
 import { projects, site, skills } from "#content";
 import type { SkillOverview, SkillPageData } from "./skills.types";
 import {
@@ -33,7 +37,15 @@ export function getSkillPage(slug: string): SkillPageData | undefined {
 		isTop: getSkillPosition(skill.slug, site.topSkills) !== -1,
 		// Only what a card needs, so project bodies stay out of the page data.
 		projects: getProjectsUsingTools(ordered, skill.tools).map(
-			({ slug, title, cover, tools }) => ({ slug, title, cover, tools }),
+			({ slug, title, cover, status, startedAt, tools }) => ({
+				slug,
+				title,
+				cover,
+				status,
+				tools,
+				number: padIndex(ordered.findIndex((p) => p.slug === slug) + 1),
+				year: getProjectYear(startedAt),
+			}),
 		),
 	};
 }

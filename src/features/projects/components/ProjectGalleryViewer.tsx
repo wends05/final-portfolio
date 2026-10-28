@@ -178,6 +178,7 @@ export default function ProjectGalleryViewer({
 	}, [phase, popupMounted]);
 
 	const stage = viewerStage(viewport);
+	const activeBox = images[index] && fitContain(images[index].image, stage);
 	const counter = `${padIndex(index + 1)} / ${padIndex(count)}`;
 	const step = (delta: number) => onIndexChange(stepSlide(index, delta, count));
 
@@ -223,35 +224,57 @@ export default function ProjectGalleryViewer({
 						const box = fitContain(shot.image, stage);
 						const active = i === index;
 						return (
-							<img
-								key={shot.image.src}
-								ref={(element) => {
-									shots.current[i] = element;
-								}}
-								src={shot.image.src}
-								alt={shot.alt}
-								inert={!active}
-								decoding="async"
-								style={
-									{
-										"--box-left": `${box.left}px`,
-										"--box-top": `${box.top}px`,
-										"--box-width": `${box.width}px`,
-										"--box-height": `${box.height}px`,
-									} as CSSProperties
-								}
-								className={cn(
-									"absolute top-(--box-top) left-(--box-left) h-(--box-height) w-(--box-width) max-w-none object-cover transition-fade-rise duration-300 ease-swiss motion-reduce:transition-none",
-									active
-										? "opacity-100"
-										: cn(
-												"opacity-0",
-												i < index ? "-translate-x-6" : "translate-x-6",
-											),
-								)}
-							/>
+							<div key={shot.image.src} className="relative">
+								<img
+									ref={(element) => {
+										shots.current[i] = element;
+									}}
+									src={shot.image.src}
+									alt={shot.alt}
+									inert={!active}
+									decoding="async"
+									style={
+										{
+											"--box-left": `${box.left}px`,
+											"--box-top": `${box.top}px`,
+											"--box-width": `${box.width}px`,
+											"--box-height": `${box.height}px`,
+										} as CSSProperties
+									}
+									className={cn(
+										"absolute top-(--box-top) left-(--box-left) h-(--box-height) w-(--box-width) max-w-none object-cover transition-fade-rise duration-300 ease-swiss motion-reduce:transition-none",
+										active
+											? "opacity-100"
+											: cn(
+													"opacity-0",
+													i < index ? "-translate-x-6" : "translate-x-6",
+												),
+									)}
+								/>
+							</div>
 						);
 					})}
+
+					{/* The caption sits in the lower left corner of the image on show. The
+					 * image's own `alt` already speaks to screen readers. */}
+					{activeBox && (
+						<p
+							aria-hidden
+							style={
+								{
+									"--caption-left": `calc(${activeBox.left}px + 0.75rem)`,
+									"--caption-bottom": `calc(${viewport.height - activeBox.top - activeBox.height}px + 0.75rem)`,
+									"--caption-width": `min(32rem, calc(${activeBox.width}px - 1.5rem))`,
+								} as CSSProperties
+							}
+							className={cn(
+								"type-meta absolute bottom-(--caption-bottom) left-(--caption-left) max-w-(--caption-width) bg-inverse/70 px-2 py-1 text-inverse-foreground",
+								fadeBottom,
+							)}
+						>
+							{images[index]?.alt}
+						</p>
+					)}
 
 					<div
 						className={cn(
@@ -282,9 +305,6 @@ export default function ProjectGalleryViewer({
 					</div>
 
 					<div className="pointer-events-none absolute inset-x-0 bottom-0 flex h-34 flex-col items-center justify-center gap-2.5 px-4 md:h-28">
-						<p aria-hidden className={cn("type-meta text-center", fadeBottom)}>
-							{images[index]?.alt}
-						</p>
 						{count > 1 && (
 							<div className="flex w-full items-center justify-between md:justify-center">
 								<button

@@ -12,6 +12,7 @@ const project = (slug: string, startedAt: string, tools: string[]) => ({
 	slug,
 	title: slug.toUpperCase(),
 	startedAt,
+	status: "COMPLETED",
 	tools,
 	cover: null,
 	body: "<p>write-up</p>",
@@ -66,13 +67,30 @@ describe("getSkillPage", () => {
 
 	it("lists the projects that used its tools in the /projects order, each with only those tools", () => {
 		expect(getSkillPage("web")?.projects).toEqual([
-			{ slug: "old-app", title: "OLD-APP", cover: null, tools: ["react"] },
+			{
+				slug: "old-app",
+				title: "OLD-APP",
+				cover: null,
+				status: "COMPLETED",
+				tools: ["react"],
+				number: "01",
+				year: "2022",
+			},
 			{
 				slug: "new-app",
 				title: "NEW-APP",
 				cover: null,
+				status: "COMPLETED",
 				tools: ["React", "Prisma"],
+				number: "02",
+				year: "2025",
 			},
+		]);
+	});
+
+	it("numbers each project by its place in the /projects order, not in the skill's list", () => {
+		expect(getSkillPage("games")?.projects).toMatchObject([
+			{ slug: "jam", number: "03", year: "2024" },
 		]);
 	});
 });
