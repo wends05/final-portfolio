@@ -8,7 +8,7 @@ import viteReact, { reactCompilerPreset } from "@vitejs/plugin-react";
 import { nitro } from "nitro/vite";
 import { build as buildContent } from "velite";
 import { defineConfig, type Plugin, type ResolvedConfig } from "vite";
-import { tabsToSpaces } from "./src/lib/content.indent";
+import { tabsToSpaces } from "./src/lib/content.indent.ts";
 
 // Nitro's own ignore list; a custom `onwarn` replaces Nitro's, so it is repeated here.
 const NITRO_IGNORED_WARNINGS = new Set([
