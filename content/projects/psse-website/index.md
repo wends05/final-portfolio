@@ -49,7 +49,7 @@ credits:
   - { collaborator: padre108 }
   - { collaborator: regbarte }
   - { collaborator: kailouss }
-# Draft: the description is a placeholder and the write-up is deferred. Private repo, no live URL yet.
+# Private repo, no live URL yet.
 draft: false
 ---
 
