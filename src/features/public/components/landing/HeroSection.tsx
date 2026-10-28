@@ -6,6 +6,7 @@ import {
 import { SplitText } from "gsap/SplitText";
 import { useRef } from "react";
 import { INTRO_HERO_DELAY, introPlaying } from "#/features/public/utils/intro";
+import { gateEntrance } from "#/features/public/utils/transition/transition-store";
 import { appGSAP, useAppGSAP } from "#/integrations/animations/gsap";
 import { matchMotion } from "#/integrations/animations/motion";
 
@@ -42,7 +43,7 @@ export default function HeroSection() {
 						{ autoAlpha: 0 },
 						{ autoAlpha: 1, duration: 0.8, ease: "none" },
 					);
-					return;
+					return gateEntrance(tl);
 				}
 
 				// Words rise out of their own masks; the h1 itself is shown
@@ -73,6 +74,8 @@ export default function HeroSection() {
 					},
 					1,
 				);
+				// After a section transition, wait for the panel to lift.
+				return gateEntrance(tl);
 			});
 		},
 		{ scope: root },
