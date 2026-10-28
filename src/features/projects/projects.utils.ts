@@ -240,14 +240,17 @@ export interface ShutterTimeline {
 	play(): unknown;
 	reverse(): unknown;
 	timeScale(value: number): unknown;
+	time(): number;
 }
 
 /**
  * The tools dialog's answer to Base UI's `onOpenChange`. Opening (again, even
  * mid-close) plays the shutter forwards at normal speed. Closing keeps the
  * dialog mounted (`preventUnmount`) and plays it backwards at `closeSpeed`;
- * the timeline's `onReverseComplete` then unmounts it. With no timeline yet
- * there is nothing to play, so Base UI closes on its own.
+ * the timeline's `onReverseComplete` then unmounts it. With no timeline yet,
+ * or one still at its start, there is nothing to play back (and GSAP never
+ * fires `onReverseComplete` for a reverse from time 0), so Base UI closes on
+ * its own.
  */
 export function playToolsShutter(
 	open: boolean,
@@ -256,6 +259,7 @@ export function playToolsShutter(
 	closeSpeed: number,
 ) {
 	if (!timeline) return;
+	if (!open && timeline.time() === 0) return;
 	if (open) {
 		timeline.timeScale(1);
 		timeline.play();

@@ -7,12 +7,13 @@ import {
 } from "#/features/projects/projects.utils";
 
 /** A timeline that records the calls the dialog makes, in order. */
-function fakeTimeline() {
+function fakeTimeline(time = 0.3) {
 	const calls: string[] = [];
 	const timeline: ShutterTimeline = {
 		play: () => calls.push("play"),
 		reverse: () => calls.push("reverse"),
 		timeScale: (value) => calls.push(`timeScale(${value})`),
+		time: () => time,
 	};
 	return { timeline, calls };
 }
@@ -46,6 +47,20 @@ describe("playToolsShutter", () => {
 		playToolsShutter(false, null, preventUnmount, 1.6);
 		expect(preventUnmount).not.toHaveBeenCalled();
 	});
+
+	it("lets Base UI close on its own while the timeline is still at its start", () => {
+		const { timeline, calls } = fakeTimeline(0);
+		const preventUnmount = vi.fn();
+		playToolsShutter(false, timeline, preventUnmount, 1.6);
+		expect(preventUnmount).not.toHaveBeenCalled();
+		expect(calls).toEqual([]);
+	});
+
+	it("still opens a timeline that is at its start", () => {
+		const { timeline, calls } = fakeTimeline(0);
+		playToolsShutter(true, timeline, () => {}, 1.6);
+		expect(calls).toEqual(["timeScale(1)", "play"]);
+	});
 });
 
 describe("toolsShutterVars", () => {
@@ -64,6 +79,18 @@ describe("toolsShutterVars", () => {
 		tl.reverse();
 		tl.time(0, false);
 		expect(unmount).toHaveBeenCalledOnce();
+		tl.kill();
+	});
+
+	// Why playToolsShutter skips a timeline at time 0: reversing it never completes.
+	it("never unmounts a timeline reversed from its start", async () => {
+		const unmount = vi.fn();
+		const tl = gsap.timeline(toolsShutterVars(unmount));
+		tl.to({ value: 0 }, { value: 1, duration: 0.2 });
+		tl.play();
+		tl.reverse();
+		await new Promise((resolve) => setTimeout(resolve, 100));
+		expect(unmount).not.toHaveBeenCalled();
 		tl.kill();
 	});
 });
