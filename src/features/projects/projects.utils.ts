@@ -55,6 +55,69 @@ export function stepSlide(current: number, delta: number, count: number) {
 /** A two-digit counter: 1 → "01". */
 export const padIndex = (n: number) => String(n).padStart(2, "0");
 
+/** The year a project started: "2024-09-01" → "2024". */
+export const getProjectYear = (startedAt: string) => startedAt.slice(0, 4);
+
+/** A rectangle in CSS pixels, measured from the viewport's top-left corner. */
+export interface Box {
+	left: number;
+	top: number;
+	width: number;
+	height: number;
+}
+
+/**
+ * The area the full-screen viewer's image may fill: clear of the top bar and
+ * the caption and dots, and from `md` of the side arrows. The same insets
+ * as the classes in `ProjectGalleryViewer`.
+ */
+export function viewerStage(viewport: { width: number; height: number }): Box {
+	const inset =
+		viewport.width >= 768
+			? { x: 96, top: 72, bottom: 112 }
+			: { x: 16, top: 64, bottom: 136 };
+	return {
+		left: inset.x,
+		top: inset.top,
+		width: Math.max(0, viewport.width - inset.x * 2),
+		height: Math.max(0, viewport.height - inset.top - inset.bottom),
+	};
+}
+
+/**
+ * The largest box with the image's aspect ratio that fits inside `stage`,
+ * centred in it. Returns `stage` itself when either size has no area.
+ */
+export function fitContain(
+	image: { width: number; height: number },
+	stage: Box,
+): Box {
+	if (image.width <= 0 || image.height <= 0) return stage;
+	if (stage.width <= 0 || stage.height <= 0) return stage;
+	const scale = Math.min(
+		stage.width / image.width,
+		stage.height / image.height,
+	);
+	const width = image.width * scale;
+	const height = image.height * scale;
+	return {
+		left: stage.left + (stage.width - width) / 2,
+		top: stage.top + (stage.height - height) / 2,
+		width,
+		height,
+	};
+}
+
+/**
+ * Which way a horizontal drag of `dx` pixels steps the viewer: 1 for the next
+ * image (a swipe left), -1 for the previous one, 0 when the drag is too short.
+ */
+export function swipeStep(dx: number, threshold = 48): -1 | 0 | 1 {
+	if (dx <= -threshold) return 1;
+	if (dx >= threshold) return -1;
+	return 0;
+}
+
 /**
  * The project's external links that are set, labelled for display. The live
  * site comes first: it is the one the page shows as the solid button.
@@ -170,4 +233,44 @@ export function resolveCredits(
 			profileUrl: col.profileUrl ?? null,
 		};
 	});
+}
+
+/** The parts of a GSAP timeline the tools dialog drives. */
+export interface ShutterTimeline {
+	play(): unknown;
+	reverse(): unknown;
+	timeScale(value: number): unknown;
+	time(): number;
+}
+
+/**
+ * The tools dialog's answer to Base UI's `onOpenChange`. Opening (again, even
+ * mid-close) plays the shutter forwards at normal speed. Closing keeps the
+ * dialog mounted (`preventUnmount`) and plays it backwards at `closeSpeed`;
+ * the timeline's `onReverseComplete` then unmounts it. With no timeline yet,
+ * or one still at its start, there is nothing to play back (and GSAP never
+ * fires `onReverseComplete` for a reverse from time 0), so Base UI closes on
+ * its own.
+ */
+export function playToolsShutter(
+	open: boolean,
+	timeline: ShutterTimeline | null,
+	preventUnmount: () => void,
+	closeSpeed: number,
+) {
+	if (!timeline) return;
+	if (!open && timeline.time() === 0) return;
+	if (open) {
+		timeline.timeScale(1);
+		timeline.play();
+		return;
+	}
+	preventUnmount();
+	timeline.timeScale(closeSpeed);
+	timeline.reverse();
+}
+
+/** The shutter timeline's settings: built paused, and unmounted once it has run backwards. */
+export function toolsShutterVars(unmount: () => void) {
+	return { paused: true, onReverseComplete: unmount };
 }

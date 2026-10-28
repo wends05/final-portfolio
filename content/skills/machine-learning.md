@@ -1,9 +1,20 @@
 ---
 slug: machine-learning
-name: "Machine learning"
+name: "Machine learning & computer vision"
 confidence: 35
-tools: ["Python", "PyTorch", "scikit-learn"]
-# Placeholder made from the old mocks; replace before publishing.
-draft: true
+tools:
+  [
+    "Python",
+    "TensorFlow",
+    "Keras",
+    "MediaPipe",
+    "OpenCV",
+    "NumPy",
+    "scikit-learn",
+    "Jupyter",
+  ]
 ---
-What machine learning means in my work: the tools I reach for first, the projects where they did the work, and what I am learning next.
+
+draft: false
+
+One of the skills I learned in university. My learning on machine learning revolved around Engineering Data Analysis, Feature Engineering, and Model Training using python and jupyter notebooks.

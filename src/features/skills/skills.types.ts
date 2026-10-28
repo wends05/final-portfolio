@@ -10,8 +10,14 @@ export type SkillOverview = Pick<
 >;
 
 /** A project on a skill page, keeping only that skill's tools. */
-export type SkillProject = Pick<Project, "slug" | "title" | "cover"> & {
+export type SkillProject = Pick<
+	Project,
+	"slug" | "title" | "cover" | "status"
+> & {
 	tools: Tool[];
+	/** The project's number in the /projects order, as two digits. */
+	number: string;
+	year: string;
 };
 
 /** Everything /skills/<slug> shows. */

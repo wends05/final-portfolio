@@ -1,9 +1,9 @@
 ---
 slug: mobile-development
 name: "Mobile development"
-confidence: 55
-tools: ["Flutter", "React Native", "Expo"]
-# Placeholder made from the old mocks; replace before publishing.
-draft: true
+confidence: 50
+tools: ["React Native", "Expo", "NativeWind", "Flutter", "Dart"]
+draft: false
 ---
-What mobile development means in my work: the tools I reach for first, the projects where they did the work, and what I am learning next.
+
+An extra skill I picked up during university. As someone who learned web development first, React Native and Flutter made learning mobile development easier. I personally plan to learn more on swift development later.

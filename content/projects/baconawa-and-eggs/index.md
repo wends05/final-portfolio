@@ -1,31 +1,39 @@
 ---
 slug: baconawa-and-eggs
 title: "Baconawa and Eggs"
-description: "Game made for The Odyssey Festival (2024). Released Aug 2024. Under development for more gameplay features."
-status: ONGOING
-startedAt: 2024-09-01
-tools: ["Godot"]
+# Previous description, stale now that the project is completed: Game made for The Odyssey Festival (2024). Released Aug 2024. Under development for more gameplay features.
+description: "[owner writes description]"
+status: COMPLETED
+startedAt: 2024-07-02
+endedAt: 2024-08-09
+tools: ["Godot", "GDScript"]
 teamName: "team nyats"
 credits:
-  - { collaborator: collaborator-1, role: art }
-  - { collaborator: collaborator-2, role: music }
-githubUrl: https://github.com/wends05/Baconawa-and-Eggs
+  - { collaborator: omumuraisu }
+  - { collaborator: katoteshiku }
+  - { collaborator: teaz7 }
+githubUrl: https://github.com/wends05/Baconawa-and-eggs
 metadata:
   - { label: "event", value: "The Odyssey Festival 2024" }
   - { label: "role", value: "programmer" }
   - { label: "platforms", value: ["Windows", "Web"] }
   - { label: "category", value: "game development" }
-# Placeholder made from the old mocks; replace before publishing.
+# draft: the description is a placeholder the owner replaces.
 draft: true
 ---
+
+A game developed for a hackathon: The Oddysey 2024. I was able to team up with some of my friends from other universities and able to create an arcade-style game based off the Philippine mythology, the Bakunawa.
+
+The concept was to have the Bakunawa
+
 ## Problem
 
-Placeholder write-up for Baconawa and Eggs.
+[owner writes this section]
 
 ## Approach
 
-Placeholder.
+[owner writes this section]
 
 ## Result
 
-Placeholder.
+[owner writes this section]

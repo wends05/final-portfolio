@@ -1,9 +1,11 @@
 ---
 slug: game-development
 name: "Game development"
-confidence: 60
-tools: ["Godot"]
-# Placeholder made from the old mocks; replace before publishing.
-draft: true
+confidence: 75
+tools: ["Godot", "GDScript"]
+draft: false
 ---
-What game development means in my work: the tools I reach for first, the projects where they did the work, and what I am learning next.
+
+One of the skills I learned as I joined different hackathons, as well as complying on different academic subjects.
+
+It's one of the fun things I enjoyed learning especially in my time in university, going through, considering that coding games takes a whole new approach than most web applications: Object Oriented Programming, Game Loops, and also new interesting concepts such as signals, and resources in Godot.

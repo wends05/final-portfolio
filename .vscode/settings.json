@@ -29,6 +29,11 @@
 	"[css]": {
 		"editor.defaultFormatter": "biomejs.biome"
 	},
+	"[markdown]": {
+		"editor.insertSpaces": true,
+		"editor.tabSize": 2,
+		"editor.detectIndentation": false
+	},
 	"editor.codeActionsOnSave": {
 		"source.organizeImports.biome": "explicit"
 	}

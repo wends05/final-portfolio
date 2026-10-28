@@ -7,15 +7,19 @@ import { Link } from "@tanstack/react-router";
 import { useRef } from "react";
 import { Button } from "#/components/ui/button";
 import { usePageEntrance } from "#/features/public/hooks/usePageEntrance";
+import { splitVisibleTools } from "#/lib/tools";
 import type { ProjectPageData } from "../projects.types";
 import {
 	getMetadataRows,
 	getProjectDateLine,
 	getProjectLinks,
+	getProjectYear,
 	padIndex,
 } from "../projects.utils";
+import ProjectCoverTile from "./ProjectCoverTile";
 import ProjectGallery from "./ProjectGallery";
 import ProjectLinkButtons from "./ProjectLinkButtons";
+import ProjectToolsDialog from "./ProjectToolsDialog";
 
 interface ProjectCaseStudyProps {
 	page: ProjectPageData;
@@ -33,6 +37,7 @@ export default function ProjectCaseStudy({ page }: ProjectCaseStudyProps) {
 	const links = getProjectLinks(project);
 	const rows = getMetadataRows(project.metadata);
 	const dateLine = getProjectDateLine(project);
+	const tools = splitVisibleTools(project.tools, 3);
 	const hasDetails =
 		project.tools.length > 0 || rows.length > 0 || credits.length > 0;
 	const root = useRef<HTMLElement>(null);
@@ -106,11 +111,17 @@ export default function ProjectCaseStudy({ page }: ProjectCaseStudyProps) {
 					className="col-span-full -mx-4 mt-10 md:col-span-6 md:row-start-1 md:mx-0 md:mt-14"
 				>
 					<div className="relative aspect-4/3 overflow-hidden bg-muted">
-						{project.cover && (
+						{project.cover ? (
 							<img
 								src={project.cover.src}
 								alt={`Cover of ${project.title}`}
 								className="absolute inset-0 size-full object-cover"
+							/>
+						) : (
+							<ProjectCoverTile
+								number={padIndex(position)}
+								status={project.status.toLowerCase()}
+								year={getProjectYear(project.startedAt)}
 							/>
 						)}
 					</div>
@@ -142,20 +153,26 @@ export default function ProjectCaseStudy({ page }: ProjectCaseStudyProps) {
 						data-entrance
 						className="col-span-full mt-10 grid grid-cols-subgrid content-start gap-y-10 md:col-span-6 md:row-start-2"
 					>
-						{/* Every tool, one per row, in the project's own order (most important first). */}
+						{/* The first three tools, one per row, in the project's own order
+						    (most important first). "show all N" opens every one. */}
 						{project.tools.length > 0 && (
 							<section
 								aria-labelledby="project-tools"
 								className="col-span-full"
 							>
-								<h2
-									id="project-tools"
-									className="type-label border-rule border-b pb-2.5"
-								>
-									tools
-								</h2>
+								<div className="flex items-center justify-between gap-4 border-rule border-b pb-2.5">
+									<h2 id="project-tools" className="type-label">
+										tools
+									</h2>
+									{tools.hidden > 0 && (
+										<ProjectToolsDialog
+											title={project.title}
+											tools={project.tools}
+										/>
+									)}
+								</div>
 								<ul>
-									{project.tools.map((tool) => (
+									{tools.visible.map((tool) => (
 										<li
 											key={tool}
 											className="type-meta flex min-h-11 items-center border-rule-soft border-b"
