@@ -1,6 +1,6 @@
 # Portfolio
 
-The owner's personal showcase site at portfolio.wends.dev (named wends.dev): projects, the skills they demonstrate, and a CV. Visitors confirm experience and stack quickly, then leave or go deeper.
+The owner's personal showcase site at wends.dev: projects, the skills they demonstrate, and a CV. Visitors confirm experience and stack quickly, then leave or go deeper.
 
 ## Language
 
@@ -43,11 +43,3 @@ _Avoid_: Contributor
 **Credit**:
 One collaborator's appearance on one project, with an optional role.
 _Avoid_: Attribution
-
-**Agent copy**:
-A page as Markdown, for agents: `/projects/<slug>.md` for `/projects/<slug>`, `/index.md` for the home page. Built from the same content as the page; drafts have none.
-_Avoid_: Markdown version, machine copy
-
-**Agent view**:
-A page's agent copy rendered for people, under `/ai`: `/ai/projects/<slug>`. The Human / Machine toggle moves between a page and its agent view.
-_Avoid_: Machine view, AI page

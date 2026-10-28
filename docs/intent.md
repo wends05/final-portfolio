@@ -4,7 +4,7 @@ Agreed with the owner: **2026-10-04**. Updated with the owner: **2026-10-17** (n
 
 ## Purpose
 
-`wends.dev`, served at `https://portfolio.wends.dev`, is a personal showcase. A visitor should be able to confirm experience and stack quickly, then leave or go deeper. Success means credentials are easy to verify without hunting.
+`wends.dev` is a personal showcase. A visitor should be able to confirm experience and stack quickly, then leave or go deeper. Success means credentials are easy to verify without hunting.
 
 The work itself is the proof: projects, the skills they demonstrate, and a downloadable CV. There is no separate experience timeline or certifications section.
 

@@ -11,10 +11,7 @@ export interface SeoInput {
 	title?: string;
 	/** At most 160 characters; see `truncateDescription`. */
 	description: string;
-	/**
-	 * The canonical path, such as "/projects/foo". Without it there is no
-	 * canonical, `og:url`, or link to the page's agent copy.
-	 */
+	/** The canonical path, such as "/projects/foo". Without it there is no canonical or `og:url`. */
 	path?: string;
 	/** Falls back to the default social image, when there is one. */
 	image?: SeoImage | null;
@@ -27,6 +24,6 @@ export type SeoMeta = { title: string } | Record<string, string>;
 
 export interface SeoHead {
 	meta: SeoMeta[];
-	links: { rel: string; href: string; type?: string }[];
+	links: { rel: string; href: string }[];
 	scripts: { type: "application/ld+json"; children: string }[];
 }
