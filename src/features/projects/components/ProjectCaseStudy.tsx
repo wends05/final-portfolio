@@ -15,6 +15,7 @@ import {
 	getProjectYear,
 	padIndex,
 } from "../projects.utils";
+import ProjectCover from "./ProjectCover";
 import ProjectCoverTile from "./ProjectCoverTile";
 import ProjectGallery from "./ProjectGallery";
 import ProjectLinkButtons from "./ProjectLinkButtons";
@@ -107,21 +108,17 @@ export default function ProjectCaseStudy({ page }: ProjectCaseStudyProps) {
 					data-entrance
 					className="col-span-full -mx-4 mt-10 md:col-span-6 md:row-start-1 md:mx-0 md:mt-14"
 				>
-					<div className="relative aspect-4/3 overflow-hidden bg-muted">
-						{project.cover ? (
-							<img
-								src={project.cover.src}
-								alt={`Cover of ${project.title}`}
-								className="absolute inset-0 size-full object-cover"
-							/>
-						) : (
+					{project.cover ? (
+						<ProjectCover title={project.title} cover={project.cover} />
+					) : (
+						<div className="relative aspect-4/3 overflow-hidden bg-muted">
 							<ProjectCoverTile
 								number={padIndex(position)}
 								status={project.status.toLowerCase()}
 								year={getProjectYear(project.startedAt)}
 							/>
-						)}
-					</div>
+						</div>
+					)}
 				</figure>
 
 				<section

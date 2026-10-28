@@ -25,6 +25,8 @@ import {
 interface ProjectGalleryViewerProps {
 	title: string;
 	images: ProjectImageView[];
+	/** What the viewer is showing, in its top-left title: "gallery" or "cover". */
+	label?: string;
 	/** The viewer is wanted. It stays on screen until its exit finishes. */
 	open: boolean;
 	/** The image on show, shared with the page's gallery. */
@@ -83,6 +85,7 @@ const arrowButton = cn(
 export default function ProjectGalleryViewer({
 	title,
 	images,
+	label = "gallery",
 	open,
 	index,
 	onIndexChange,
@@ -283,7 +286,8 @@ export default function ProjectGalleryViewer({
 						)}
 					>
 						<Dialog.Title className="type-label truncate">
-							gallery<span className="max-md:hidden"> · {title}</span>
+							{label}
+							<span className="max-md:hidden"> · {title}</span>
 						</Dialog.Title>
 						<div className="flex shrink-0 items-center gap-3">
 							{count > 1 && (
