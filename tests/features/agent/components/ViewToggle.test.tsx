@@ -33,6 +33,9 @@ const { default: ViewToggle } = await import(
 	"#/features/agent/components/ViewToggle"
 );
 const { menuStore } = await import("#/features/public/utils/menu/menu-store");
+const { transitionStore } = await import(
+	"#/features/public/utils/transition/transition-store"
+);
 
 function render(pathname: string, status = "success") {
 	router.state = {
@@ -53,6 +56,7 @@ function links(markup: string) {
 
 afterEach(() => {
 	menuStore.setState({ phase: "closed", target: null });
+	transitionStore.setState({ covering: false });
 });
 
 describe("ViewToggle", () => {
@@ -83,6 +87,11 @@ describe("ViewToggle", () => {
 		expect(render("/coming-soon")).toBe("");
 		expect(render("/projects/missing", "notFound")).toBe("");
 		expect(render("/ai/projects", "error")).toBe("");
+	});
+
+	it("hides while a section transition covers the page", () => {
+		transitionStore.setState({ covering: true });
+		expect(render("/projects")).toBe("");
 	});
 
 	it("hides while the site menu is open", () => {

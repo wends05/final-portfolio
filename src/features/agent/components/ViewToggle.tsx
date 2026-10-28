@@ -2,6 +2,7 @@ import { RobotIcon, UserIcon } from "@phosphor-icons/react/ssr";
 import { Link, useRouterState } from "@tanstack/react-router";
 import { useStore } from "zustand";
 import { menuStore } from "#/features/public/utils/menu/menu-store";
+import { transitionStore } from "#/features/public/utils/transition/transition-store";
 import { cn } from "#/lib/utils";
 import { getViewTwins } from "../utils/view-paths";
 
@@ -13,7 +14,8 @@ const option =
  * bottom-right corner, each to the same page in its view. It sits in the root
  * document, outside both layouts, so the ink block slides from one icon to
  * the other while the route changes. Hidden on pages without a twin (404,
- * errors, coming soon) and while the site menu is open.
+ * errors, coming soon), while the site menu is open, and while a section
+ * transition's ink panel covers the page.
  */
 export default function ViewToggle() {
 	const pathname = useRouterState({ select: (s) => s.location.pathname });
@@ -22,8 +24,9 @@ export default function ViewToggle() {
 			s.matches.some((m) => m.status === "notFound" || m.status === "error"),
 	});
 	const menuClosed = useStore(menuStore, (s) => s.phase === "closed");
+	const covering = useStore(transitionStore, (s) => s.covering);
 	const twins = getViewTwins(pathname);
-	if (!twins || failed || !menuClosed) return null;
+	if (!twins || failed || !menuClosed || covering) return null;
 
 	const machine = twins.view === "machine";
 

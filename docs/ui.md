@@ -321,8 +321,8 @@ The `/ai` pages show each page's [agent copy](../CONTEXT.md) rendered for people
 | Reduced motion | No slide: the block and colours switch at once |
 
 - It is mounted once, in the root document, so it does not remount when the layout changes with the view. `getViewTwins(pathname)` gives the two paths, or null.
-- It renders nothing on pages without a twin (the coming-soon page, unknown paths), on 404 and error pages (a match whose status is `notFound` or `error`), and while the site menu is not `closed`. [../src/styles/view-toggle.css](../src/styles/view-toggle.css) hides it while the intro curtain plays.
-- `z-30` keeps it above the page and under the menu (`z-40`), dialogs and the gallery viewer (`z-50`), and the intro curtain (`z-60`).
+- It renders nothing on pages without a twin (the coming-soon page, unknown paths), on 404 and error pages (a match whose status is `notFound` or `error`), while the site menu is not `closed`, and while a [section transition](#section-transition) covers the page (`transitionStore.covering`). [../src/styles/view-toggle.css](../src/styles/view-toggle.css) hides it while the intro curtain plays.
+- `z-30` keeps it above the page and under the menu (`z-40`), dialogs and the gallery viewer (`z-50`), the section transition's panel (`z-55`), and the intro curtain (`z-60`).
 - Each link has an accessible name ("Human view", "Machine view") and a `title` with the same words. Nothing depends on hover.
 
 When changing the toggle or the agent view, check it with the keyboard, with reduced motion, at phone width, in Graphite, on a 404 under `/ai`, and with the menu open.
