@@ -44,7 +44,6 @@ tools:
   ]
 githubUrl: https://github.com/wends05/lovedbylovef
 liveUrl: https://lovedbylovef.vercel.app
-# draft: the description is a placeholder the owner replaces.
 draft: false
 ---
 

@@ -38,7 +38,6 @@ credits:
   - { collaborator: padre108 }
   - { collaborator: xandei }
 githubUrl: https://github.com/dreyyiizz/TrashTrek
-# draft: the description is a placeholder the owner replaces.
 draft: false
 ---
 

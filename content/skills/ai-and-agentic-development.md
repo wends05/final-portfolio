@@ -4,7 +4,6 @@ name: "AI & agentic development"
 confidence: 75
 tools:
   ["Claude Code", "Codex", "OpenCode", "GitHub Copilot", "MCP", "Agent skills"]
-# draft: the overview is a placeholder the owner replaces.
 draft: false
 ---
 

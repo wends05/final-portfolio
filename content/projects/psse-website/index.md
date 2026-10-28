@@ -49,7 +49,6 @@ credits:
   - { collaborator: padre108 }
   - { collaborator: regbarte }
   - { collaborator: kailouss }
-# draft: the description is a placeholder the owner replaces.
 # Also a draft on purpose: Intentional draft, write-up deferred. Private repo, no live URL yet.
 draft: false
 ---

@@ -29,7 +29,6 @@ gallery:
     }
 tools: ["Godot", "GDScript", "Go", "Gin"]
 githubUrl: https://github.com/wends05/algo-project
-# draft: the description is a placeholder the owner replaces.
 draft: false
 ---
 

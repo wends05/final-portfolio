@@ -25,7 +25,6 @@ tools:
     "Firebase",
     "Zod",
   ]
-# draft: the overview is a placeholder the owner replaces.
 draft: false
 ---
 

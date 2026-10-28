@@ -30,7 +30,6 @@ teamName: "IX"
 credits:
   - { collaborator: matchaejayyy }
   - { collaborator: huenyeon }
-# draft: the description is a placeholder the owner replaces.
 # Also a draft on purpose: Intentional draft. Built for one franchisee, not affiliated with the 48 Coffee brand.
 draft: false
 ---

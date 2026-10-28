@@ -21,7 +21,6 @@ tools:
 credits:
   - { collaborator: itsantonle }
 githubUrl: https://github.com/wends05/ml-finals
-# draft: the description is a placeholder the owner replaces.
 draft: false
 ---
 

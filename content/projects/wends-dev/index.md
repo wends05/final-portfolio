@@ -29,7 +29,6 @@ tools:
   ]
 githubUrl: https://github.com/wends05/final-portfolio
 liveUrl: https://portfolio.wends.dev
-# draft: the description is a placeholder the owner replaces.
 draft: false
 ---
 
