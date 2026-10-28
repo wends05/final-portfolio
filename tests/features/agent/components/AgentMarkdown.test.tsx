@@ -10,6 +10,7 @@ vi.mock("@tanstack/react-router", () => ({
 	),
 }));
 
+const { markdownTable } = await import("#/features/agent/utils/agent-copy");
 const { default: AgentMarkdown } = await import(
 	"#/features/agent/components/AgentMarkdown"
 );
@@ -37,6 +38,12 @@ describe("AgentMarkdown", () => {
 		expect(markup).toMatch(/<div class="[^"]*overflow-x-auto[^"]*"><table/);
 		expect(markup).toContain(">Field</th>");
 		expect(markup).toContain(">React</td>");
+	});
+
+	it("keeps a cell whole when its text has a backslash before a pipe", () => {
+		const markup = render(markdownTable(["A", "B"], [["x\\|y", "z"]]));
+		expect(markup).toContain(">x\\|y</td>");
+		expect(markup).toContain(">z</td>");
 	});
 
 	it("keeps links to site pages in the agent view", () => {

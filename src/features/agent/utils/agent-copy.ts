@@ -15,11 +15,15 @@ import { agentCopyPath } from "./view-paths";
  * its own still points at the site.
  */
 
-/** Text for a table cell: one line, with `|` escaped so it cannot end the cell. */
+/**
+ * Text for a table cell: one line, with each `|` escaped so it cannot end the
+ * cell. Backslashes right before a pipe are doubled too: escaping only the
+ * pipe would turn `x\|y` into `x\\|y`, an escaped backslash and a cell break.
+ */
 export function tableCell(text: string) {
 	return text
 		.replace(/\s*\n\s*/g, " ")
-		.replace(/\|/g, "\\|")
+		.replace(/(\\*)\|/g, (_, slashes: string) => `${slashes}${slashes}\\|`)
 		.trim();
 }
 

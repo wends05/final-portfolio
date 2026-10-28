@@ -84,6 +84,11 @@ describe("Markdown helpers", () => {
 		expect(tableCell(" a |\n b ")).toBe("a \\| b");
 	});
 
+	it("escapes backslashes right before a pipe", () => {
+		expect(tableCell("x\\|y")).toBe("x\\\\\\|y");
+		expect(tableCell("C:\\dir")).toBe("C:\\dir");
+	});
+
 	it("builds a GFM table", () => {
 		expect(markdownTable(["A", "B"], [["1", "2"]])).toBe(
 			"| A | B |\n| --- | --- |\n| 1 | 2 |",
