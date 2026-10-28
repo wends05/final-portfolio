@@ -1,12 +1,12 @@
 import { describe, expect, it, vi } from "vitest";
 import {
 	CONTACT_LINKS,
+	CV_PATH,
 	copyText,
 	DEFAULT_EMAIL_ID,
 	EMAILS,
 	findEmail,
 	mailtoHref,
-	RESUME_PATH,
 } from "#/features/public/utils/contact";
 
 describe("contact emails", () => {
@@ -31,18 +31,18 @@ describe("contact emails", () => {
 });
 
 describe("contact links", () => {
-	it("lists LinkedIn, GitHub and the résumé in that order", () => {
+	it("lists LinkedIn, GitHub and the CV in that order", () => {
 		expect(CONTACT_LINKS.map((link) => link.label)).toEqual([
 			"LinkedIn",
 			"GitHub",
-			"Résumé",
+			"CV",
 		]);
 	});
 
-	it("points external links at https and the résumé at the static PDF", () => {
+	it("points external links at https and the CV at the static PDF", () => {
 		for (const link of CONTACT_LINKS) {
 			if (link.kind === "external") expect(link.href).toMatch(/^https:\/\//);
-			else expect(link.href).toBe(RESUME_PATH);
+			else expect(link.href).toBe(CV_PATH);
 		}
 	});
 });
