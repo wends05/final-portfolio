@@ -49,8 +49,8 @@ credits:
   - { collaborator: padre108 }
   - { collaborator: regbarte }
   - { collaborator: kailouss }
-# Also a draft on purpose: Intentional draft, write-up deferred. Private repo, no live URL yet.
-draft: false
+# Draft: the description is a placeholder and the write-up is deferred. Private repo, no live URL yet.
+draft: true
 ---
 
 The Software Engineering department needed its own visibility to the public, and there is no website that was made from before. Additionally, the PSSE (Philippine Society of Software Engineers) also wanted a place to promote the organization aside from its [Facebook page](https://www.facebook.com/the.psse/), namely the events, officers, and the projects.

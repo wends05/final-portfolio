@@ -30,7 +30,7 @@ teamName: "IX"
 credits:
   - { collaborator: matchaejayyy }
   - { collaborator: huenyeon }
-# Also a draft on purpose: Intentional draft. Built for one franchisee, not affiliated with the 48 Coffee brand.
+# Built for one franchisee, not affiliated with the 48 Coffee brand.
 draft: false
 ---
 

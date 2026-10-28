@@ -5,12 +5,12 @@ description: "A Social Deduction game with a research paper."
 status: ONGOING
 startedAt: 2026-08-17
 tools: ["Godot", "GDScript", "Linear", "Notion"]
-# Also a draft on purpose: Intentional draft. Add githubUrl and publish once development is public. C# joins the tools then.
 draft: false
-credtis:
+credits:
   - { collaborator: huenyeon }
-  - { collaborator: okjose }
-  - { collaborator: kjv }
+  # Add okjose and kjv to content/collaborators.yaml, then uncomment:
+  # - { collaborator: okjose }
+  # - { collaborator: kjv }
 ---
 
 The system that will be made for our capstone project.
