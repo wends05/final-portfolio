@@ -24,16 +24,4 @@ draft: true
 
 A game developed for a hackathon: The Oddysey 2024. I was able to team up with some of my friends from other universities and able to create an arcade-style game based off the Philippine mythology, the Bakunawa.
 
-The concept was to have the Bakunawa
-
-## Problem
-
-[owner writes this section]
-
-## Approach
-
-[owner writes this section]
-
-## Result
-
-[owner writes this section]
+The concept was inspired by pac-man. But instead of having the Bakunawa be "Pac-man", the roles were reversed. Bakunawa is the one eating the "ghosts", or in this game, the eggs. There are also additional mechanics such as power ups and debuffs to make the game a little more entertaining.
