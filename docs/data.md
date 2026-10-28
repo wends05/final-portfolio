@@ -85,6 +85,8 @@ Both Velite checks fail `vite build`, so invalid content fails the Vercel deploy
 
 Velite writes `.velite/` (JSON, `index.js`, and types) and `public/static/` (image copies). Both are gitignored and rebuilt by `dev`, `build`, `postinstall`, and `verify`. Import the data through `#content`; never edit the output by hand.
 
+Velite keeps each body twice: as HTML for the pages (`body`, `overview`) and as the Markdown you wrote for the [agent copies](decisions/0021-agent-copies-and-agent-view.md) (`bodyMarkdown`, `overviewMarkdown`). Server routes serve the copies, `llms.txt` and `sitemap.md` from that data; drafts never get one.
+
 ## Adding content
 
 Run `bun run new:project <slug>` to scaffold a project, then follow the "adding content" recipe in [../AGENTS.md](../AGENTS.md). The CV is a static `public/cv.pdf`, replaced by commit.

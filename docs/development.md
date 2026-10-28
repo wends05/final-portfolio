@@ -95,6 +95,7 @@ The workflow needs the `CLAUDE_CODE_OAUTH_TOKEN` repository secret, created with
 ## Generated files
 
 - Edit route files, then use route generation; do not manually patch `src/routeTree.gen.ts`.
+- Never put a file in `public/` whose path a page or a server route also answers, such as `index.md` or `projects.md`: Vercel serves static files before the app, so the file would replace the page ([decision 0021](decisions/0021-agent-copies-and-agent-view.md)).
 - `.velite/` and `public/static/` are Velite's output from `content/` ([data.md](data.md#generated-output)); never edit them. The Vite plugin in `vite.config.ts` rebuilds them in `dev` and `build`, and `bun run content` does it for scripts that do not start Vite.
 - Drafts are kept only when `VITE_SHOW_DRAFTS` is `true` when Velite runs. The plugin reads it from Vite's env, `.env.local` included; `bun run content` and the pre-scripts see only the shell's environment, so they always drop drafts unless you run `VITE_SHOW_DRAFTS=true bun run content`.
 - Keep `bun.lock` aligned with intentional dependency changes. TanStack Start and Router use caret ranges from their stable releases ([decision 0006](decisions/0006-tanstack-start-application-stack.md)); several other ranges use `latest`. Inspect installed versions before applying version-specific advice.
@@ -188,7 +189,8 @@ Set these environment variables in the Vercel project for each environment that 
 | Variable | Needed for |
 | --- | --- |
 | `VITE_SHOW_DRAFTS` | Preview only (`development`), to show drafts. Never set it for Production: it would publish every draft and its images. |
-| `COMING_SOON` | The [coming-soon gate](architecture.md#coming-soon-gate). Vercel applies a changed value only to new deployments, so redeploy after changing it. |
+| `COMING_SOON` | The [coming-soon gate](architecture.md#coming-soon-gate). Vercel applies a changed value only to new deployments, so redeploy after changing it. While it is `"true"` the agent files answer 404. |
+| `VITE_SITE_URL` | Optional. The origin the [agent copies](decisions/0021-agent-copies-and-agent-view.md) link to; defaults to `https://portfolio.wends.dev`. |
 
 A Preview variable applies to every branch that deploys unless it is scoped. In the Vercel dashboard (Settings → Environment Variables), add the variable for Preview and pick a specific branch to give that branch its own value, such as `VITE_SHOW_DRAFTS` for `development`. A branch-specific value overrides an all-branches Preview value with the same name.
 

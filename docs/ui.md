@@ -302,3 +302,27 @@ flowchart LR
 - **Reduced motion:** the same flow with a short fade of the page blur and the window; nothing moves.
 
 There are no mocks. Placeholder projects and skills are content files marked `draft: true` ([data.md](data.md#drafts)); preview them with `VITE_SHOW_DRAFTS=true`. Without drafts the routes show their empty state and 404s.
+
+## Agent view
+
+The `/ai` pages show each page's [agent copy](../CONTEXT.md) rendered for people ([decision 0021](decisions/0021-agent-copies-and-agent-view.md)). The design is the canvas's "Agent view toggle" page, option A2.
+
+- **Layout:** [AgentLayout](../src/features/agent/components/AgentLayout.tsx), separate from the public layout: `font-label` (Geist Mono) at `text-body-s`, `bg-background` and `text-foreground` so it follows Light and Graphite, a header with home, projects, skills and the page's `.md` file, then the page path and the copy in a `max-w-3xl` column. No intro curtain, Lenis, or footer. Each page fades in (200ms, `motion-safe` only).
+- **Markdown:** [AgentMarkdown](../src/features/agent/components/AgentMarkdown.tsx) renders the copy with `react-markdown` and `remark-gfm`. Headings show their `#` marks, dimmed and `aria-hidden`. Tables sit in an `overflow-x-auto` box, so a wide table scrolls on phones and the page does not. Named links to the site's pages become `Link`s to their agent views (`agentViewLink`); bare URLs (the "Human page" line, the sitemap's URLs), files and other sites keep their addresses.
+- **Never edit a copy's text in a component.** The view and the `.md` file render the same string; change the builders in `src/features/agent/utils/agent-copy.ts`.
+
+### View toggle
+
+[ViewToggle](../src/features/agent/components/ViewToggle.tsx) is two icon links in the bottom-right corner (`right-4 bottom-4`, `md:right-6 md:bottom-6`): a person for the human page and a robot for the agent view, each 44px square inside a 1px `border-rule` frame on `bg-background`. An ink block (`bg-primary`) sits under the current view, whose icon turns `text-primary-foreground`; the link has `aria-current="page"`.
+
+| Moment | Motion |
+| --- | --- |
+| Pick the other view | The ink block slides 44px (300ms, `ease-swiss`) and the icon colours cross; the route changes at the same time |
+| Reduced motion | No slide: the block and colours switch at once |
+
+- It is mounted once, in the root document, so it does not remount when the layout changes with the view. `getViewTwins(pathname)` gives the two paths, or null.
+- It renders nothing on pages without a twin (the coming-soon page, unknown paths), on 404 and error pages (a match whose status is `notFound` or `error`), while the site menu is not `closed`, and while a [section transition](#section-transition) covers the page (`transitionStore.covering`). [../src/styles/view-toggle.css](../src/styles/view-toggle.css) hides it while the intro curtain plays.
+- `z-30` keeps it above the page and under the menu (`z-40`), dialogs and the gallery viewer (`z-50`), the section transition's panel (`z-55`), and the intro curtain (`z-60`).
+- Each link has an accessible name ("Human view", "Machine view") and a `title` with the same words. Nothing depends on hover.
+
+When changing the toggle or the agent view, check it with the keyboard, with reduced motion, at phone width, in Graphite, on a 404 under `/ai`, and with the menu open.

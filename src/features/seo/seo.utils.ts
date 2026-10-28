@@ -1,3 +1,4 @@
+import { agentCopyPath } from "#/features/agent/utils/view-paths";
 import type { SeoHead, SeoImage, SeoInput, SeoMeta } from "./seo.types";
 
 export const SITE_NAME = "wends.dev";
@@ -79,7 +80,10 @@ export function buildSeo(input: SeoInput): SeoHead {
 
 	return {
 		meta,
-		links: url && indexable ? [{ rel: "canonical", href: url }] : [],
+		links:
+			url && input.path && indexable
+				? [{ rel: "canonical", href: url }, markdownAlternate(input.path)]
+				: [],
 		scripts:
 			input.jsonLd && indexable
 				? [
@@ -89,6 +93,18 @@ export function buildSeo(input: SeoInput): SeoHead {
 						},
 					]
 				: [],
+	};
+}
+
+/**
+ * The `<link>` to a page's agent copy (ADR 0021). Every indexable page with a
+ * path has one, served by a server route.
+ */
+export function markdownAlternate(path: string) {
+	return {
+		rel: "alternate",
+		type: "text/markdown",
+		href: absoluteUrl(agentCopyPath(path)),
 	};
 }
 

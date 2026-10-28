@@ -6,6 +6,10 @@ import {
 	resolveCredits,
 } from "./projects.utils";
 
+/** The /projects page description, also in its agent copy. */
+export const PROJECTS_DESCRIPTION =
+	"Apps, games and experiments by Wendell Terence Dador, featured projects first.";
+
 export function getProjectsPage(): { projects: Project[]; featured: string[] } {
 	return {
 		projects: orderProjects(projects, site.featured),
