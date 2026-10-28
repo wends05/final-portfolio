@@ -108,6 +108,13 @@ export default function ProjectsPage({
 				</p>
 			) : (
 				<>
+					{/* Phones: the navbar has no background of its own, so this fills the
+					    space behind it and the tiles scroll under the strip, not the bar. */}
+					<div
+						aria-hidden
+						className="fixed inset-x-0 top-0 z-10 h-(--navbar-height) bg-background md:hidden"
+					/>
+
 					{/* Sticky beside the grid from md; a strip under the navbar on phones. */}
 					<aside
 						ref={panel}
