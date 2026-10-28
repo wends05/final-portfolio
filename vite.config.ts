@@ -19,6 +19,7 @@ const NITRO_IGNORED_WARNINGS = new Set([
 ]);
 
 // Content Markdown is indented with spaces: rewrite tab indents before Velite reads them.
+// Dev only: a build must not edit the checkout, and committed content already uses spaces.
 async function indentContentWithSpaces(contentDir: string) {
 	for (const file of await readdir(contentDir, { recursive: true })) {
 		if (!file.endsWith(".md")) continue;
@@ -42,11 +43,11 @@ function velite(): Plugin {
 			// Vite 8 calls buildStart once per environment; Velite runs once.
 			if (started) return;
 			started = true;
-			await indentContentWithSpaces(join(resolved.root, "content"));
+			const isDev = resolved.command === "serve";
+			if (isDev) await indentContentWithSpaces(join(resolved.root, "content"));
 			// Vite loads .env files into import.meta.env only; prepare reads process.env.
 			const showDrafts = resolved.env.VITE_SHOW_DRAFTS;
 			if (showDrafts) process.env.VITE_SHOW_DRAFTS = showDrafts;
-			const isDev = resolved.command === "serve";
 			await buildContent({ watch: isDev, clean: !isDev });
 		},
 	};
