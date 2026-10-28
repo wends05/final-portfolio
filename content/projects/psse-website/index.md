@@ -1,7 +1,7 @@
 ---
 slug: psse-website
 title: "PSSE website"
-description: "[owner writes description]"
+description: "The official Philippine Society of Software Engineers and the Software Engineering website."
 status: ONGOING
 startedAt: 2026-06-22
 cover: ./cover.webp
@@ -49,8 +49,8 @@ credits:
   - { collaborator: padre108 }
   - { collaborator: regbarte }
   - { collaborator: kailouss }
-# Draft: the description is a placeholder and the write-up is deferred. Private repo, no live URL yet.
-draft: true
+# Private repo, no live URL yet.
+draft: false
 ---
 
 The Software Engineering department needed its own visibility to the public, and there is no website that was made from before. Additionally, the PSSE (Philippine Society of Software Engineers) also wanted a place to promote the organization aside from its [Facebook page](https://www.facebook.com/the.psse/), namely the events, officers, and the projects.
