@@ -1,6 +1,7 @@
 import gsap from "gsap";
 import { describe, expect, it, vi } from "vitest";
 import {
+	captionUnderImage,
 	fitContain,
 	getMetadataRows,
 	getProjectDateLine,
@@ -291,10 +292,33 @@ describe("viewerStage", () => {
 		});
 	});
 
+	it("keeps the caption room off a phone held sideways", () => {
+		expect(viewerStage({ width: 667, height: 375 })).toEqual({
+			left: 16,
+			top: 64,
+			width: 635,
+			height: 375 - 64 - 136,
+		});
+	});
+
 	it("never goes negative on a tiny viewport", () => {
 		const stage = viewerStage({ width: 20, height: 100 });
 		expect(stage.width).toBe(0);
 		expect(stage.height).toBe(0);
+	});
+});
+
+describe("captionUnderImage", () => {
+	it("is true on a phone held upright", () => {
+		expect(captionUnderImage({ width: 390, height: 844 })).toBe(true);
+	});
+
+	it("is false on a phone held sideways", () => {
+		expect(captionUnderImage({ width: 667, height: 375 })).toBe(false);
+	});
+
+	it("is false from md, however tall", () => {
+		expect(captionUnderImage({ width: 768, height: 1024 })).toBe(false);
 	});
 });
 

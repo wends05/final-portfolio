@@ -15,6 +15,7 @@ import { cn } from "#/lib/utils";
 import type { ProjectImageView } from "../projects.types";
 import {
 	type Box,
+	captionUnderImage,
 	fitContain,
 	PHONE_CAPTION_ROOM,
 	padIndex,
@@ -182,6 +183,7 @@ export default function ProjectGalleryViewer({
 	}, [phase, popupMounted]);
 
 	const stage = viewerStage(viewport);
+	const captionUnder = captionUnderImage(viewport);
 	const activeBox = images[index] && fitContain(images[index].image, stage);
 	const counter = `${padIndex(index + 1)} / ${padIndex(count)}`;
 	const step = (delta: number) => onIndexChange(stepSlide(index, delta, count));
@@ -259,9 +261,9 @@ export default function ProjectGalleryViewer({
 						);
 					})}
 
-					{/* The caption sits in the lower left corner of the image on show from
-					 * `md`, and under it on phones, where it would cover too much of the
-					 * image. The image's own `alt` already speaks to screen readers. */}
+					{/* The caption sits in the lower left corner of the image on show, or
+					 * under it on a phone tall enough to spare the room (`captionUnderImage`).
+					 * The image's own `alt` already speaks to screen readers. */}
 					{activeBox && (
 						<p
 							aria-hidden
@@ -276,7 +278,10 @@ export default function ProjectGalleryViewer({
 								} as CSSProperties
 							}
 							className={cn(
-								"type-meta absolute max-md:inset-x-4 max-md:top-(--caption-top) max-md:max-h-(--caption-room) max-md:overflow-y-auto md:bottom-(--caption-bottom) md:left-(--caption-left) md:max-w-(--caption-width) md:bg-inverse/70 md:px-2 md:py-1 text-inverse-foreground",
+								"type-meta absolute text-inverse-foreground",
+								captionUnder
+									? "inset-x-4 top-(--caption-top) max-h-(--caption-room) overflow-y-auto"
+									: "bottom-(--caption-bottom) left-(--caption-left) max-w-(--caption-width) bg-inverse/70 px-2 py-1",
 								fadeBottom,
 							)}
 						>

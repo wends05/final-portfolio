@@ -68,9 +68,24 @@ export interface Box {
 
 /**
  * Height in px that phones keep free under the viewer's image for its caption
- * (about four lines of caption type). From `md` the caption sits on the image.
+ * (about four lines of caption type).
  */
 export const PHONE_CAPTION_ROOM = 96;
+
+/** A phone shorter than this (a phone held sideways) has no room to spare for it. */
+const CAPTION_UNDER_MIN_HEIGHT = 560;
+
+/**
+ * The viewer's caption sits under the image on phones tall enough to spare
+ * `PHONE_CAPTION_ROOM`. From `md`, and on a phone held sideways, it sits on
+ * the image's lower left corner instead.
+ */
+export function captionUnderImage(viewport: {
+	width: number;
+	height: number;
+}): boolean {
+	return viewport.width < 768 && viewport.height >= CAPTION_UNDER_MIN_HEIGHT;
+}
 
 /**
  * The area the full-screen viewer's image may fill: clear of the top bar and
@@ -81,7 +96,11 @@ export function viewerStage(viewport: { width: number; height: number }): Box {
 	const inset =
 		viewport.width >= 768
 			? { x: 96, top: 72, bottom: 112 }
-			: { x: 16, top: 64, bottom: 136 + PHONE_CAPTION_ROOM };
+			: {
+					x: 16,
+					top: 64,
+					bottom: 136 + (captionUnderImage(viewport) ? PHONE_CAPTION_ROOM : 0),
+				};
 	return {
 		left: inset.x,
 		top: inset.top,
