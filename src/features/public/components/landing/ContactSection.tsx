@@ -13,13 +13,13 @@ import {
 	CONTACT_LINKS,
 	COPY_FEEDBACK_MS,
 	type ContactLink,
+	CV_FILENAME,
 	copyText,
 	DEFAULT_EMAIL_ID,
 	EMAILS,
 	type EmailId,
 	findEmail,
 	mailtoHref,
-	RESUME_FILENAME,
 } from "#/features/public/utils/contact";
 import { cn } from "#/lib/utils";
 import CoverEdge from "./CoverEdge";
@@ -55,11 +55,11 @@ export default function ContactSection() {
 	);
 }
 
-// Each tile's centered icon: brand logos, and a plain sheet for the résumé.
+// Each tile's centered icon: brand logos, and a plain sheet for the CV.
 const LINK_ICONS: Record<ContactLink["label"], Icon> = {
 	LinkedIn: LinkedinLogoIcon,
 	GitHub: GithubLogoIcon,
-	Résumé: FileTextIcon,
+	CV: FileTextIcon,
 };
 
 function ContactTile({ link }: { link: ContactLink }) {
@@ -70,7 +70,7 @@ function ContactTile({ link }: { link: ContactLink }) {
 		<a
 			href={link.href}
 			{...(download
-				? { download: RESUME_FILENAME }
+				? { download: CV_FILENAME }
 				: { target: "_blank", rel: "noopener noreferrer" })}
 			className={cn(
 				"group focus-ring flex min-h-30 flex-col justify-between gap-6 border border-rule p-4 transition-colors-scale duration-200 ease-swiss focus-visible:outline-offset-3 active:scale-98 sm:aspect-3/4 sm:p-5",

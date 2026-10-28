@@ -7,7 +7,7 @@ Scope: Documented portfolio goals and the initial storage discussion.
 ## Jobs
 
 - `[E]` When updating the portfolio, the owner wants to present projects and skills so visitors can check their work and credentials. Source: [product intent](../intent.md).
-- `[E]` When checking credentials, a visitor wants to find projects, demonstrated skills, and a resume without hunting through the site. Source: [product intent](../intent.md).
+- `[E]` When checking credentials, a visitor wants to find projects, demonstrated skills, and a CV without hunting through the site. Source: [product intent](../intent.md).
 
 ## Users
 
@@ -19,7 +19,7 @@ Scope: Documented portfolio goals and the initial storage discussion.
 
 **Visitor checking credentials**
 
-- `[E]` Goal: verify the owner's experience through projects, skills, and a downloadable resume. Source: [product intent](../intent.md).
+- `[E]` Goal: verify the owner's experience through projects, skills, and a downloadable CV. Source: [product intent](../intent.md).
 - Device context and observed browsing behavior have not been established in this discussion.
 
 ## Mental model
