@@ -26,6 +26,8 @@ Route groups that start with `_` (`_public`) are pathless layouts and do not app
 | `/skills` | `_public/skills/index.tsx` | All skills, each linking to its page |
 | `/skills/<slug>` | `_public/skills/$slug.tsx` | One skill: its confidence, a tool filter, and the projects that used its tools |
 | `/coming-soon` | `coming-soon.tsx` | Holding page while the site is gated; `noindex` |
+| `/sitemap.xml` | `sitemap[.]xml.ts` | Server route: the public pages plus every project and skill that is not a draft |
+| `/robots.txt` | `robots[.]txt.ts` | Server route: allows crawlers and names the sitemap, or disallows everything while the site is gated |
 
 ```mermaid
 flowchart TD
@@ -37,12 +39,12 @@ There is no admin area and no sign-in ([decision 0019](decisions/0019-static-sit
 
 ## Coming-soon gate
 
-While the site is not ready, public pages redirect to `/coming-soon`. One build-time variable controls the gate, and there is no bypass for the owner:
+While the site is not ready, public pages redirect to `/coming-soon`. One server environment variable controls the gate, and there is no bypass for the owner:
 
-| `VITE_COMING_SOON` | Result |
+| `COMING_SOON` | Result |
 | --- | --- |
 | not `"true"` | Site is public; `/coming-soon` redirects to `/` |
-| `"true"` | Public pages redirect to `/coming-soon` |
+| `"true"` | Public pages redirect to `/coming-soon`; `/sitemap.xml` lists nothing and `/robots.txt` disallows everything |
 
 ```ts
 // src/features/site/site.utils.ts
@@ -50,15 +52,46 @@ export function isSiteGated(comingSoon: string | undefined) {
 	return comingSoon === "true";
 }
 
+// src/features/site/site.functions.ts
+export const getSiteGate = createServerFn().handler(async () => ({
+	gated: isSiteGated(process.env.COMING_SOON),
+}));
+
 // src/routes/_public/route.tsx
-beforeLoad: () => {
-	if (isSiteGated(import.meta.env.VITE_COMING_SOON)) throw redirect({ to: "/coming-soon" });
+beforeLoad: async () => {
+	const { gated } = await getSiteGate();
+	if (gated) throw redirect({ to: "/coming-soon" });
 },
 ```
 
-The value is read when the site is built, so changing it in Vercel takes a new deployment. The gate is not authentication, and it is removed after launch.
+The server reads `COMING_SOON` from its environment, not the client bundle. Vercel applies a changed value only to new deployments, so changing it in Vercel takes a redeploy. The gate is not authentication, and it is removed after launch.
 
 The gate hides pages, not content. Every project that is not a draft ships in the client bundle even while the site is gated, so keep unreleased work as `draft: true` until launch ([content](data.md#drafts)).
+
+## SEO and metadata
+
+`src/features/seo/seo.utils.ts` is the only place that builds page metadata. A route's `head()` calls `buildSeo()` and returns the result; no route writes `og:` or `twitter:` tags by hand.
+
+```ts
+head: ({ loaderData }) => {
+	const project = loaderData?.page.project;
+	if (!project) return {};
+	return buildSeo({
+		title: project.title, // "Title · wends.dev"; leave out on the home page
+		description: truncateDescription(project.description), // at most 160 characters
+		path: `/projects/${project.slug}`, // canonical and og:url, on https://portfolio.wends.dev
+		image: project.cover, // Velite's relative `/static/…` URL becomes absolute
+		type: "article",
+		jsonLd: projectJsonLd(project),
+	});
+},
+```
+
+- Every public page has its own title and description. The root route sets site-wide defaults, which the 404 page keeps; a page's own tags replace them.
+- The origin is the `SITE_ORIGIN` constant, not an environment variable. Preview deployments are behind a login, so they are never crawled.
+- A page without an image sends none and uses the `summary` Twitter card. Set `DEFAULT_SOCIAL_IMAGE` to a 1200×630 file in `public/` to give every page without its own image a `summary_large_image` card.
+- `noindex: true` drops the canonical link, `og:url`, and JSON-LD. Error pages set `noindex` themselves ([ErrorPage](../src/features/site/components/ErrorPage.tsx)).
+- `/sitemap.xml` and `/robots.txt` read the same Velite content as the pages. While `COMING_SOON` is `"true"`, the sitemap lists nothing and `robots.txt` disallows everything.
 
 ## Content flow
 
@@ -92,4 +125,4 @@ flowchart LR
 | `src/styles.css`, `src/styles/` | Global styles and tokens ([ui](ui.md)) |
 | `vercel.json` | Vercel settings ([0005](decisions/0005-vercel-deployment.md), [0014](decisions/0014-vercel-deploys-main-and-development-only.md)) |
 
-Expected features: `public` (landing page), `projects`, `skills`, and `site` (gate and error pages).
+Expected features: `public` (landing page), `projects`, `skills`, `seo` (metadata, sitemap, and robots), and `site` (gate and error pages).

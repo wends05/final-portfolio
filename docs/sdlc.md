@@ -64,7 +64,7 @@ Never rename a branch that has an open PR; GitHub closes the PR. For a change th
 
 ## Acceptance and completion
 
-Owner authorization comes from an actual instruction; an agent-written status cannot supply it. The owner's latest instruction takes precedence over an older plan. Existing database permission rules in `AGENTS.md` still apply.
+Owner authorization comes from an actual instruction; an agent-written status cannot supply it. The owner's latest instruction takes precedence over an older plan.
 
 Report a task complete only when its own requirements have evidence. Failed required checks remain failed even if the cause predates the task. Distinguish scoped completion from a clean application baseline, and local verification from deployment. In the completion report include what changed, checks and results, existing failures versus new findings, and anything not checked.
 
@@ -78,14 +78,14 @@ These documents guide behavior; they do not enforce tool permissions. CI runs `v
 | Tooling/configuration | Relevant lint/format checks, real command execution, failure behavior where applicable |
 | TypeScript or UI | `bun --bun run verify`, including tests for the changed behavior ([0010](decisions/0010-vitest-tests-in-every-pr.md)); affected pages, small screens, keyboard interactions |
 | Behavioral bug fix | Reproduce with a failing test, then fix it so the test passes |
-| Data or authorization | Relevant tests and reviewed contract/server boundaries; permission before database-changing commands |
+| Content or data | Relevant tests, `bun run content`, and reviewed server boundaries |
 | Deployment | Build, configured startup, target smoke checks, recovery procedure |
 
 ```bash
 bun --bun run verify
 ```
 
-The runner executes Biome, design-system lint, TypeScript, and the build sequentially from the repository root. Ordinary failures do not skip later checks. Any failure or command startup error produces a nonzero aggregate exit; interruption stops execution. A successful build does not prove runtime database behavior or complete acceptance coverage.
+The runner executes Biome, design-system lint, TypeScript, and the build sequentially from the repository root. Ordinary failures do not skip later checks. Any failure or command startup error produces a nonzero aggregate exit; interruption stops execution. A successful build does not prove runtime behavior or complete acceptance coverage.
 
 Take a fresh baseline when a comparison is needed. Keep output concise and never include secrets or `.env` contents. Check configured coverage before treating any command as sufficient evidence.
 

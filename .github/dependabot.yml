@@ -11,13 +11,6 @@ updates:
       # raise this bound when the runtime moves to a new major
       - dependency-name: "@types/node"
         versions: [">=25"]
-      # prisma, @prisma/orm-postgres and @prisma/cli-engine must move as a set:
-      # prisma pins the @prisma/orm-toolchain and cli-engine versions that
-      # orm-postgres must match, and mismatches break `contract:emit`.
-      # Bump them by hand together (docs/development.md#prisma-version-set)
-      - dependency-name: "prisma"
-      - dependency-name: "@prisma/orm-postgres"
-      - dependency-name: "@prisma/cli-engine"
     groups:
       # minor + patch updates arrive together in one PR;
       # major updates still get their own PR so you can read the changelog

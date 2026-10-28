@@ -2,6 +2,7 @@ import { createFileRoute, redirect } from "@tanstack/react-router";
 import { useState } from "react";
 import ComingSoonComponent from "#/features/public/components/ComingSoonComponent";
 import IntroCurtain from "#/features/public/components/intro/IntroCurtain";
+import { buildSeo, DEFAULT_DESCRIPTION } from "#/features/seo/seo.utils";
 import { getSiteGate } from "#/features/site/site.functions";
 
 export const Route = createFileRoute("/coming-soon")({
@@ -10,14 +11,12 @@ export const Route = createFileRoute("/coming-soon")({
 
 		if (!gated) throw redirect({ to: "/" });
 	},
-	head: () => ({
-		meta: [
-			{
-				name: "robots",
-				content: "noindex",
-			},
-		],
-	}),
+	head: () =>
+		buildSeo({
+			title: "coming soon",
+			description: DEFAULT_DESCRIPTION,
+			noindex: true,
+		}),
 	component: ComingSoonPage,
 });
 

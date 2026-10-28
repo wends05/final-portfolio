@@ -1,6 +1,6 @@
 # Portfolio documentation
 
-Start with [docs/README.md](docs/README.md) for the portfolio's architecture, setup, database, UI conventions, current implementation status, and agent handoff guidance. Agents should also read [AGENTS.md](AGENTS.md).
+Start with [docs/README.md](docs/README.md) for the portfolio's architecture, setup, content, UI conventions, current implementation status, and agent handoff guidance. Agents should also read [AGENTS.md](AGENTS.md).
 
 The starter instructions below are retained for reference. Use the project-specific docs and current configuration when they differ.
 
@@ -53,15 +53,9 @@ bun run .output/server/index.mjs
 Built under Bun, Nitro selected its `bun` preset (recorded in `.output/nitro.json`). No deployment host has been chosen yet. For host-specific presets (Vercel, Netlify, Cloudflare, AWS Lambda, etc.), see https://v3.nitro.build/deploy.
 
 
-## Database (Neon)
+## Content
 
-The app uses a Neon Postgres database through Prisma Next. Copy `.env.example` to `.env` and set `DATABASE_URL` to the connection string from the Neon console (project `portfolio`, branch `production`, database `neondb`). Then apply migrations:
-
-```bash
-bun --bun prisma db migrate
-```
-
-See [docs/data.md](docs/data.md) and [decision 0003](docs/decisions/0003-neon-database-and-portfolio-schema.md).
+There is no database. Content is Markdown and YAML in `content/`, validated by Velite at build time. See [docs/data.md](docs/data.md) and [decision 0019](docs/decisions/0019-static-site-content-in-repo.md).
 
 
 
