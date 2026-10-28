@@ -76,6 +76,11 @@ describe("page metadata", () => {
 		expect(content(head, "og:type")).toBe("article");
 		expect(head.links).toEqual([
 			{ rel: "canonical", href: "https://portfolio.wends.dev/projects/foo" },
+			{
+				rel: "alternate",
+				type: "text/markdown",
+				href: "https://portfolio.wends.dev/projects/foo.md",
+			},
 		]);
 	});
 

@@ -9,6 +9,7 @@
 @import "./styles/footer.css";
 @import "./styles/lenis.css";
 @import "./styles/theme-toggle.css";
+@import "./styles/view-toggle.css";
 
 @custom-variant dark (&:is(.dark *));
 

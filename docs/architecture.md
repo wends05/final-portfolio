@@ -25,9 +25,11 @@ Route groups that start with `_` (`_public`) are pathless layouts and do not app
 | `/projects/<slug>` | `_public/projects/$.tsx` | Case study for one project. A splat, so deeper paths 404 inside the layout |
 | `/skills` | `_public/skills/index.tsx` | All skills, each linking to its page |
 | `/skills/<slug>` | `_public/skills/$slug.tsx` | One skill: its confidence, a tool filter, and the projects that used its tools |
+| `/ai`, `/ai/projects`, `/ai/projects/<slug>`, `/ai/skills`, `/ai/skills/<slug>` | `ai/` | The [agent view](decisions/0021-agent-copies-and-agent-view.md) of each page: its agent copy rendered, in its own plain layout (`ai/route.tsx`); `noindex` |
 | `/coming-soon` | `coming-soon.tsx` | Holding page while the site is gated; `noindex` |
 | `/sitemap.xml` | `sitemap[.]xml.ts` | Server route: the public pages plus every project and skill that is not a draft |
 | `/robots.txt` | `robots[.]txt.ts` | Server route: allows crawlers and names the sitemap, or disallows everything while the site is gated |
+| `/index.md`, `/projects.md`, `/projects/<slug>.md`, `/skills.md`, `/skills/<slug>.md`, `/llms.txt`, `/sitemap.md` | none: static files | [Agent copies](decisions/0021-agent-copies-and-agent-view.md) and their indexes, written into `public/` by `scripts/agent-files.ts` before each build; none while the site is gated |
 
 ```mermaid
 flowchart TD
@@ -91,6 +93,7 @@ head: ({ loaderData }) => {
 - The origin is the `SITE_ORIGIN` constant, not an environment variable. Preview deployments are behind a login, so they are never crawled.
 - A page without an image sends none and uses the `summary` Twitter card. Set `DEFAULT_SOCIAL_IMAGE` to a 1200×630 file in `public/` to give every page without its own image a `summary_large_image` card.
 - `noindex: true` drops the canonical link, `og:url`, and JSON-LD. Error pages set `noindex` themselves ([ErrorPage](../src/features/site/components/ErrorPage.tsx)).
+- Every indexable page with a path also gets `<link rel="alternate" type="text/markdown">` to its [agent copy](decisions/0021-agent-copies-and-agent-view.md).
 - `/sitemap.xml` and `/robots.txt` read the same Velite content as the pages. While `COMING_SOON` is `"true"`, the sitemap lists nothing and `robots.txt` disallows everything.
 
 ## Content flow
@@ -125,4 +128,4 @@ flowchart LR
 | `src/styles.css`, `src/styles/` | Global styles and tokens ([ui](ui.md)) |
 | `vercel.json` | Vercel settings ([0005](decisions/0005-vercel-deployment.md), [0014](decisions/0014-vercel-deploys-main-and-development-only.md)) |
 
-Expected features: `public` (landing page), `projects`, `skills`, `seo` (metadata, sitemap, and robots), and `site` (gate and error pages).
+Expected features: `public` (landing page), `projects`, `skills`, `seo` (metadata, sitemap, and robots), `site` (gate and error pages), and `agent` (agent copies, the `/ai` views, and the Human / Machine toggle).

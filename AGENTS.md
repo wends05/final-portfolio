@@ -23,6 +23,7 @@ bun run test             # Vitest (Node.js)
 bun --bun run verify     # check, lint:ds, typecheck, test, build; nonzero if any fail
 bun run content          # Velite: validate content/ and regenerate .velite/
 bun run new:project <slug>  # scaffold content/projects/<slug>/index.md as a draft
+bun run agent-files      # write the agent copies, llms.txt and sitemap.md into public/
 ```
 
 `verify` passes on `main`. Keep it passing: a change is not done while `verify` fails. Every pull request that changes behavior includes Vitest tests ([docs/decisions/0010-vitest-tests-in-every-pr.md](docs/decisions/0010-vitest-tests-in-every-pr.md)).
@@ -42,7 +43,7 @@ Agents: write only what the owner gave you. Placeholder text stays `draft: true`
 
 ## Rules
 
-- Do not edit generated files by hand: `src/routeTree.gen.ts` (route generator), `.velite/`, and `public/static/` (Velite). See [docs/development.md](docs/development.md#generated-files) and [docs/data.md](docs/data.md).
+- Do not edit generated files by hand: `src/routeTree.gen.ts` (route generator), `.velite/`, and `public/static/` (Velite), and the agent files in `public/` (`*.md`, `llms.txt`; `scripts/agent-files.ts`). See [docs/development.md](docs/development.md#generated-files) and [docs/data.md](docs/data.md).
 - Keep server-only code in `*.server.ts` modules and server functions; UI receives plain data through route loaders and server functions. Do not use React Server Components or Bun-only runtime APIs ([docs/decisions/0011-no-react-server-components.md](docs/decisions/0011-no-react-server-components.md), [docs/decisions/0005-vercel-deployment.md](docs/decisions/0005-vercel-deployment.md)).
 - Follow the feature folder layout in [docs/decisions/0009-feature-folder-structure.md](docs/decisions/0009-feature-folder-structure.md): `<feature>.server.ts`, `<feature>.functions.ts`, `utils`, `types`, `hooks/`, and `components/` per feature; shared code in `#/components` and `#/lib`.
 - Never print or commit the contents of `.env`.
