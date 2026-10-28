@@ -209,6 +209,23 @@ describe("ProjectCaseStudy cover", () => {
 		expect(markup).not.toContain("tile-columns");
 	});
 
+	it("offers the full-screen view on the cover, and keeps the 4:3 box", () => {
+		const markup = render(
+			makePage({
+				cover: { src: "/static/cover.png", width: 1600, height: 1200 },
+			} as Partial<ProjectPageData["project"]>),
+		);
+		const figure = /<figure.*?<\/figure>/s.exec(markup)?.[0] ?? "";
+		expect(figure).toContain("aspect-4/3");
+		expect(figure).toContain('aria-label="View cover full screen"');
+		expect(figure).toContain('aria-haspopup="dialog"');
+		expect(markup).not.toContain('role="dialog"');
+	});
+
+	it("offers no full-screen view on the no-cover tile", () => {
+		expect(render(makePage())).not.toContain("View cover full screen");
+	});
+
 	it("fills the cover slot with the no-cover tile when there is none", () => {
 		const markup = render(makePage());
 		expect(markup).not.toContain("Cover of Wishlist App");
