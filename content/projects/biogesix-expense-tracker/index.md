@@ -5,7 +5,23 @@ description: "[owner writes description]"
 status: COMPLETED
 startedAt: 2024-10-30
 endedAt: 2024-12-21
-tools: ["TypeScript", "React", "Vite", "React Router", "TanStack Query", "Tailwind CSS", "Radix UI", "shadcn/ui", "Node.js", "Express", "PostgreSQL", "Supabase", "Vitest"]
+tools:
+  [
+    "TypeScript",
+    "React",
+    "Vite",
+    "React Router",
+    "TanStack Query",
+    "Tailwind CSS",
+    "Radix UI",
+    "shadcn/ui",
+    "Node.js",
+    "Express",
+    "PostgreSQL",
+    "Supabase",
+    "Vitest",
+    "Notion",
+  ]
 teamName: "biogesix"
 credits:
   - { collaborator: huenyeon }
@@ -17,6 +33,7 @@ githubUrl: https://github.com/biogesix/tracker-webapp
 # draft: the description is a placeholder the owner replaces.
 draft: true
 ---
+
 ## Problem
 
 [owner writes this section]

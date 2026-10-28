@@ -1,3 +1,4 @@
 # Homepage order: featured projects and top skills, by slug.
-featured: [lovedbylovef, sara-building, bellman-ford-game]
-topSkills: [frontend-development, backend-development, ai-and-agentic-development]
+featured: [perfect-placement, wends-dev, bellman-ford-game]
+topSkills:
+  [ai-and-agentic-development, frontend-development, backend-development]

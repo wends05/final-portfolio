@@ -1,9 +1,20 @@
 ---
 slug: machine-learning
 name: "Machine learning & computer vision"
-confidence: 35  # low on purpose
-tools: ["Python", "TensorFlow", "Keras", "MediaPipe", "OpenCV", "NumPy", "scikit-learn", "Jupyter"]
-# draft: the overview is a placeholder the owner replaces.
-draft: true
+confidence: 35
+tools:
+  [
+    "Python",
+    "TensorFlow",
+    "Keras",
+    "MediaPipe",
+    "OpenCV",
+    "NumPy",
+    "scikit-learn",
+    "Jupyter",
+  ]
 ---
-[owner writes overview]
+
+draft: false
+
+One of the skills I learned in university. My learning on machine learning revolved around Engineering Data Analysis, Feature Engineering, and Model Training using python and jupyter notebooks.

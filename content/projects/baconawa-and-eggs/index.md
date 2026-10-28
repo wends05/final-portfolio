@@ -21,6 +21,11 @@ metadata:
 # draft: the description is a placeholder the owner replaces.
 draft: true
 ---
+
+A game developed for a hackathon: The Oddysey 2024. I was able to team up with some of my friends from other universities and able to create an arcade-style game based off the Philippine mythology, the Bakunawa.
+
+The concept was to have the Bakunawa
+
 ## Problem
 
 [owner writes this section]
