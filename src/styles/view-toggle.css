@@ -1,7 +1,0 @@
-/*
- * The view toggle sits in the root document, outside the layout the intro
- * curtain makes inert, so it waits for the curtain the way the page does.
- */
-:root[data-intro="play"]:has(.intro-curtain) .view-toggle {
-  visibility: hidden;
-}
