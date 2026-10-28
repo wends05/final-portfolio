@@ -141,7 +141,7 @@ stateDiagram-v2
 - **Where code goes:** the bar in `Navbar.tsx` and the panel in `components/menu/` (`SiteMenu`, `MenuItem`), both under `src/features/public/components/`; the page list, timing constants and current-page helpers in `utils/menu/menu.ts`.
 - **Motion:** through the motion helpers ([reduced motion](#reduced-motion)), with `curtain` for the ink panel and `swiss` for words and washes. Durations live in `MENU_TIMING`. The curtain (600–640ms) and the rising words (720ms) are longer than the 150–300ms used elsewhere; that exception covers the menu and the section transition (WD-51) only.
 - **Current page:** the link whose path matches the page exactly gets `aria-current="page"`, and a paper dot marks the current section (the first path segment). Picking the current page only closes the menu; picking **projects** on `/projects/<slug>` navigates to `/projects`.
-- **Picking a page:** the other words fade, a paper wash sweeps the chosen word, and the router navigates while the panel covers the screen. The timeline waits for the route, then the curtain lifts. The section transition (WD-51) will read the `leaving` phase to tell a menu pick from other navigation.
+- **Picking a page:** the other words fade, a paper wash sweeps the chosen word, and the router navigates while the panel covers the screen. The timeline waits for the route, then the curtain lifts. The [section transition](#section-transition) reads the `leaving` phase to tell a menu pick from other navigation.
 - **Content:** no contact links and no resume in the menu. The bottom row holds only the "Esc to close" hint, from `md` up.
 - **Accessibility:** the button has `aria-expanded`, `aria-controls` and the name "Open menu" or "Close menu" (phones show only the two lines). The panel is a `nav` labelled "Site". While it is open the page behind is `inert` and Lenis is stopped. Focus moves to the first link on open and back to the button on close; Esc closes. Reduced motion only fades the panel. Touch targets are at least 44px; focus rings use `focus-ring`, with `focus-visible:outline-focus-inverse` on ink.
 
@@ -195,7 +195,7 @@ Find elements by scope:
 
 ## Page entrance
 
-Every page enters the same way, title first ([WD-51](https://linear.app/wends/issue/WD-51), step 5): the title's lines rise out of their masks (720ms, `swiss`), then the rest fades up 16px, 400ms each, 60ms apart. The title card and the 150ms fades between pages come with the rest of WD-51.
+Every page enters the same way, title first ([WD-51](https://linear.app/wends/issue/WD-51), step 5): the title's lines rise out of their masks (720ms, `swiss`), then the rest fades up 16px, 400ms each, 60ms apart. The [section transition](#section-transition) decides when it starts.
 
 - [usePageEntrance](../src/features/public/hooks/usePageEntrance.ts) plays it: mark the `h1` with `data-entrance-title` and each block that should follow with `data-entrance`. They play in document order.
 - Timing lives in `ENTRANCE_TIMING` in [utils/entrance.ts](../src/features/public/utils/entrance.ts). After 10 items the stagger stops growing, so long lists don't drag.
@@ -205,6 +205,31 @@ Every page enters the same way, title first ([WD-51](https://linear.app/wends/is
 - Pass a `key` when the content can change without the route remounting: the case study passes the slug, so "next project" plays the entrance again.
 - Reduced motion: everything fades in together, nothing moves.
 - A hidden tab runs no animation frames, so the entrance waits and plays when the tab is shown.
+- During a section transition the timeline is built paused and plays when the controller releases it (`gateEntrance` in `utils/transition/transition-store.ts`). The hero uses the same gate.
+
+## Section transition
+
+Moving to another section (the first path segment: home, skills, projects) for the first time in a tab plays a title card: an ink panel wipes up over the whole screen, top bar and footer included, the router navigates under it, the section name fades in at the centre, then the panel lifts and the page plays its [entrance](#page-entrance). Linear [WD-51](https://linear.app/wends/issue/WD-51) holds the table of cases and the timing.
+
+```mermaid
+flowchart LR
+    Nav["navigation"] --> Choose{"chooseTransition"}
+    Choose -->|"new section, not visited"| Card["cover 460ms → navigate → name 400ms, hold 600ms → lift 600ms → entrance"]
+    Choose -->|"same section, or visited"| Fade["page fades 150ms → navigate → entrance"]
+    Choose -->|"menu pick"| Menu["menu lifts, frame fades in 320ms → entrance"]
+    Choose -->|"list pick"| Pick["entrance"]
+```
+
+- [SectionTransition](../src/features/public/components/transition/SectionTransition.tsx), mounted once in `RootLayout`, is the controller. It registers a history blocker (`router.history.block`) that holds each navigation until the panel covers the screen or the page has faded, so links, `router.navigate`, back and forward all take the same path. Once the new route has rendered (`onRendered`), it shows the name, lifts the panel and releases the entrance.
+- The rules are pure functions in [utils/transition/transition.ts](../src/features/public/utils/transition/transition.ts): `chooseTransition` picks the kind, and `SECTION_TIMING` holds the seconds. Visited sections live in `sessionStorage["visited-sections"]`; the first load counts as a visit.
+- The source comes from the stores: the menu's `leaving` phase means a menu pick, and `usePickTransition` sets `source: "pick"` in `transitionStore` just before it navigates.
+- A navigation during a transition kills the running timeline and runs toward the newest target. An older push is dropped; an older back or forward goes through, since the browser has already moved.
+- While the panel covers the page, Lenis is stopped, the page is `inert`, and scroll resets to the top under it. Focus moves to the new page's `h1` when the entrance starts.
+- The panel and the name are `aria-hidden`. The name is the one centred text on the site, an exception to the left-aligned type; it changes opacity only.
+- Reduced motion: the panel fades in and out instead of wiping, and the entrance only fades.
+- The panel uses `curtain` and the name `swiss`; like the menu, its durations are an exception to the 150–300ms rule.
+
+When changing the transition, check a first and a second visit to each section, back and forward, a click during the card, a slow route load, keyboard focus after it, and reduced motion.
 
 ## List pick
 
@@ -217,6 +242,7 @@ A list pick is a plain left click on a row that starts a transition: the rest of
 - The card blocks have CSS transitions on opacity; the hook sets `transition: none` first, or each GSAP frame would lag behind.
 - [LandingProjectsSection](../src/features/public/components/landing/LandingProjectsSection.tsx) ignores ScrollTrigger updates from the moment of the click, because stopping Lenis fires one more update with a wrong progress.
 - Reduced motion: everything fades together in `reducedFade`, then the router navigates.
+- The pick marks itself as the transition's source, so the [section transition](#section-transition) skips its title card and plays only the entrance.
 - If the navigation fails (offline, a failed route load), `followNavigation` in `utils/pick.ts` catches it: the timeline reverts so the list shows again, Lenis restarts, and the section's `onCancel` clears the pick so the visitor can try again.
 
 ## Projects pages

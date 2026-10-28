@@ -1,6 +1,7 @@
 import { useLenis } from "lenis/react";
 import type { RefObject } from "react";
 import { followNavigation, PICK_TIMING } from "#/features/public/utils/pick";
+import { transitionStore } from "#/features/public/utils/transition/transition-store";
 import { appGSAP, useAppGSAP } from "#/integrations/animations/gsap";
 import { matchMotion } from "#/integrations/animations/motion";
 
@@ -34,8 +35,10 @@ interface UsePickTransitionOptions {
  * List pick (a landing skill row, a project's "Read more"): the rest fades, an
  * ink wash sweeps across the picked title, the title fades, then the router
  * navigates. Lenis stops for the pick, so scrolling can't change what is on
- * stage, and starts again once the route resolves. If the navigation fails,
- * the timeline reverts so the list shows again, and `onCancel` runs.
+ * stage, and starts again once the route resolves. The section transition
+ * sees the pick as its source and plays only the page entrance. If the
+ * navigation fails, the timeline reverts so the list shows again, and
+ * `onCancel` runs.
  */
 export function usePickTransition({
 	scope,
@@ -59,12 +62,16 @@ export function usePickTransition({
 
 			const go = (tl: Timeline | null) => {
 				tl?.pause();
+				// The pick already showed the destination's name, so the section
+				// transition skips its title card and plays only the entrance.
+				transitionStore.getState().setSource("pick");
 				void followNavigation(() => navigate(slug), {
 					onArrive: () => {
 						lenis?.start();
 						tl?.resume();
 					},
 					onFail: () => {
+						transitionStore.getState().setSource(null);
 						lenis?.start();
 						tl?.revert();
 						onCancel?.();

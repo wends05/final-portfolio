@@ -29,3 +29,14 @@ export function matchMotion(
 export function matchFullMotion(setup: () => undefined | Cleanup) {
 	return appGSAP.matchMedia().add(FULL_MOTION, setup);
 }
+
+/**
+ * Whether reduced motion is on right now. For one-off timelines started by an
+ * event, such as a navigation, which end before the preference could change;
+ * use `matchMotion` for anything that stays on the page.
+ */
+export function prefersReducedMotion() {
+	return (
+		typeof window !== "undefined" && window.matchMedia(REDUCED_MOTION).matches
+	);
+}
