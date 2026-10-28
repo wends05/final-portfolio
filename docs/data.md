@@ -17,7 +17,7 @@ content/
 
 | File | Fields | Rules |
 | --- | --- | --- |
-| `projects/<slug>/index.md` | `slug`, `title`, `description`, `status`, `startedAt`, `endedAt?`, `cover?`, `gallery?`, `tools`, `credits?`, `teamName?`, `githubUrl?`, `liveUrl?`, `metadata?`, `draft?`; body | `slug` unique and kebab-case, matching the folder name. `status` is `ONGOING` or `COMPLETED`. Dates are `YYYY-MM-DD`; `endedAt` is not before `startedAt`, and is empty while ongoing. `description` is the short summary; the body is the case-study write-up. `tools` is ordered by importance: the `/projects` panel shows the first three and the case study lists them all. |
+| `projects/<slug>/index.md` | `slug`, `title`, `description`, `status`, `startedAt`, `endedAt?`, `cover?`, `gallery?`, `tools`, `credits?`, `teamName?`, `githubUrl?`, `liveUrl?`, `metadata?`, `draft?`; body | `slug` unique and kebab-case, matching the folder name. `status` is `ONGOING` or `COMPLETED`. Dates are `YYYY-MM-DD`; `endedAt` is not before `startedAt`, and is empty while ongoing. `description` is the short summary; the body is the case-study write-up. `tools` is ordered by importance: the `/projects` panel and the case study show the first three, and the case study's "show all N" dialog lists them all. |
 | `skills/<slug>.md` | `slug`, `name`, `confidence`, `tools`, `draft?`; body | The body is the overview; its first 160 characters as plain text are the page description. `confidence` is required, an integer from 0 to 100. |
 | `tools.yaml` | A list of names | Unique ignoring case, so "React" and "react" cannot both exist. A tool can belong to several skills or to none. |
 | `collaborators.yaml` | `slug`, `name`, `profileUrl?` | `slug` unique. Collaborators do not sign in. |
