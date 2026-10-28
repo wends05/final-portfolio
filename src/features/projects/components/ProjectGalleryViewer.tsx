@@ -16,6 +16,7 @@ import type { ProjectImageView } from "../projects.types";
 import {
 	type Box,
 	fitContain,
+	PHONE_CAPTION_ROOM,
 	padIndex,
 	stepSlide,
 	swipeStep,
@@ -258,8 +259,9 @@ export default function ProjectGalleryViewer({
 						);
 					})}
 
-					{/* The caption sits in the lower left corner of the image on show. The
-					 * image's own `alt` already speaks to screen readers. */}
+					{/* The caption sits in the lower left corner of the image on show from
+					 * `md`, and under it on phones, where it would cover too much of the
+					 * image. The image's own `alt` already speaks to screen readers. */}
 					{activeBox && (
 						<p
 							aria-hidden
@@ -268,10 +270,13 @@ export default function ProjectGalleryViewer({
 									"--caption-left": `calc(${activeBox.left}px + 0.75rem)`,
 									"--caption-bottom": `calc(${viewport.height - activeBox.top - activeBox.height}px + 0.75rem)`,
 									"--caption-width": `min(32rem, calc(${activeBox.width}px - 1.5rem))`,
+									"--caption-top": `calc(${activeBox.top + activeBox.height}px + 0.75rem)`,
+									// The stage keeps PHONE_CAPTION_ROOM free under the image.
+									"--caption-room": `${stage.top + stage.height + PHONE_CAPTION_ROOM - (activeBox.top + activeBox.height) - 12}px`,
 								} as CSSProperties
 							}
 							className={cn(
-								"type-meta absolute bottom-(--caption-bottom) left-(--caption-left) max-w-(--caption-width) bg-inverse/70 px-2 py-1 text-inverse-foreground",
+								"type-meta absolute max-md:inset-x-4 max-md:top-(--caption-top) max-md:max-h-(--caption-room) max-md:overflow-y-auto md:bottom-(--caption-bottom) md:left-(--caption-left) md:max-w-(--caption-width) md:bg-inverse/70 md:px-2 md:py-1 text-inverse-foreground",
 								fadeBottom,
 							)}
 						>

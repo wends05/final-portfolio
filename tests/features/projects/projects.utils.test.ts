@@ -9,6 +9,7 @@ import {
 	getProjectYear,
 	nearestIndex,
 	orderProjects,
+	PHONE_CAPTION_ROOM,
 	padIndex,
 	playToolsShutter,
 	resolveCredits,
@@ -281,12 +282,12 @@ describe("viewerStage", () => {
 		});
 	});
 
-	it("leaves room for the arrow row under the image on phones", () => {
+	it("leaves room for the arrow row and the caption under the image on phones", () => {
 		expect(viewerStage({ width: 390, height: 844 })).toEqual({
 			left: 16,
 			top: 64,
 			width: 358,
-			height: 644,
+			height: 644 - PHONE_CAPTION_ROOM,
 		});
 	});
 

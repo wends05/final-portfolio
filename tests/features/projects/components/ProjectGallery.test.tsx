@@ -52,4 +52,18 @@ describe("ProjectGallery", () => {
 			{ n: "2", hidden: true },
 		]);
 	});
+
+	// On phones the counter is too narrow beside the caption and wraps "03 / 03"
+	// onto three lines, so it takes its own line and never breaks.
+	it("stacks the counter above the caption on phones without wrapping it", () => {
+		const markup = render([shot(1), shot(2)]);
+		const caption = markup.match(/<p[^>]*class="([^"]*type-meta[^"]*)"/)?.[1];
+		expect(caption?.split(" ")).toEqual(
+			expect.arrayContaining(["flex-col", "md:flex-row"]),
+		);
+		const counter = markup.match(/<b class="([^"]*)">01 \/ 02<\/b>/)?.[1];
+		expect(counter?.split(" ")).toEqual(
+			expect.arrayContaining(["whitespace-nowrap", "shrink-0"]),
+		);
+	});
 });

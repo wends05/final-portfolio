@@ -114,8 +114,11 @@ export default function ProjectGallery({
 				))}
 			</div>
 
-			<p className="type-meta mt-2.5 flex gap-2.5">
-				{count > 1 && <b className="font-semibold">{counter}</b>}
+			{/* On phones the counter takes its own line so it never wraps beside the caption. */}
+			<p className="type-meta mt-2.5 flex flex-col gap-1 md:flex-row md:gap-2.5">
+				{count > 1 && (
+					<b className="shrink-0 whitespace-nowrap font-semibold">{counter}</b>
+				)}
 				<span className="text-muted-foreground">{images[slide].alt}</span>
 			</p>
 

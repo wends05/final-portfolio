@@ -67,15 +67,21 @@ export interface Box {
 }
 
 /**
+ * Height in px that phones keep free under the viewer's image for its caption
+ * (about four lines of caption type). From `md` the caption sits on the image.
+ */
+export const PHONE_CAPTION_ROOM = 96;
+
+/**
  * The area the full-screen viewer's image may fill: clear of the top bar and
- * the caption and dots, and from `md` of the side arrows. The same insets
- * as the classes in `ProjectGalleryViewer`.
+ * the dots, on phones of the caption under the image, and from `md` of the
+ * side arrows. The same insets as the classes in `ProjectGalleryViewer`.
  */
 export function viewerStage(viewport: { width: number; height: number }): Box {
 	const inset =
 		viewport.width >= 768
 			? { x: 96, top: 72, bottom: 112 }
-			: { x: 16, top: 64, bottom: 136 };
+			: { x: 16, top: 64, bottom: 136 + PHONE_CAPTION_ROOM };
 	return {
 		left: inset.x,
 		top: inset.top,
