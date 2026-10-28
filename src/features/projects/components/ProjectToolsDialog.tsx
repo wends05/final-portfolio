@@ -18,9 +18,15 @@ const TIMING = {
 	blur: 0.3,
 	hairline: 0.35,
 	open: 0.5,
+	/** The hairline fades as the window opens over it. */
+	hairlineFade: 0.1,
 	rules: 0.4,
+	/** The rules start this long before the window has fully opened. */
+	rulesOverlap: 0.15,
 	rulesSpread: 0.35,
 	names: 0.3,
+	/** Each name starts this long after its rule. */
+	namesDelay: 0.12,
 	reducedFade: 0.2,
 	closeSpeed: 1.6,
 };
@@ -90,7 +96,11 @@ export default function ProjectToolsDialog({
 								ease: "curtain",
 							},
 						)
-						.to("[data-tools-hairline]", { autoAlpha: 0, duration: 0.1 }, "<")
+						.to(
+							"[data-tools-hairline]",
+							{ autoAlpha: 0, duration: TIMING.hairlineFade },
+							"<",
+						)
 						// each tool's rule draws left to right, and its name follows
 						.fromTo(
 							"[data-tool-rule]",
@@ -101,7 +111,7 @@ export default function ProjectToolsDialog({
 								ease: "swiss",
 								stagger: { amount: TIMING.rulesSpread },
 							},
-							"-=0.15",
+							`-=${TIMING.rulesOverlap}`,
 						)
 						.fromTo(
 							"[data-tool-name]",
@@ -113,7 +123,7 @@ export default function ProjectToolsDialog({
 								ease: "swiss",
 								stagger: { amount: TIMING.rulesSpread },
 							},
-							"<+=0.12",
+							`<+=${TIMING.namesDelay}`,
 						);
 				}
 
