@@ -76,6 +76,8 @@ const projects = defineCollection({
 			draft: s.boolean().default(false),
 			// The Markdown body: the case-study write-up, as HTML.
 			body: s.markdown(),
+			// The same write-up as Markdown, for the agent copy (ADR 0021).
+			bodyMarkdown: s.raw(),
 		})
 		// YYYY-MM-DD strings compare in date order.
 		.refine((p) => !p.endedAt || p.endedAt >= p.startedAt, {
@@ -97,6 +99,8 @@ const skills = defineCollection({
 		draft: s.boolean().default(false),
 		// The Markdown body: the overview, as HTML.
 		overview: s.markdown(),
+		// The same overview as Markdown, for the agent copy (ADR 0021).
+		overviewMarkdown: s.raw(),
 		// The overview as plain text, for the page's meta description.
 		description: s.excerpt({ length: 160 }),
 	}),

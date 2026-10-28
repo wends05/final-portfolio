@@ -10,6 +10,7 @@ import {
 	Scripts,
 } from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
+import ViewToggle from "#/features/agent/components/ViewToggle";
 import { introHeadScript } from "#/features/public/utils/intro";
 import { buildSeo, DEFAULT_DESCRIPTION } from "#/features/seo/seo.utils";
 import TanStackQueryDevtools from "#/integrations/tanstack-query/devtools";
@@ -57,9 +58,12 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 			</head>
 			<body>
 				{children}
+				{/* Outside every layout, so it stays put while the view changes. */}
+				<ViewToggle />
 				<TanStackDevtools
 					config={{
-						position: "bottom-right",
+						// Bottom-right is the view toggle's corner.
+						position: "bottom-left",
 					}}
 					plugins={[
 						{

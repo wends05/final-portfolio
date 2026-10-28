@@ -6,6 +6,7 @@ import {
 	buildSitemapXml,
 	formatTitle,
 	homeJsonLd,
+	markdownAlternate,
 	projectJsonLd,
 	SITE_ORIGIN,
 	serializeJsonLd,
@@ -60,7 +61,7 @@ describe("truncateDescription", () => {
 describe("buildSeo", () => {
 	const base = { description: "A page.", path: "/projects" };
 
-	it("sets the title, description, canonical link, Open Graph and Twitter tags", () => {
+	it("sets the title, description, canonical and agent copy links, Open Graph and Twitter tags", () => {
 		const seo = buildSeo({ ...base, title: "projects" });
 		expect(seo.meta).toContainEqual({ title: "projects · wends.dev" });
 		expect(find(seo.meta, "description", "content")).toBe("A page.");
@@ -70,7 +71,20 @@ describe("buildSeo", () => {
 		expect(find(seo.meta, "twitter:title", "content")).toBe("projects");
 		expect(seo.links).toEqual([
 			{ rel: "canonical", href: `${SITE_ORIGIN}/projects` },
+			{
+				rel: "alternate",
+				type: "text/markdown",
+				href: `${SITE_ORIGIN}/projects.md`,
+			},
 		]);
+	});
+
+	it("links the home page to /index.md", () => {
+		expect(markdownAlternate("/")).toEqual({
+			rel: "alternate",
+			type: "text/markdown",
+			href: `${SITE_ORIGIN}/index.md`,
+		});
 	});
 
 	it("sends no image and a summary card when there is none", () => {
