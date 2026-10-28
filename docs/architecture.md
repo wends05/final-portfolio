@@ -20,7 +20,7 @@ Route groups that start with `_` (`_public`) are pathless layouts and do not app
 
 | URL | Route file | Purpose |
 | --- | --- | --- |
-| `/` | `_public/index.tsx` | Hero, description, 3 featured projects, 3 top skills, contact links, resume download |
+| `/` | `_public/index.tsx` | Hero, description, 3 featured projects, 3 top skills, contact links, CV download |
 | `/projects` | `_public/projects/index.tsx` | All projects that are not drafts |
 | `/projects/<slug>` | `_public/projects/$.tsx` | Case study for one project. A splat, so deeper paths 404 inside the layout |
 | `/skills` | `_public/skills/index.tsx` | All skills, each linking to its page |

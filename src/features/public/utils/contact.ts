@@ -1,5 +1,5 @@
-export const RESUME_PATH = "/resume.pdf";
-export const RESUME_FILENAME = "wendell-dador-resume.pdf";
+export const CV_PATH = "/cv.pdf";
+export const CV_FILENAME = "wendell-dador-cv.pdf";
 
 export const CONTACT_LINKS = [
 	{
@@ -18,9 +18,9 @@ export const CONTACT_LINKS = [
 	},
 	{
 		kicker: "03 · pdf",
-		label: "Résumé",
+		label: "CV",
 		meta: "Download",
-		href: RESUME_PATH,
+		href: CV_PATH,
 		kind: "download",
 	},
 ] as const;

@@ -87,4 +87,4 @@ Velite writes `.velite/` (JSON, `index.js`, and types) and `public/static/` (ima
 
 ## Adding content
 
-Run `bun run new:project <slug>` to scaffold a project, then follow the "adding content" recipe in [../AGENTS.md](../AGENTS.md). The resume is a static `public/resume.pdf`, replaced by commit.
+Run `bun run new:project <slug>` to scaffold a project, then follow the "adding content" recipe in [../AGENTS.md](../AGENTS.md). The CV is a static `public/cv.pdf`, replaced by commit.

@@ -1,6 +1,6 @@
 # Portfolio
 
-The owner's personal showcase site at wends.dev: projects, the skills they demonstrate, and a resume. Visitors confirm experience and stack quickly, then leave or go deeper.
+The owner's personal showcase site at wends.dev: projects, the skills they demonstrate, and a CV. Visitors confirm experience and stack quickly, then leave or go deeper.
 
 ## Language
 

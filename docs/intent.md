@@ -6,7 +6,7 @@ Agreed with the owner: **2026-10-04**. Updated with the owner: **2026-10-17** (n
 
 `wends.dev` is a personal showcase. A visitor should be able to confirm experience and stack quickly, then leave or go deeper. Success means credentials are easy to verify without hunting.
 
-The work itself is the proof: projects, the skills they demonstrate, and a downloadable resume. There is no separate experience timeline or certifications section.
+The work itself is the proof: projects, the skills they demonstrate, and a downloadable CV. There is no separate experience timeline or certifications section.
 
 ## Audience and tone
 
@@ -28,11 +28,11 @@ flowchart TD
 
 | Area | Intent |
 | --- | --- |
-| Homepage | Hero and description that establish who the owner is, three featured projects, three top skills, contact links, and a resume download |
+| Homepage | Hero and description that establish who the owner is, three featured projects, three top skills, contact links, and a CV download |
 | Projects | `/projects` lists all projects. Each project has a case-study page covering the problem, approach, and result |
 | Skills | Skills such as Web development, each with its tools and the projects that used them |
 | Contact | Links only: LinkedIn, GitHub, and email (main and school addresses, main picked by default). No form and no contact backend |
-| Resume | A downloadable PDF |
+| CV | A downloadable PDF |
 | Content editing | Content lives in the repository and changes by pull request; see [Content editing](#content-editing) |
 
 ## Content rules
@@ -63,7 +63,7 @@ Answered with the owner on 2026-10-04:
 
 - **Case-study URLs:** a unique `slug` field, so URLs are `/projects/<slug>`.
 - **Case-study content:** a `description` field for now; problem, approach, and result fields may come later. On 2026-10-17 the owner chose a Markdown write-up for problem, approach, and result, with `description` kept as the short summary.
-- **Resume:** a static file at `public/resume.pdf`, replaced by commit.
+- **CV:** a static file at `public/cv.pdf`, replaced by commit.
 - **Skills and tools:** two levels ([0018](decisions/0018-skills-group-tools.md)). A skill (for example Web development, with a 0–100 confidence) groups tools (for example React), and a tool can sit under several skills. Projects link to tools, and the homepage's top skills are skills.
 - **Collaborators:** projects can credit a team name and collaborators with optional roles.
 
