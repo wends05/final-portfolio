@@ -43,7 +43,7 @@ draft: false
 
 This game is published on the [Game On Portal](https://gameonportal.ph/game/trashtrek).
 
-A jumper game inspired by Zombie Tsunami, where the person can collect trash, and has to correctly throw the trash to the correct trash bins. The game also features a leaderboard system that is an extra feature using python and FastAPI, through either a local MongoDB instance or a cloud-based MongoDB service. The backend is in a [separate repository](https://github.com/wends05/trashtrek-server). The game also has a shop system for buying items to use in the game.
+A jumper game inspired by Zombie Tsunami, where the person can collect trash, and has to correctly throw the trash to the correct trash bins. The game also features a leaderboard system that is an extra feature using python and FastAPI, through either a local MongoDB instance or a cloud-based MongoDB service. The game also has a shop system for buying items to use in the game.
 
 The game was developed using Godot Engine with GDScript. I also placed a leaderboard system that was an extra feature using python and FastAPI, through either a local MongoDB instance or a cloud-based MongoDB service. The backend is in a [separate repository](https://github.com/wends05/trashtrek-server).
 

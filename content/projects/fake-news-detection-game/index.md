@@ -8,9 +8,8 @@ tools: ["Godot", "GDScript", "Linear", "Notion"]
 draft: false
 credits:
   - { collaborator: huenyeon }
-  # Add okjose and kjv to content/collaborators.yaml, then uncomment:
-  # - { collaborator: okjose }
-  # - { collaborator: kjv }
+  - { collaborator: okjose }
+  - { collaborator: kimlyjohn }
 ---
 
 The system that will be made for our capstone project.

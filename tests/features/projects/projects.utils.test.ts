@@ -1,6 +1,7 @@
 import gsap from "gsap";
 import { describe, expect, it, vi } from "vitest";
 import {
+	captionUnderImage,
 	fitContain,
 	getMetadataRows,
 	getProjectDateLine,
@@ -9,6 +10,7 @@ import {
 	getProjectYear,
 	nearestIndex,
 	orderProjects,
+	PHONE_CAPTION_ROOM,
 	padIndex,
 	playToolsShutter,
 	resolveCredits,
@@ -281,12 +283,21 @@ describe("viewerStage", () => {
 		});
 	});
 
-	it("leaves room for the arrow row under the image on phones", () => {
+	it("leaves room for the arrow row and the caption under the image on phones", () => {
 		expect(viewerStage({ width: 390, height: 844 })).toEqual({
 			left: 16,
 			top: 64,
 			width: 358,
-			height: 644,
+			height: 644 - PHONE_CAPTION_ROOM,
+		});
+	});
+
+	it("keeps the caption room off a phone held sideways", () => {
+		expect(viewerStage({ width: 667, height: 375 })).toEqual({
+			left: 16,
+			top: 64,
+			width: 635,
+			height: 375 - 64 - 136,
 		});
 	});
 
@@ -294,6 +305,20 @@ describe("viewerStage", () => {
 		const stage = viewerStage({ width: 20, height: 100 });
 		expect(stage.width).toBe(0);
 		expect(stage.height).toBe(0);
+	});
+});
+
+describe("captionUnderImage", () => {
+	it("is true on a phone held upright", () => {
+		expect(captionUnderImage({ width: 390, height: 844 })).toBe(true);
+	});
+
+	it("is false on a phone held sideways", () => {
+		expect(captionUnderImage({ width: 667, height: 375 })).toBe(false);
+	});
+
+	it("is false from md, however tall", () => {
+		expect(captionUnderImage({ width: 768, height: 1024 })).toBe(false);
 	});
 });
 
