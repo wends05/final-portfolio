@@ -11,6 +11,10 @@ import {
 	orderSkillsPage,
 } from "./skills.utils";
 
+/** The /skills page description, also in its agent copy. */
+export const SKILLS_DESCRIPTION =
+	"The skills and tools Wendell Terence Dador works with, and the projects behind each one.";
+
 /** Every skill for /skills: top skills first, then by confidence. */
 export function getSkillsPage(): SkillOverview[] {
 	// Only the fields the list shows, so overview HTML stays out of the page data.
