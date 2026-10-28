@@ -71,7 +71,7 @@ Sections live in `src/features/public/components/landing/`. The navbar, footer a
 | Featured projects | 3 projects in `featuredRank` order, each linking to its case study |
 | Top skills | 3 skills in `topRank` order, linking to `/skills` |
 | Contact | "More of me" heading beside three tiles (LinkedIn, GitHub, CV download from `public/cv.pdf`) and an email panel: Main/School choice with Main picked by default, a mailto link and a copy button. Links and addresses live in `features/public/utils/contact.ts` |
-| Navbar | Fixed top bar: `wends.dev` wordmark linking to `/`, and a Menu button that opens the full-screen menu ([WD-53](https://linear.app/wends/issue/WD-53)). Menu state lives in `menuStore` ([0015](decisions/0015-zustand-for-client-ui-state.md)) |
+| Navbar | Fixed top bar: `wends.dev` wordmark linking to `/`, and a Menu button that opens the full-screen menu ([WD-53](https://linear.app/wends/issue/WD-53)). Menu state lives in `menuStore` ([0015](decisions/0015-zustand-for-client-ui-state.md)). The bar is transparent at the top of the page and takes the page background once scrolled (`useNavbarSolid`), so content never shows through it; over the open menu it stays transparent |
 | Footer | Sits behind the page: the page scrolls up to reveal it. `footer-reveal` (in [../src/styles/footer.css](../src/styles/footer.css)) clips a `footer-reveal-content` child that is fixed to the viewport bottom. Keyboard focus inside it scrolls it into view. |
 
 For every page: check keyboard focus, heading order, image alt text, and small-screen layout.

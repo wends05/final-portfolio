@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { useStore } from "zustand";
 import ThemeToggle from "#/features/public/components/ThemeToggle";
+import { useNavbarSolid } from "#/features/public/hooks/useNavbarSolid";
 import {
 	MENU_BUTTON_ID,
 	MENU_PANEL_ID,
@@ -13,6 +14,7 @@ export default function Navbar() {
 	const toggle = useStore(menuStore, (s) => s.toggle);
 	const isOpen = phase === "open";
 	const isClosed = phase === "closed";
+	const solid = useNavbarSolid();
 
 	// Over the ink menu the bar turns paper, and so does its focus ring.
 	const focusRing = cn(
@@ -24,6 +26,9 @@ export default function Navbar() {
 		<header
 			className={cn(
 				"page-grid fixed inset-x-0 top-0 z-50 py-4 md:py-5",
+				// Scrolled content would show through the bar: give it the page's
+				// background, except over the ink menu, which has its own.
+				isClosed && solid && "bg-background",
 				!isClosed && "text-inverse-foreground",
 			)}
 		>
