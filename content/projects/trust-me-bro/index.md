@@ -1,15 +1,15 @@
 ---
-slug: fake-news-detection-game
+slug: trust-me-bro
 title: "Capstone: Trust Me Bro"
-description: "A Social Deduction game with a research paper."
+description: "A Social Deduction game."
 status: ONGOING
 startedAt: 2026-08-17
 tools: ["Godot", "GDScript", "Linear", "Notion"]
 draft: false
 credits:
   - { collaborator: huenyeon }
-  - { collaborator: okjose }
+  - { collaborator: josearron }
   - { collaborator: kimlyjohn }
 ---
 
-The system that will be made for our capstone project.
+The system that will be made for our capstone project. Not much to add here yet. Come back at a later date. :)

@@ -7,19 +7,58 @@
 - { slug: huenyeon, name: "Huenyeon", profileUrl: https://github.com/Huenyeon }
 - { slug: kenchyyy, name: "kenchyyy", profileUrl: https://github.com/kenchyyy }
 - { slug: dainzt, name: "DainzT", profileUrl: https://github.com/DainzT }
-- { slug: dreyyiizz, name: "dreyyiizz", profileUrl: https://github.com/dreyyiizz }
+- {
+    slug: dreyyiizz,
+    name: "dreyyiizz",
+    profileUrl: https://github.com/dreyyiizz,
+  }
 - { slug: xandei, name: "xandei", profileUrl: https://github.com/xandei }
-- { slug: itsantonle, name: "itsantonle", profileUrl: https://github.com/itsantonle }
-- { slug: cassandraysabel, name: "cassandraysabel", profileUrl: https://github.com/cassandraysabel }
+- {
+    slug: itsantonle,
+    name: "itsantonle",
+    profileUrl: https://github.com/itsantonle,
+  }
+- {
+    slug: cassandraysabel,
+    name: "cassandraysabel",
+    profileUrl: https://github.com/cassandraysabel,
+  }
 - { slug: regbarte, name: "regbarte", profileUrl: https://github.com/regbarte }
 - { slug: manawkie, name: "Manawkie", profileUrl: https://github.com/Manawkie }
-- { slug: matchaejayyy, name: "matchaejayyy", profileUrl: https://github.com/matchaejayyy }
-- { slug: mjayconstantino, name: "MJayConstantino", profileUrl: https://github.com/MJayConstantino }
-- { slug: josearron, name: "JoseArron", profileUrl: https://github.com/JoseArron }
+- {
+    slug: matchaejayyy,
+    name: "matchaejayyy",
+    profileUrl: https://github.com/matchaejayyy,
+  }
+- {
+    slug: mjayconstantino,
+    name: "MJayConstantino",
+    profileUrl: https://github.com/MJayConstantino,
+  }
+- {
+    slug: josearron,
+    name: "JoseArron",
+    profileUrl: https://github.com/JoseArron,
+  }
 - { slug: kailouss, name: "kailouss", profileUrl: https://github.com/kailouss }
-- { slug: omumuraisu, name: "Omumuraisu", profileUrl: https://github.com/Omumuraisu }
-- { slug: katoteshiku, name: "Katoteshiku", profileUrl: https://github.com/Katoteshiku }
+- {
+    slug: omumuraisu,
+    name: "Omumuraisu",
+    profileUrl: https://github.com/Omumuraisu,
+  }
+- {
+    slug: katoteshiku,
+    name: "Katoteshiku",
+    profileUrl: https://github.com/Katoteshiku,
+  }
 - { slug: teaz7, name: "Teaz7", profileUrl: https://github.com/Teaz7 }
-- { slug: sorrentoe, name: "Sorrentoe", profileUrl: https://github.com/Sorrentoe }
-- { slug: okjose, name: "okjose", profileUrl: https://github.com/okjose }
-- { slug: kimlyjohn, name: "kimlyjohn", profileUrl: https://github.com/kimlyjohn }
+- {
+    slug: sorrentoe,
+    name: "Sorrentoe",
+    profileUrl: https://github.com/Sorrentoe,
+  }
+- {
+    slug: kimlyjohn,
+    name: "kimlyjohn",
+    profileUrl: https://github.com/kimlyjohn,
+  }
