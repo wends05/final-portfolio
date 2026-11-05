@@ -19,13 +19,14 @@ Use this folder for implementation choices whose rationale should survive future
 | [0013: Admin authentication and authorization](0013-admin-authentication-and-authorization.md) | Superseded by 0019 |
 | [0014: Vercel deploys only `main` and `development`](0014-vercel-deploys-main-and-development-only.md) | Superseded by 0022 |
 | [0015: Zustand for shared client UI state](0015-zustand-for-client-ui-state.md) | Accepted |
-| [0016: Dependabot for dependency and action updates](0016-dependabot-dependency-updates.md) | Accepted |
+| [0016: Dependabot for dependency and action updates](0016-dependabot-dependency-updates.md) | Superseded by 0023 |
 | [0017: The `cn` package for class merging](0017-cn-package-for-class-merging.md) | Accepted |
 | [0018: Skills group tools](0018-skills-group-tools.md) | Accepted |
 | [0019: Static site, with content in the repository](0019-static-site-content-in-repo.md) | Accepted |
 | [0020: Design-system lint rules](0020-design-system-lint-rules.md) | Accepted |
 | [0021: Agent copies and the agent view](0021-agent-copies-and-agent-view.md) | Accepted |
 | [0022: Preview every branch; no `develop` branch](0022-preview-every-branch-no-develop.md) | Accepted |
+| [0023: Manual dependency updates; Dependabot alerts only](0023-manual-dependency-updates.md) | Accepted |
 
 Some choices made before these records began were recorded on 2026-10-05 (0006–0009) with the owner's stated reasons. Do not invent reasons for other earlier choices; existing architecture is documented in [../architecture.md](../architecture.md). Add each new record to the table above.
 
