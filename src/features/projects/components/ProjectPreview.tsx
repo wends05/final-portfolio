@@ -88,6 +88,7 @@ export default function ProjectPreview({
 								}}
 							>
 								Read more
+								<span className="sr-only"> about {project.title}</span>
 								<ArrowRightIcon />
 							</Link>
 						}

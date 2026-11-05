@@ -94,6 +94,7 @@ export default function LandingProjectCard({
 								}}
 							>
 								Read more
+								<span className="sr-only"> about {project.title}</span>
 								<ArrowRightIcon />
 							</Link>
 						}

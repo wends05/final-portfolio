@@ -60,3 +60,13 @@ describe("ProjectPreview tools", () => {
 		expect(toolsLine(render([]))).toBeUndefined();
 	});
 });
+
+describe("ProjectPreview read more link", () => {
+	// Several projects show a "Read more" link, so each needs the project name
+	// to be told apart by screen readers and in link lists.
+	it("names the project in the link text", () => {
+		expect(render([])).toMatch(
+			/Read more<span class="sr-only"> about CapyCopy<\/span>/,
+		);
+	});
+});
