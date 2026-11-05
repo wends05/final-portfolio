@@ -1,7 +1,7 @@
 # 0016: Dependabot for dependency and action updates
 
 Date: 2026-10-14
-Status: Accepted
+Status: Superseded by [0023](0023-manual-dependency-updates.md)
 
 ## Context
 

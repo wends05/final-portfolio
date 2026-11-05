@@ -14,7 +14,7 @@ These docs describe where the portfolio is going and how to build it: product di
 | [Homepage plan](ui.md#homepage-plan) | Building homepage sections, the intro curtain, or the hero |
 | [Glossary](../CONTEXT.md) | The words the site and its code use: project, case study, draft, skill, tool, collaborator, credit |
 | [Architecture](architecture.md) | Planned routes, the coming-soon gate, content flow, and where code goes |
-| [Development](development.md) | Setup, commands, checks, generated files, dependency overrides, and Dependabot updates |
+| [Development](development.md) | Setup, commands, checks, generated files, dependency overrides, and dependency updates |
 | [Deployment](development.md#vercel) | Vercel setup, which branches deploy, environment variables, and what a push to `main` does |
 | [Content](data.md) | Content files, their fields and rules, drafts, images, and validation |
 | [UI conventions](ui.md) | Building sections, cards, navigation, or styles, working on the light and Graphite themes, or enabling design-system lint rules |

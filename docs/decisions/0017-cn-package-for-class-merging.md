@@ -34,7 +34,7 @@ Components keep importing `cn` from `#/lib/utils` (the `utils` alias in [../../c
 ## Consequences
 
 - One dependency instead of two. `clsx` stays in `bun.lock` as a transitive dependency of `class-variance-authority` and the TanStack devtools.
-- `cn` is pre-1.0, so `^0.4.0` allows only `0.4.x`. A `0.5` release can break the API and arrives in Dependabot's grouped minor pull request ([0016](0016-dependabot-dependency-updates.md)); read its changelog before merging.
+- `cn` is pre-1.0, so `^0.4.0` allows only `0.4.x`. A `0.5` release can break the API, so read its changelog before moving to it ([0023](0023-manual-dependency-updates.md)).
 - New `--text-*` tokens are still registered in `src/lib/utils.ts` ([../ui.md](../ui.md#styles-and-tokens)).
 
 ## Validation
