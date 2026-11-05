@@ -62,7 +62,10 @@ export default function SkillItem({
 						{hidden > 0 && <span> +{hidden}</span>}
 					</span>
 					<div data-pick-fade className={hideClassName}>
-						<Progress value={skill.confidence}>
+						<Progress
+							value={skill.confidence}
+							aria-label={`${skill.name} confidence`}
+						>
 							<ProgressValue variant="meta" />
 						</Progress>
 					</div>
