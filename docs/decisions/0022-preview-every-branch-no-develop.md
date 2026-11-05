@@ -42,4 +42,4 @@ flowchart LR
 
 ## Validation
 
-Not verified when this was written: that a push to a `<type>/<short-name>` branch creates a preview, and that the pull request for this change shows one.
+On 2026-11-05 the branch `ci/pr-previews` got a Vercel preview, and an anonymous request to it redirected to Vercel login. Not verified: that `main` still deploys production after the `git.deploymentEnabled` block was removed.
