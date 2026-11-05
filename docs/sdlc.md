@@ -57,8 +57,8 @@ flowchart LR
    ```
 
    `Closes`/`Fixes`/`Resolves` move the issue to Done on merge; `Part of`/`Refs` only link it.
-4. **CI** runs `verify` and must pass. Vercel deploys only `main` and `development` ([decision 0014](decisions/0014-vercel-deploys-main-and-development-only.md)), so a feature branch has no preview URL.
-5. **The owner merges with a merge commit.** The branch's commits and a merge commit land on `main`, which deploys production.
+4. **CI** runs `verify`, and a ruleset on `main` blocks the merge until it passes. Direct pushes to `main` are rejected. Vercel deploys only `main` and `development` ([decision 0014](decisions/0014-vercel-deploys-main-and-development-only.md)), so a feature branch has no preview URL.
+5. **The owner merges with a merge commit**, the only merge method the ruleset allows. GitHub deletes the head branch after the merge. The branch's commits and a merge commit land on `main`, which deploys production.
 
 Never rename a branch that has an open PR; GitHub closes the PR. For a change that depends on an open PR, base the new branch on that PR's branch, then rebase onto `main` after it merges.
 

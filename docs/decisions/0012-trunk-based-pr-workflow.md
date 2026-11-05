@@ -1,7 +1,7 @@
 # 0012: Trunk-based pull request workflow
 
 Date: 2026-10-05
-Updated: 2026-10-05 (merge commits instead of squash merge, by owner decision)
+Updated: 2026-10-05 (merge commits instead of squash merge, by owner decision); 2026-11-05 (branch protection applied)
 Status: Accepted
 
 ## Context
@@ -39,9 +39,16 @@ flowchart LR
 
 - One merge per change. `main` keeps every branch commit plus a merge commit per PR, so commit messages on branches matter.
 - Closing keywords keep Linear in sync without manual status changes.
-- Branch protection on `main` (required `verify`, merge commits allowed, auto-delete branches, no direct pushes) completes this workflow; tracked in Linear WD-4.
+- A repository ruleset named `main` protects the default branch: changes arrive only through pull requests, the `verify` check from GitHub Actions must pass, merge commits are the only allowed merge method, and deleting or force-pushing `main` is blocked. No review approval is required, because the owner works alone. Merged head branches are deleted automatically. The advisory Claude review is never a required check.
 - [0014](0014-vercel-deploys-main-and-development-only.md) limits Vercel deployments to `main` and `development`, so a pull request from any other branch has no Vercel preview, unlike the per-PR previews assumed above.
 
 ## Validation
 
-On 2026-10-05, PRs #1 and #2 were closed by renaming their branches and reopened as #3 (`ci/vitest-verify`) and #4 (`refactor/remove-rsc`), which use this format. Branch protection is not yet applied.
+On 2026-10-05, PRs #1 and #2 were closed by renaming their branches and reopened as #3 (`ci/vitest-verify`) and #4 (`refactor/remove-rsc`), which use this format.
+
+On 2026-11-05 the ruleset was created through the GitHub API, and `delete_branch_on_merge` was turned on. The rules GitHub reports for `main` are `deletion`, `non_fast_forward`, `pull_request`, and `required_status_checks`. To inspect or change them:
+
+```bash
+gh api repos/wends05/final-portfolio/rules/branches/main
+gh api repos/wends05/final-portfolio/rulesets
+```
