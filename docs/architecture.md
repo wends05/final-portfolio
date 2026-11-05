@@ -126,6 +126,6 @@ flowchart LR
 | `src/lib/` | Shared utilities |
 | `src/integrations/` | TanStack Query wiring, GSAP setup (`animations/`) |
 | `src/styles.css`, `src/styles/` | Global styles and tokens ([ui](ui.md)) |
-| `vercel.json` | Vercel settings ([0005](decisions/0005-vercel-deployment.md), [0014](decisions/0014-vercel-deploys-main-and-development-only.md)) |
+| `vercel.json` | Vercel settings ([0005](decisions/0005-vercel-deployment.md), [0022](decisions/0022-preview-every-branch-no-develop.md)) |
 
 Expected features: `public` (landing page), `projects`, `skills`, `seo` (metadata, sitemap, and robots), `site` (gate and error pages), and `agent` (agent copies, the `/ai` views, and the Human / Machine toggle).
