@@ -1,7 +1,7 @@
 # 0014: Vercel deploys only `main` and `development`
 
 Date: 2026-10-09
-Status: Accepted
+Status: Superseded by [0022](0022-preview-every-branch-no-develop.md)
 
 ## Context
 

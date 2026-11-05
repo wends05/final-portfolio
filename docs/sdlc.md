@@ -38,7 +38,7 @@ flowchart LR
 
 ## Git workflow
 
-Trunk-based, through pull requests ([decision 0012](decisions/0012-trunk-based-pr-workflow.md)). There is no `develop` branch until after launch (Linear WD-50).
+Trunk-based, through pull requests ([decision 0012](decisions/0012-trunk-based-pr-workflow.md)). There is no `develop` branch ([decision 0022](decisions/0022-preview-every-branch-no-develop.md)).
 
 ```mermaid
 flowchart LR
@@ -57,7 +57,7 @@ flowchart LR
    ```
 
    `Closes`/`Fixes`/`Resolves` move the issue to Done on merge; `Part of`/`Refs` only link it.
-4. **CI** runs `verify`, and a ruleset on `main` blocks the merge until it passes. Direct pushes to `main` are rejected. Vercel deploys only `main` and `development` ([decision 0014](decisions/0014-vercel-deploys-main-and-development-only.md)), so a feature branch has no preview URL.
+4. **CI** runs `verify`, and a ruleset on `main` blocks the merge until it passes. Direct pushes to `main` are rejected. Vercel builds a preview for the branch, behind Vercel login ([decision 0022](decisions/0022-preview-every-branch-no-develop.md)).
 5. **The owner merges with a merge commit**, the only merge method the ruleset allows. GitHub deletes the head branch after the merge. The branch's commits and a merge commit land on `main`, which deploys production.
 
 Never rename a branch that has an open PR; GitHub closes the PR. For a change that depends on an open PR, base the new branch on that PR's branch, then rebase onto `main` after it merges.

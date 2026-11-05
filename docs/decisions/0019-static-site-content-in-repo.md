@@ -86,7 +86,7 @@ draft: false
 ## Consequences
 
 - Content edits are pull requests. A change goes live after merge plus a build, about a minute or two; git history is the edit log.
-- Feature branches do not deploy ([0014](0014-vercel-deploys-main-and-development-only.md)), so new content is previewed locally with drafts on, or on `development` with `VITE_SHOW_DRAFTS=true` scoped to Preview.
+- New content is previewed locally with drafts on, or on the branch's Vercel preview with `VITE_SHOW_DRAFTS=true` set for Preview ([0022](0022-preview-every-branch-no-develop.md); this replaced the `development`-only previews of [0014](0014-vercel-deploys-main-and-development-only.md)).
 - Prisma Next, the `migrations/` folder, the Neon database and Auth, the storage integration, the `_dashboard` routes, and their dependencies and environment variables are removed. The Neon project can be archived afterwards.
 - The Vercel deployment becomes static output, so the Node.js runtime setting in [0005](0005-vercel-deployment.md) no longer applies.
 - All content ships in the client bundle so loaders can run in the browser on client-side navigation. At this size that is a few kilobytes; revisit if it grows. The coming-soon gate therefore hides pages but not content: unreleased work stays `draft: true` until launch.

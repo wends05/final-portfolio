@@ -10,7 +10,7 @@ Pushing `main` deploys production on Vercel ([0005](0005-vercel-deployment.md)),
 
 ## Decision
 
-Work trunk-based: short-lived branches merge into `main` through pull requests. There is no `develop` branch until after launch.
+Work trunk-based: short-lived branches merge into `main` through pull requests. There is no `develop` branch; after launch the owner confirmed this in [0022](0022-preview-every-branch-no-develop.md).
 
 ```mermaid
 flowchart LR
@@ -31,7 +31,7 @@ flowchart LR
 
 ## Alternatives
 
-- **`develop` + `main` (Git Flow-style):** a fixed staging URL for testing merged features together. Rejected for now: every change would need two merges, the branches drift, and each needs CI and protection. Until launch, production is behind the coming-soon gate, so `main` already acts as staging, and every PR has its own Vercel preview. Revisit after launch (Linear WD-50).
+- **`develop` + `main` (Git Flow-style):** a fixed staging URL for testing merged features together. Rejected for now: every change would need two merges, the branches drift, and each needs CI and protection. Until launch, production is behind the coming-soon gate, so `main` already acts as staging, and every PR has its own Vercel preview. Revisited after launch and rejected again in [0022](0022-preview-every-branch-no-develop.md) (Linear WD-50).
 - **Squash merge:** one commit per PR on `main`, but the owner chose merge commits, which keep each branch's commits.
 - **Linear IDs in branch names or PR titles:** links automatically, but one PR often resolves several issues, and generated branch names are long.
 
@@ -40,7 +40,7 @@ flowchart LR
 - One merge per change. `main` keeps every branch commit plus a merge commit per PR, so commit messages on branches matter.
 - Closing keywords keep Linear in sync without manual status changes.
 - A repository ruleset named `main` protects the default branch: changes arrive only through pull requests, the `verify` check from GitHub Actions must pass, merge commits are the only allowed merge method, and deleting or force-pushing `main` is blocked. No review approval is required, because the owner works alone. Merged head branches are deleted automatically. The advisory Claude review is never a required check.
-- [0014](0014-vercel-deploys-main-and-development-only.md) limits Vercel deployments to `main` and `development`, so a pull request from any other branch has no Vercel preview, unlike the per-PR previews assumed above.
+- Every branch gets a Vercel preview ([0022](0022-preview-every-branch-no-develop.md), which replaced the `main`-and-`development`-only rule in [0014](0014-vercel-deploys-main-and-development-only.md)).
 
 ## Validation
 
