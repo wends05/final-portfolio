@@ -46,7 +46,7 @@ Major updates get their own pull request so each changelog can be read and each 
 - The owner merges Dependabot PRs when `verify` passes; nothing merges automatically. Read the changelog before merging a major update.
 - Dependabot names its branches `dependabot/...`, an exception to the `<type>/<short-name>` rule ([0012](0012-trunk-based-pr-workflow.md)). Its PR titles are conventional commits through the `chore` and `ci` prefixes.
 - Workflows triggered by Dependabot cannot read repository secrets. [../../.github/workflows/claude-review.yml](../../.github/workflows/claude-review.yml) skips Dependabot PRs; `ci.yml` needs no secrets. Any new workflow that needs a secret must skip Dependabot PRs too.
-- Vercel deploys only `main` and `development` ([0014](0014-vercel-deploys-main-and-development-only.md)), so Dependabot PRs have no preview. `verify` is the only check before merge.
+- Dependabot PRs get a Vercel preview like every branch ([0022](0022-preview-every-branch-no-develop.md)). `verify` is the only required check before merge.
 - When the open-PR limit is reached, Dependabot opens no new npm PRs until some are merged or closed.
 - `bun audit` never blocks a merge. Fix advisories in their own pull request, through an update or an `overrides` pin ([../development.md](../development.md#dependency-overrides)).
 - This file configures version updates only. Dependabot security updates are a separate repository setting.
