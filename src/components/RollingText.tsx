@@ -13,6 +13,7 @@ interface RollingTextProps {
  * Text whose letters roll up on hover: each letter leaves through the top of
  * its mask while a copy rises in from below, then rolls back down on leave.
  * Decorative only; with reduced motion the text stays as plain text.
+ * Assistive tech reads an sr-only copy, so the split letters stay hidden.
  */
 export default function RollingText({ text, className }: RollingTextProps) {
 	const ref = useRef<HTMLSpanElement>(null);
@@ -23,9 +24,12 @@ export default function RollingText({ text, className }: RollingTextProps) {
 			if (!el || !contextSafe) return;
 
 			matchFullMotion(() => {
+				// aria "none": the sr-only copy below names the text, and an
+				// aria-label on a plain span is not allowed.
 				const split = SplitText.create(el, {
 					type: "words,chars",
 					mask: "chars",
+					aria: "none",
 				});
 
 				// Clip only vertically: negative letter-spacing makes each letter's
@@ -75,8 +79,11 @@ export default function RollingText({ text, className }: RollingTextProps) {
 	);
 
 	return (
-		<span ref={ref} className={cn("inline-block", className)}>
-			{text}
-		</span>
+		<>
+			<span className="sr-only">{text}</span>
+			<span ref={ref} aria-hidden className={cn("inline-block", className)}>
+				{text}
+			</span>
+		</>
 	);
 }
