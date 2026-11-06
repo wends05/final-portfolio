@@ -50,8 +50,12 @@ export default function PinnedText({
 			matchFullMotion(() => {
 				// One array across all paragraphs, so they ink in reading order.
 				const q = appGSAP.utils.selector(stageEl);
-				const words = (q("p") as HTMLElement[]).flatMap(
-					(p) => SplitText.create(p, { type: "words", tag: "span" }).words,
+				// Split only the hidden copy: the sr-only text stays whole, so a
+				// screen reader reads each paragraph once, as one sentence.
+				const words = (q("[data-split]") as HTMLElement[]).flatMap(
+					(copy) =>
+						SplitText.create(copy, { type: "words", tag: "span", aria: "none" })
+							.words,
 				);
 				const inkTime = fill * inkShare;
 
@@ -104,14 +108,17 @@ export default function PinnedText({
 				{paragraphs.map((paragraph) => (
 					<p
 						key={paragraph}
-						// SplitText sets display:inline-block on words, which breaks
-						// text-justify spacing; only color animates, so keep them inline.
 						className={cn(
-							"[&>span]:inline! ink-words col-span-4 self-center text-justify font-normal text-heading-l md:col-span-8",
+							"col-span-4 self-center text-justify font-normal text-heading-l md:col-span-8",
 							paragraphClassName,
 						)}
 					>
-						{paragraph}
+						<span className="sr-only">{paragraph}</span>
+						{/* SplitText sets display:inline-block on words, which breaks
+						text-justify spacing; only color animates, so keep them inline. */}
+						<span data-split aria-hidden className="[&>span]:inline! ink-words">
+							{paragraph}
+						</span>
 					</p>
 				))}
 			</div>
