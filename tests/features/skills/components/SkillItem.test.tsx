@@ -14,7 +14,7 @@ const { default: SkillItem } = await import(
 	"#/features/skills/components/SkillItem"
 );
 
-const markup = () =>
+const markup = (active = true) =>
 	renderToStaticMarkup(
 		<SkillItem
 			skill={{
@@ -23,7 +23,7 @@ const markup = () =>
 				confidence: 85,
 				tools: [],
 			}}
-			active
+			active={active}
 			onActivate={() => {}}
 			onPick={() => {}}
 		/>,
@@ -35,5 +35,17 @@ describe("SkillItem confidence bar", () => {
 		expect(markup()).toMatch(
 			/role="progressbar"[^>]*aria-label="Frontend Development confidence"|aria-label="Frontend Development confidence"[^>]*role="progressbar"/,
 		);
+	});
+});
+
+describe("SkillItem inactive title", () => {
+	// Inactive rows dim on purpose, but the title must stay readable: the
+	// subtle text color holds 3:1 for display type; muted at 50% did not.
+	it("dims inactive titles to the subtle text color", () => {
+		const title = markup(false).match(/<h2[^>]*class="([^"]+)"/)?.[1] ?? "";
+		expect(title.split(" ")).toContain(
+			"motion-safe:group-data-[active=false]:text-subtle",
+		);
+		expect(title).not.toContain("/50");
 	});
 });

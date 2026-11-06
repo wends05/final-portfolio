@@ -50,10 +50,11 @@ export default function SkillItem({
 				}}
 			>
 				<div className="flex w-full flex-col gap-4 pt-6">
-					{/* SkillsPage waits ACTIVATE_BEFORE_PICK_MS for this fade to ink before a pick. */}
+					{/* SkillsPage waits ACTIVATE_BEFORE_PICK_MS for this fade to ink before a pick.
+					Inactive titles dim to text-subtle, which keeps display type at 3:1. */}
 					<h2
 						data-pick-title
-						className="text-display-l transition-colors duration-500 motion-safe:group-data-[active=false]:text-muted-foreground/50"
+						className="text-display-l transition-colors duration-500 motion-safe:group-data-[active=false]:text-subtle"
 					>
 						<WashText>{skill.name}</WashText>
 					</h2>
