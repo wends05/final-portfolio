@@ -56,7 +56,7 @@ export default function Footer() {
 						<li key={id}>
 							<a
 								href={mailtoHref(address)}
-								className="inline-flex min-h-6 items-center hover:underline"
+								className="focus-ring inline-flex min-h-6 items-center hover:underline focus-visible:outline-focus-inverse"
 							>
 								{address}
 							</a>
@@ -72,13 +72,19 @@ export default function Footer() {
 								href={href}
 								target="_blank"
 								rel="noopener noreferrer"
+								className="focus-ring focus-visible:outline-focus-inverse"
 								aria-label={label}
 							>
 								<SocialIcon size={24} aria-hidden />
 							</a>
 						);
 					})}
-					<a href={CV_PATH} download={CV_FILENAME} aria-label="Download CV">
+					<a
+						href={CV_PATH}
+						download={CV_FILENAME}
+						aria-label="Download CV"
+						className="focus-ring focus-visible:outline-focus-inverse"
+					>
 						<FilePdfIcon size={24} aria-hidden />
 					</a>
 				</div>

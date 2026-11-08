@@ -69,7 +69,7 @@ const fadeBottom = cn(
 	"transition-opacity group-data-[phase=open]/viewer:delay-400",
 );
 const viewerButton =
-	"pointer-events-auto inline-flex size-12 shrink-0 items-center justify-center border border-inverse-foreground/50 bg-inverse/55 text-inverse-foreground focus-ring transition-fade-colors hover:bg-inverse-foreground hover:text-inverse focus-visible:outline-inverse-foreground";
+	"pointer-events-auto inline-flex size-12 shrink-0 items-center justify-center border border-inverse-foreground/50 bg-inverse/55 text-inverse-foreground focus-ring transition-fade-colors hover:bg-inverse-foreground hover:text-inverse focus-visible:outline-focus-inverse";
 const arrowButton = cn(
 	viewerButton,
 	fade,
@@ -343,7 +343,7 @@ export default function ProjectGalleryViewer({
 											aria-label={`Show image ${i + 1}`}
 											aria-current={i === index}
 											onClick={() => onIndexChange(i)}
-											className="flex h-11 items-center px-1.75 focus-ring focus-visible:outline-inverse-foreground"
+											className="flex h-11 items-center px-1.75 focus-ring focus-visible:outline-focus-inverse"
 										>
 											<span
 												className={cn(
