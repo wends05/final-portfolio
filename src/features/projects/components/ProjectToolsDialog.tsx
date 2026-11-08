@@ -32,7 +32,7 @@ const TIMING = {
 };
 
 const closeButton =
-	"inline-flex size-11 shrink-0 items-center justify-center border border-rule bg-background text-foreground outline-none transition-colors duration-150 ease-swiss hover:bg-primary hover:text-primary-foreground focus-visible:outline-2 focus-visible:outline-ring focus-visible:outline-offset-2";
+	"inline-flex size-11 shrink-0 items-center justify-center border border-rule bg-background text-foreground focus-ring transition-colors duration-150 ease-swiss hover:bg-primary hover:text-primary-foreground";
 
 /**
  * The case study's "show all N" button and the window it opens: every tool in
@@ -152,7 +152,7 @@ export default function ProjectToolsDialog({
 				);
 			}}
 		>
-			<Dialog.Trigger className="type-label -my-2 inline-flex min-h-11 items-center underline-offset-4 outline-none hover:underline focus-visible:outline-2 focus-visible:outline-ring">
+			<Dialog.Trigger className="type-label -my-2 inline-flex min-h-11 items-center underline-offset-4 focus-ring hover:underline">
 				show all {tools.length}
 			</Dialog.Trigger>
 			<Dialog.Portal>

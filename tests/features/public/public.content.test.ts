@@ -60,6 +60,7 @@ describe("getHomepage", () => {
 			slug: "mobile",
 			name: "MOBILE",
 			tools: ["React"],
+			confidence: 50,
 		});
 	});
 });

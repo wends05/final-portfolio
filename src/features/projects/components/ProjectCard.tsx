@@ -49,7 +49,7 @@ export default function ProjectCard({
 					onPick(project.slug);
 				}}
 				className={cn(
-					"flex flex-col outline-none transition-opacity duration-200 ease-swiss focus-visible:outline-2 focus-visible:outline-ring focus-visible:outline-offset-2",
+					"flex flex-col focus-ring transition-opacity duration-200 ease-swiss",
 					dim && !shown && "opacity-40",
 					row &&
 						"max-md:flex-row max-md:items-center max-md:gap-4 max-md:border-rule-soft max-md:border-b max-md:py-3",

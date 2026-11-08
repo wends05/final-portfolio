@@ -1,7 +1,10 @@
 import type { Project, Skill, Tool } from "#content";
 
 /** A homepage skill. */
-export type LandingSkill = Pick<Skill, "name" | "slug" | "tools">;
+export type LandingSkill = Pick<
+	Skill,
+	"name" | "slug" | "tools" | "confidence"
+>;
 
 /** A /skills item. */
 export type SkillOverview = Pick<
