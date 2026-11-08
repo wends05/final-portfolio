@@ -227,7 +227,7 @@ export default function ProjectCaseStudy({ page }: ProjectCaseStudyProps) {
 														href={credit.profileUrl}
 														target="_blank"
 														rel="noreferrer"
-														className={`${row} group outline-none focus-visible:outline-2 focus-visible:outline-ring`}
+														className={`${row} group focus-ring`}
 													>
 														<span className="inline-flex items-center gap-1 underline-offset-4 group-hover:underline">
 															{credit.name}
@@ -276,7 +276,7 @@ export default function ProjectCaseStudy({ page }: ProjectCaseStudyProps) {
 						<Link
 							to="/projects/$slug"
 							params={{ slug: next.slug }}
-							className="group inline-flex items-center gap-3 outline-none focus-visible:outline-2 focus-visible:outline-ring focus-visible:outline-offset-2"
+							className="group inline-flex items-center gap-3 focus-ring"
 						>
 							<span className="text-display-m underline-offset-8 group-hover:underline">
 								{next.title}

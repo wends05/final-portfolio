@@ -42,7 +42,12 @@ export default function LandingSkillCard({
 					)}
 				</span>
 			</div>
-			<div className="content-center">
+			{/* The skills page shows confidence as a bar; the card shows only the
+			percentage beside the arrow. */}
+			<div className="flex shrink-0 items-center gap-4">
+				<span data-pick-fade className="type-meta tabular-nums">
+					{skill.confidence}%<span className="sr-only"> confidence</span>
+				</span>
 				<ArrowRightIcon />
 			</div>
 		</Link>

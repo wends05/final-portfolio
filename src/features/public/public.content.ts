@@ -27,6 +27,7 @@ export function getHomepage() {
 			slug: s.slug,
 			name: s.name,
 			tools: s.tools,
+			confidence: s.confidence,
 		}));
 	return {
 		featuredProjects: featuredProjects.slice(0, HOMEPAGE_LIMIT),

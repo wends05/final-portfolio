@@ -1,4 +1,5 @@
 import {
+	FilePdfIcon,
 	GithubLogoIcon,
 	type Icon,
 	LinkedinLogoIcon,
@@ -7,6 +8,8 @@ import { useEffect, useRef } from "react";
 import {
 	CONTACT_LINKS,
 	type ContactLink,
+	CV_FILENAME,
+	CV_PATH,
 	EMAILS,
 	mailtoHref,
 } from "#/features/public/utils/contact";
@@ -45,7 +48,7 @@ export default function Footer() {
 			className="footer-reveal bg-inverse text-inverse-foreground"
 		>
 			<div className="footer-reveal-content page-grid gap-y-4 pt-32 pb-12 md:pt-40 md:pb-20">
-				<p className="col-span-3 -col-start-3 row-start-1 text-end text-display-m">
+				<p className="text-display-m col-span-3 -col-start-3 row-start-1 text-end">
 					Wendell Terence Dador
 				</p>
 				<ul className="type-meta col-span-full pt-10">
@@ -53,7 +56,7 @@ export default function Footer() {
 						<li key={id}>
 							<a
 								href={mailtoHref(address)}
-								className="inline-flex min-h-6 items-center hover:underline"
+								className="focus-ring inline-flex min-h-6 items-center hover:underline focus-visible:outline-focus-inverse"
 							>
 								{address}
 							</a>
@@ -69,12 +72,21 @@ export default function Footer() {
 								href={href}
 								target="_blank"
 								rel="noopener noreferrer"
+								className="focus-ring focus-visible:outline-focus-inverse"
 								aria-label={label}
 							>
 								<SocialIcon size={24} aria-hidden />
 							</a>
 						);
 					})}
+					<a
+						href={CV_PATH}
+						download={CV_FILENAME}
+						aria-label="Download CV"
+						className="focus-ring focus-visible:outline-focus-inverse"
+					>
+						<FilePdfIcon size={24} aria-hidden />
+					</a>
 				</div>
 			</div>
 		</footer>

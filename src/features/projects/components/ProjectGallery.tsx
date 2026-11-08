@@ -18,7 +18,7 @@ interface ProjectGalleryProps {
 }
 
 const navButton =
-	"inline-flex size-11 items-center justify-center border border-rule bg-background text-foreground outline-none transition-colors duration-150 ease-swiss hover:bg-primary hover:text-primary-foreground focus-visible:outline-2 focus-visible:outline-ring focus-visible:outline-offset-2";
+	"inline-flex size-11 items-center justify-center border border-rule bg-background text-foreground focus-ring transition-colors duration-150 ease-swiss hover:bg-primary hover:text-primary-foreground";
 
 /**
  * The case study's gallery: the `ProjectImage` rows, one at a time, with the
