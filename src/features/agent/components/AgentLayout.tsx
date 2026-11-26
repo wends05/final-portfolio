@@ -1,4 +1,5 @@
 import { Link, Outlet, useRouterState } from "@tanstack/react-router";
+import { InsideMainContext } from "#/lib/landmarks";
 import { agentCopyPath, getViewTwins } from "../utils/view-paths";
 
 const NAV = [
@@ -48,7 +49,9 @@ export default function AgentLayout() {
 				className="motion-safe:fade-in mx-auto max-w-3xl px-4 pt-14 pb-32 motion-safe:animate-in motion-safe:duration-200"
 			>
 				<p className="mb-6 text-muted-foreground">{pathname}</p>
-				<Outlet />
+				<InsideMainContext value>
+					<Outlet />
+				</InsideMainContext>
 			</main>
 		</div>
 	);

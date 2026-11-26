@@ -87,6 +87,7 @@ Not-found and error pages share one template, [ErrorPage](../src/features/site/c
 - An error in the `/_public` layout itself renders without the Navbar, so that page draws its own wordmark (`standalone`).
 - Error details show in development only (`getSafeErrorDetail`). In production, [../src/start.ts](../src/start.ts) serializes every `Error` as a generic message, so database and storage messages never reach the page source; function middleware logs the real error on the server.
 - Error pages are `noindex`, and the intro curtain does not play on them.
+- Every page draws its own `<main>` around its content, and the error page does too. The Navbar, footer, and the standalone wordmark header stay outside it. The agent view's layout draws `<main>` itself, so it sets `InsideMainContext` ([../src/lib/landmarks.ts](../src/lib/landmarks.ts)) and an error page there renders a plain `<div>`, never a nested `<main>`.
 
 ## Smooth scroll
 

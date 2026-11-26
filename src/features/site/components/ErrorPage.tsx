@@ -1,10 +1,12 @@
 import { Link, useLocation } from "@tanstack/react-router";
+import { use } from "react";
 import {
 	type ErrorPageAction,
 	type ErrorPageKind,
 	getErrorPageCopy,
 	getSafeErrorDetail,
 } from "#/features/site/site.utils";
+import { InsideMainContext } from "#/lib/landmarks";
 import { cn } from "#/lib/utils";
 
 interface ErrorPageProps {
@@ -42,11 +44,15 @@ export default function ErrorPage({
 	const copy = getErrorPageCopy(errorKind);
 	const detail = getSafeErrorDetail(error);
 	const { pathname } = useLocation();
+	// The page's landmark, unless the layout around it already draws one.
+	const Main = use(InsideMainContext) ? "div" : "main";
 
 	return (
-		<div className="relative flex min-h-svh flex-col justify-between gap-16 pt-32 pb-12">
+		<>
 			{/* React hoists this into <head>, keeping error pages out of search. */}
 			<meta name="robots" content="noindex" />
+			{/* Outside <main>, so it stays the page's banner. Nothing above it is
+			    positioned, so it sits at the top of the page. */}
 			{standalone && (
 				<header className="page-grid absolute inset-x-0 top-0 py-4 md:py-5">
 					<Link
@@ -58,54 +64,55 @@ export default function ErrorPage({
 					</Link>
 				</header>
 			)}
-
-			{/* w-full: page-grid's auto margins would shrink a flex item. */}
-			<div className="page-grid w-full">
-				<p className="type-label col-span-full text-muted-foreground">
-					{copy.label}
-				</p>
-			</div>
-
-			<div className="space-y-8">
-				<div className="page-grid">
-					<h1 className="col-span-full text-display-xl md:col-span-11">
-						{copy.message}
-					</h1>
-				</div>
-
-				<div className="page-grid gap-y-6">
-					<div className="col-span-full border-rule border-t" />
-					<p className="type-meta wrap-break-word col-span-full text-muted-foreground md:col-span-3">
-						{copy.code} · {pathname}
+			<Main className="relative flex min-h-svh flex-col justify-between gap-16 pt-32 pb-12">
+				{/* w-full: page-grid's auto margins would shrink a flex item. */}
+				<div className="page-grid w-full">
+					<p className="type-label col-span-full text-muted-foreground">
+						{copy.label}
 					</p>
-					<div className="col-span-full flex flex-col gap-4 md:col-span-4 md:col-start-5">
-						<p>{copy.details}</p>
-						{detail && (
-							<div className="border-rule-soft border-t pt-3">
-								<p className="type-label mb-2 text-muted-foreground">
-									Development only
-								</p>
-								<pre className="type-meta wrap-break-word whitespace-pre-wrap">
-									{detail}
-								</pre>
-							</div>
-						)}
+				</div>
+
+				<div className="space-y-8">
+					<div className="page-grid">
+						<h1 className="col-span-full text-display-xl md:col-span-11">
+							{copy.message}
+						</h1>
 					</div>
-					<div className="col-span-full flex flex-col gap-2 md:col-span-3 md:col-start-10">
-						<ErrorPageButton
-							action={copy.primary}
-							className={actionStyles.primary}
-							onRetry={onRetry}
-						/>
-						<ErrorPageButton
-							action={copy.secondary}
-							className={actionStyles.secondary}
-							onRetry={onRetry}
-						/>
+
+					<div className="page-grid gap-y-6">
+						<div className="col-span-full border-rule border-t" />
+						<p className="type-meta wrap-break-word col-span-full text-muted-foreground md:col-span-3">
+							{copy.code} · {pathname}
+						</p>
+						<div className="col-span-full flex flex-col gap-4 md:col-span-4 md:col-start-5">
+							<p>{copy.details}</p>
+							{detail && (
+								<div className="border-rule-soft border-t pt-3">
+									<p className="type-label mb-2 text-muted-foreground">
+										Development only
+									</p>
+									<pre className="type-meta wrap-break-word whitespace-pre-wrap">
+										{detail}
+									</pre>
+								</div>
+							)}
+						</div>
+						<div className="col-span-full flex flex-col gap-2 md:col-span-3 md:col-start-10">
+							<ErrorPageButton
+								action={copy.primary}
+								className={actionStyles.primary}
+								onRetry={onRetry}
+							/>
+							<ErrorPageButton
+								action={copy.secondary}
+								className={actionStyles.secondary}
+								onRetry={onRetry}
+							/>
+						</div>
 					</div>
 				</div>
-			</div>
-		</div>
+			</Main>
+		</>
 	);
 }
 
