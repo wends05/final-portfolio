@@ -31,13 +31,13 @@ export const Route = createFileRoute("/_public/")({
 function Home() {
 	const { featuredProjects, topSkills } = Route.useLoaderData();
 	return (
-		<div>
+		<main>
 			<HeroSection />
 			<DescriptionSection />
 			<LandingProjectsSection projects={featuredProjects} />
 			<LandingSkillsSection skills={topSkills} />
 			<EndSection />
 			<ContactSection />
-		</div>
+		</main>
 	);
 }
